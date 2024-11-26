@@ -1,0 +1,559 @@
+[
+    {
+        "label": "optparse",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "optparse",
+        "description": "optparse",
+        "detail": "optparse",
+        "documentation": {}
+    },
+    {
+        "label": "struct",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "struct",
+        "description": "struct",
+        "detail": "struct",
+        "documentation": {}
+    },
+    {
+        "label": "fontforge",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "fontforge",
+        "description": "fontforge",
+        "detail": "fontforge",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "md5",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "md5",
+        "description": "md5",
+        "detail": "md5",
+        "documentation": {}
+    },
+    {
+        "label": "subprocess",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "subprocess",
+        "description": "subprocess",
+        "detail": "subprocess",
+        "documentation": {}
+    },
+    {
+        "label": "call",
+        "importPath": "subprocess",
+        "description": "subprocess",
+        "isExtraImport": true,
+        "detail": "subprocess",
+        "documentation": {}
+    },
+    {
+        "label": "tempfile",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "tempfile",
+        "description": "tempfile",
+        "detail": "tempfile",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "copy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "copy",
+        "description": "copy",
+        "detail": "copy",
+        "documentation": {}
+    },
+    {
+        "label": "FontError",
+        "kind": 6,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "peekOfCode": "class FontError(Exception):\n    \"\"\"Error related to font handling\"\"\"\n    pass\ndef multichar(str):\n    vals = struct.unpack('4B', str[:4])\n    return (vals[0] << 24) + (vals[1] << 16) + (vals[2] << 8) + vals[3]\ndef multicharval(v):\n    return struct.pack('4B', (v >> 24) & 0xFF, (v >> 16) & 0xFF, (v >> 8) & 0xFF, v & 0xFF)\nclass EOT:\n    EOT_VERSION = 0x00020001",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "documentation": {}
+    },
+    {
+        "label": "EOT",
+        "kind": 6,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "peekOfCode": "class EOT:\n    EOT_VERSION = 0x00020001\n    EOT_MAGIC_NUMBER = 0x504c\n    EOT_DEFAULT_CHARSET = 0x01\n    EOT_FAMILY_NAME_INDEX = 0    # order of names in variable portion of EOT header\n    EOT_STYLE_NAME_INDEX = 1\n    EOT_VERSION_NAME_INDEX = 2\n    EOT_FULL_NAME_INDEX = 3\n    EOT_NUM_NAMES = 4\n    EOT_HEADER_PACK = '<4L10B2BL2H7L18x'",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "documentation": {}
+    },
+    {
+        "label": "OpenType",
+        "kind": 6,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "peekOfCode": "class OpenType:\n    SFNT_CFF = multichar('OTTO')            # Postscript CFF SFNT version\n    SFNT_TRUE = 0x10000                     # Standard TrueType version\n    SFNT_APPLE = multichar('true')          # Apple TrueType version\n    SFNT_UNPACK = '>I4H'\n    TABLE_DIR_UNPACK = '>4I'\n    TABLE_HEAD = multichar('head')          # TrueType table tags\n    TABLE_NAME = multichar('name')\n    TABLE_OS2 = multichar('OS/2')\n    TABLE_GLYF = multichar('glyf')",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "documentation": {}
+    },
+    {
+        "label": "multichar",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "peekOfCode": "def multichar(str):\n    vals = struct.unpack('4B', str[:4])\n    return (vals[0] << 24) + (vals[1] << 16) + (vals[2] << 8) + vals[3]\ndef multicharval(v):\n    return struct.pack('4B', (v >> 24) & 0xFF, (v >> 16) & 0xFF, (v >> 8) & 0xFF, v & 0xFF)\nclass EOT:\n    EOT_VERSION = 0x00020001\n    EOT_MAGIC_NUMBER = 0x504c\n    EOT_DEFAULT_CHARSET = 0x01\n    EOT_FAMILY_NAME_INDEX = 0    # order of names in variable portion of EOT header",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "documentation": {}
+    },
+    {
+        "label": "multicharval",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "peekOfCode": "def multicharval(v):\n    return struct.pack('4B', (v >> 24) & 0xFF, (v >> 16) & 0xFF, (v >> 8) & 0xFF, v & 0xFF)\nclass EOT:\n    EOT_VERSION = 0x00020001\n    EOT_MAGIC_NUMBER = 0x504c\n    EOT_DEFAULT_CHARSET = 0x01\n    EOT_FAMILY_NAME_INDEX = 0    # order of names in variable portion of EOT header\n    EOT_STYLE_NAME_INDEX = 1\n    EOT_VERSION_NAME_INDEX = 2\n    EOT_FULL_NAME_INDEX = 3",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "documentation": {}
+    },
+    {
+        "label": "eotname",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "peekOfCode": "def eotname(ttf):\n    i = ttf.rfind('.')\n    if i != -1:\n        ttf = ttf[:i]\n    return ttf + '.eotlite'\ndef readfont(f):\n    data = open(f, 'rb').read()\n    return data\ndef get_table_directory(data):\n    \"\"\"read the SFNT header and table directory\"\"\"",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "documentation": {}
+    },
+    {
+        "label": "readfont",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "peekOfCode": "def readfont(f):\n    data = open(f, 'rb').read()\n    return data\ndef get_table_directory(data):\n    \"\"\"read the SFNT header and table directory\"\"\"\n    datalen = len(data)\n    sfntsize = struct.calcsize(OpenType.SFNT_UNPACK)\n    if sfntsize > datalen:\n        raise FontError, 'truncated font data'\n    sfntvers, numTables = struct.unpack(OpenType.SFNT_UNPACK, data[:sfntsize])[:2]",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "documentation": {}
+    },
+    {
+        "label": "get_table_directory",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "peekOfCode": "def get_table_directory(data):\n    \"\"\"read the SFNT header and table directory\"\"\"\n    datalen = len(data)\n    sfntsize = struct.calcsize(OpenType.SFNT_UNPACK)\n    if sfntsize > datalen:\n        raise FontError, 'truncated font data'\n    sfntvers, numTables = struct.unpack(OpenType.SFNT_UNPACK, data[:sfntsize])[:2]\n    if sfntvers != OpenType.SFNT_CFF and sfntvers != OpenType.SFNT_TRUE:\n        raise FontError, 'invalid font type';\n    font = {}",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "documentation": {}
+    },
+    {
+        "label": "get_name_records",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "peekOfCode": "def get_name_records(nametable):\n    \"\"\"reads through the name records within name table\"\"\"\n    name = {}\n    # read the header\n    headersize = 6\n    count, strOffset = struct.unpack('>2H', nametable[2:6])\n    namerecsize = struct.calcsize(OpenType.NAME_RECORD_UNPACK)\n    if count * namerecsize + headersize > len(nametable):\n        raise FontError, 'names exceed size of name table'\n    name['count'] = count",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "documentation": {}
+    },
+    {
+        "label": "make_eot_name_headers",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "peekOfCode": "def make_eot_name_headers(fontdata, nameTableDir):\n    \"\"\"extracts names from the name table and generates the names header portion of the EOT header\"\"\"\n    nameoffset = nameTableDir['offset']\n    namelen = nameTableDir['length']\n    name = get_name_records(fontdata[nameoffset : nameoffset + namelen])\n    namestroffset = name['strOffset']\n    namerecs = name['namerecords']\n    eotnames = (OpenType.NAME_ID_FAMILY, OpenType.NAME_ID_STYLE, OpenType.NAME_ID_VERSION, OpenType.NAME_ID_FULL)\n    nameheaders = []\n    for nameid in eotnames:",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "documentation": {}
+    },
+    {
+        "label": "make_root_string",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "peekOfCode": "def make_root_string():\n    return struct.pack('2x')\ndef make_eot_header(fontdata):\n    \"\"\"given ttf font data produce an EOT header\"\"\"\n    fontDataSize = len(fontdata)\n    font = get_table_directory(fontdata)\n    # toss out .otf fonts, t2embed library doesn't support these\n    tableDir = font['tableDir']\n    # check for required tables\n    required = (OpenType.TABLE_HEAD, OpenType.TABLE_NAME, OpenType.TABLE_OS2)",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "documentation": {}
+    },
+    {
+        "label": "make_eot_header",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "peekOfCode": "def make_eot_header(fontdata):\n    \"\"\"given ttf font data produce an EOT header\"\"\"\n    fontDataSize = len(fontdata)\n    font = get_table_directory(fontdata)\n    # toss out .otf fonts, t2embed library doesn't support these\n    tableDir = font['tableDir']\n    # check for required tables\n    required = (OpenType.TABLE_HEAD, OpenType.TABLE_NAME, OpenType.TABLE_OS2)\n    for table in required:\n        if not (table in tableDir):",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "documentation": {}
+    },
+    {
+        "label": "write_eot_font",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "peekOfCode": "def write_eot_font(eot, header, data):\n    open(eot,'wb').write(''.join((header, data)))\n    return\ndef main():\n    # deal with options\n    p = optparse.OptionParser()\n    p.add_option('--output', '-o', default=\"world\")\n    options, args = p.parse_args()\n    # iterate over font files\n    for f in args:",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "peekOfCode": "def main():\n    # deal with options\n    p = optparse.OptionParser()\n    p.add_option('--output', '-o', default=\"world\")\n    options, args = p.parse_args()\n    # iterate over font files\n    for f in args:\n        data = readfont(f)\n        if len(data) == 0:\n            print 'Error reading %s' % f",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.eotlitetool",
+        "documentation": {}
+    },
+    {
+        "label": "SCRIPT_PATH",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "peekOfCode": "SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))\nINPUT_SVG_DIR = os.path.join(SCRIPT_PATH, '..', '..', 'src')\nOUTPUT_FONT_DIR = os.path.join(SCRIPT_PATH, '..', '..', 'fonts')\nMANIFEST_PATH = os.path.join(SCRIPT_PATH, '..', 'manifest.json')\nBUILD_DATA_PATH = os.path.join(SCRIPT_PATH, '..', 'build_data.json')\nAUTO_WIDTH = True\nKERNING = 15\ncp = 0xf100\nm = md5.new()\nf = fontforge.font()",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "documentation": {}
+    },
+    {
+        "label": "INPUT_SVG_DIR",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "peekOfCode": "INPUT_SVG_DIR = os.path.join(SCRIPT_PATH, '..', '..', 'src')\nOUTPUT_FONT_DIR = os.path.join(SCRIPT_PATH, '..', '..', 'fonts')\nMANIFEST_PATH = os.path.join(SCRIPT_PATH, '..', 'manifest.json')\nBUILD_DATA_PATH = os.path.join(SCRIPT_PATH, '..', 'build_data.json')\nAUTO_WIDTH = True\nKERNING = 15\ncp = 0xf100\nm = md5.new()\nf = fontforge.font()\nf.encoding = 'UnicodeFull'",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "documentation": {}
+    },
+    {
+        "label": "OUTPUT_FONT_DIR",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "peekOfCode": "OUTPUT_FONT_DIR = os.path.join(SCRIPT_PATH, '..', '..', 'fonts')\nMANIFEST_PATH = os.path.join(SCRIPT_PATH, '..', 'manifest.json')\nBUILD_DATA_PATH = os.path.join(SCRIPT_PATH, '..', 'build_data.json')\nAUTO_WIDTH = True\nKERNING = 15\ncp = 0xf100\nm = md5.new()\nf = fontforge.font()\nf.encoding = 'UnicodeFull'\nf.design_size = 16",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "documentation": {}
+    },
+    {
+        "label": "MANIFEST_PATH",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "peekOfCode": "MANIFEST_PATH = os.path.join(SCRIPT_PATH, '..', 'manifest.json')\nBUILD_DATA_PATH = os.path.join(SCRIPT_PATH, '..', 'build_data.json')\nAUTO_WIDTH = True\nKERNING = 15\ncp = 0xf100\nm = md5.new()\nf = fontforge.font()\nf.encoding = 'UnicodeFull'\nf.design_size = 16\nf.em = 512",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "documentation": {}
+    },
+    {
+        "label": "BUILD_DATA_PATH",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "peekOfCode": "BUILD_DATA_PATH = os.path.join(SCRIPT_PATH, '..', 'build_data.json')\nAUTO_WIDTH = True\nKERNING = 15\ncp = 0xf100\nm = md5.new()\nf = fontforge.font()\nf.encoding = 'UnicodeFull'\nf.design_size = 16\nf.em = 512\nf.ascent = 448",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "documentation": {}
+    },
+    {
+        "label": "AUTO_WIDTH",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "peekOfCode": "AUTO_WIDTH = True\nKERNING = 15\ncp = 0xf100\nm = md5.new()\nf = fontforge.font()\nf.encoding = 'UnicodeFull'\nf.design_size = 16\nf.em = 512\nf.ascent = 448\nf.descent = 64",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "documentation": {}
+    },
+    {
+        "label": "KERNING",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "peekOfCode": "KERNING = 15\ncp = 0xf100\nm = md5.new()\nf = fontforge.font()\nf.encoding = 'UnicodeFull'\nf.design_size = 16\nf.em = 512\nf.ascent = 448\nf.descent = 64\nmanifest_file = open(MANIFEST_PATH, 'r')",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "documentation": {}
+    },
+    {
+        "label": "cp",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "peekOfCode": "cp = 0xf100\nm = md5.new()\nf = fontforge.font()\nf.encoding = 'UnicodeFull'\nf.design_size = 16\nf.em = 512\nf.ascent = 448\nf.descent = 64\nmanifest_file = open(MANIFEST_PATH, 'r')\nmanifest_data = json.loads(manifest_file.read())",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "documentation": {}
+    },
+    {
+        "label": "m",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "peekOfCode": "m = md5.new()\nf = fontforge.font()\nf.encoding = 'UnicodeFull'\nf.design_size = 16\nf.em = 512\nf.ascent = 448\nf.descent = 64\nmanifest_file = open(MANIFEST_PATH, 'r')\nmanifest_data = json.loads(manifest_file.read())\nmanifest_file.close()",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "documentation": {}
+    },
+    {
+        "label": "f",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "peekOfCode": "f = fontforge.font()\nf.encoding = 'UnicodeFull'\nf.design_size = 16\nf.em = 512\nf.ascent = 448\nf.descent = 64\nmanifest_file = open(MANIFEST_PATH, 'r')\nmanifest_data = json.loads(manifest_file.read())\nmanifest_file.close()\nprint \"Load Manifest, Icons: %s\" % ( len(manifest_data['icons']) )",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "documentation": {}
+    },
+    {
+        "label": "f.encoding",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "peekOfCode": "f.encoding = 'UnicodeFull'\nf.design_size = 16\nf.em = 512\nf.ascent = 448\nf.descent = 64\nmanifest_file = open(MANIFEST_PATH, 'r')\nmanifest_data = json.loads(manifest_file.read())\nmanifest_file.close()\nprint \"Load Manifest, Icons: %s\" % ( len(manifest_data['icons']) )\nbuild_data = copy.deepcopy(manifest_data)",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "documentation": {}
+    },
+    {
+        "label": "f.design_size",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "peekOfCode": "f.design_size = 16\nf.em = 512\nf.ascent = 448\nf.descent = 64\nmanifest_file = open(MANIFEST_PATH, 'r')\nmanifest_data = json.loads(manifest_file.read())\nmanifest_file.close()\nprint \"Load Manifest, Icons: %s\" % ( len(manifest_data['icons']) )\nbuild_data = copy.deepcopy(manifest_data)\nbuild_data['icons'] = []",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "documentation": {}
+    },
+    {
+        "label": "f.em",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "peekOfCode": "f.em = 512\nf.ascent = 448\nf.descent = 64\nmanifest_file = open(MANIFEST_PATH, 'r')\nmanifest_data = json.loads(manifest_file.read())\nmanifest_file.close()\nprint \"Load Manifest, Icons: %s\" % ( len(manifest_data['icons']) )\nbuild_data = copy.deepcopy(manifest_data)\nbuild_data['icons'] = []\nfont_name = manifest_data['name']",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "documentation": {}
+    },
+    {
+        "label": "f.ascent",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "peekOfCode": "f.ascent = 448\nf.descent = 64\nmanifest_file = open(MANIFEST_PATH, 'r')\nmanifest_data = json.loads(manifest_file.read())\nmanifest_file.close()\nprint \"Load Manifest, Icons: %s\" % ( len(manifest_data['icons']) )\nbuild_data = copy.deepcopy(manifest_data)\nbuild_data['icons'] = []\nfont_name = manifest_data['name']\nm.update(font_name + ';')",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "documentation": {}
+    },
+    {
+        "label": "f.descent",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "peekOfCode": "f.descent = 64\nmanifest_file = open(MANIFEST_PATH, 'r')\nmanifest_data = json.loads(manifest_file.read())\nmanifest_file.close()\nprint \"Load Manifest, Icons: %s\" % ( len(manifest_data['icons']) )\nbuild_data = copy.deepcopy(manifest_data)\nbuild_data['icons'] = []\nfont_name = manifest_data['name']\nm.update(font_name + ';')\nm.update(manifest_data['prefix'] + ';')",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "documentation": {}
+    },
+    {
+        "label": "manifest_file",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "peekOfCode": "manifest_file = open(MANIFEST_PATH, 'r')\nmanifest_data = json.loads(manifest_file.read())\nmanifest_file.close()\nprint \"Load Manifest, Icons: %s\" % ( len(manifest_data['icons']) )\nbuild_data = copy.deepcopy(manifest_data)\nbuild_data['icons'] = []\nfont_name = manifest_data['name']\nm.update(font_name + ';')\nm.update(manifest_data['prefix'] + ';')\nfor dirname, dirnames, filenames in os.walk(INPUT_SVG_DIR):",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "documentation": {}
+    },
+    {
+        "label": "manifest_data",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "peekOfCode": "manifest_data = json.loads(manifest_file.read())\nmanifest_file.close()\nprint \"Load Manifest, Icons: %s\" % ( len(manifest_data['icons']) )\nbuild_data = copy.deepcopy(manifest_data)\nbuild_data['icons'] = []\nfont_name = manifest_data['name']\nm.update(font_name + ';')\nm.update(manifest_data['prefix'] + ';')\nfor dirname, dirnames, filenames in os.walk(INPUT_SVG_DIR):\n  for filename in filenames:",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "documentation": {}
+    },
+    {
+        "label": "build_data",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "peekOfCode": "build_data = copy.deepcopy(manifest_data)\nbuild_data['icons'] = []\nfont_name = manifest_data['name']\nm.update(font_name + ';')\nm.update(manifest_data['prefix'] + ';')\nfor dirname, dirnames, filenames in os.walk(INPUT_SVG_DIR):\n  for filename in filenames:\n    name, ext = os.path.splitext(filename)\n    filePath = os.path.join(dirname, filename)\n    size = os.path.getsize(filePath)",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "documentation": {}
+    },
+    {
+        "label": "build_data['icons']",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "peekOfCode": "build_data['icons'] = []\nfont_name = manifest_data['name']\nm.update(font_name + ';')\nm.update(manifest_data['prefix'] + ';')\nfor dirname, dirnames, filenames in os.walk(INPUT_SVG_DIR):\n  for filename in filenames:\n    name, ext = os.path.splitext(filename)\n    filePath = os.path.join(dirname, filename)\n    size = os.path.getsize(filePath)\n    if ext in ['.svg', '.eps']:",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "documentation": {}
+    },
+    {
+        "label": "font_name",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "peekOfCode": "font_name = manifest_data['name']\nm.update(font_name + ';')\nm.update(manifest_data['prefix'] + ';')\nfor dirname, dirnames, filenames in os.walk(INPUT_SVG_DIR):\n  for filename in filenames:\n    name, ext = os.path.splitext(filename)\n    filePath = os.path.join(dirname, filename)\n    size = os.path.getsize(filePath)\n    if ext in ['.svg', '.eps']:\n      # see if this file is already in the manifest",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "documentation": {}
+    },
+    {
+        "label": "build_hash",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "description": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "peekOfCode": "build_hash = m.hexdigest()\nif build_hash == manifest_data.get('build_hash'):\n  print \"Source files unchanged, did not rebuild fonts\"\nelse:\n  manifest_data['build_hash'] = build_hash\n  f.fontname = font_name\n  f.familyname = font_name\n  f.fullname = font_name\n  f.generate(fontfile + '.ttf')\n  f.generate(fontfile + '.svg')",
+        "detail": "theme.css.ionicons-2.0.1.builder.scripts.generate_font",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.generate",
+        "description": "theme.css.ionicons-2.0.1.builder.generate",
+        "peekOfCode": "def main():\n  generate_font_files()\n  data = get_build_data()\n  rename_svg_glyph_names(data)\n  generate_scss(data)\n  generate_less(data)\n  generate_cheatsheet(data)\n  generate_component_json(data)\n  generate_composer_json(data)\n  generate_bower_json(data)",
+        "detail": "theme.css.ionicons-2.0.1.builder.generate",
+        "documentation": {}
+    },
+    {
+        "label": "generate_font_files",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.generate",
+        "description": "theme.css.ionicons-2.0.1.builder.generate",
+        "peekOfCode": "def generate_font_files():\n  print \"Generate Fonts\"\n  cmd = \"fontforge -script %s/scripts/generate_font.py\" % (BUILDER_PATH)\n  call(cmd, shell=True)\ndef rename_svg_glyph_names(data):\n  # hacky and slow (but safe) way to rename glyph-name attributes\n  svg_path = os.path.join(FONTS_FOLDER_PATH, 'ionicons.svg')\n  svg_file = open(svg_path, 'r+')\n  svg_text = svg_file.read()\n  svg_file.seek(0)",
+        "detail": "theme.css.ionicons-2.0.1.builder.generate",
+        "documentation": {}
+    },
+    {
+        "label": "rename_svg_glyph_names",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.generate",
+        "description": "theme.css.ionicons-2.0.1.builder.generate",
+        "peekOfCode": "def rename_svg_glyph_names(data):\n  # hacky and slow (but safe) way to rename glyph-name attributes\n  svg_path = os.path.join(FONTS_FOLDER_PATH, 'ionicons.svg')\n  svg_file = open(svg_path, 'r+')\n  svg_text = svg_file.read()\n  svg_file.seek(0)\n  for ionicon in data['icons']:\n    # uniF2CA\n    org_name = 'uni%s' % (ionicon['code'].replace('0x', '').upper())\n    ion_name = 'ion-%s' % (ionicon['name'])",
+        "detail": "theme.css.ionicons-2.0.1.builder.generate",
+        "documentation": {}
+    },
+    {
+        "label": "generate_less",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.generate",
+        "description": "theme.css.ionicons-2.0.1.builder.generate",
+        "peekOfCode": "def generate_less(data):\n  print \"Generate LESS\"\n  font_name = data['name']\n  font_version = data['version']\n  css_prefix = data['prefix']\n  variables_file_path = os.path.join(LESS_FOLDER_PATH, '_ionicons-variables.less')\n  icons_file_path = os.path.join(LESS_FOLDER_PATH, '_ionicons-icons.less')\n  d = []\n  d.append('/*!');\n  d.append('Ionicons, v%s' % (font_version) );",
+        "detail": "theme.css.ionicons-2.0.1.builder.generate",
+        "documentation": {}
+    },
+    {
+        "label": "generate_scss",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.generate",
+        "description": "theme.css.ionicons-2.0.1.builder.generate",
+        "peekOfCode": "def generate_scss(data):\n  print \"Generate SCSS\"\n  font_name = data['name']\n  font_version = data['version']\n  css_prefix = data['prefix']\n  variables_file_path = os.path.join(SCSS_FOLDER_PATH, '_ionicons-variables.scss')\n  icons_file_path = os.path.join(SCSS_FOLDER_PATH, '_ionicons-icons.scss')\n  d = []\n  d.append('// Ionicons Variables')\n  d.append('// --------------------------\\n')",
+        "detail": "theme.css.ionicons-2.0.1.builder.generate",
+        "documentation": {}
+    },
+    {
+        "label": "generate_css_from_scss",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.generate",
+        "description": "theme.css.ionicons-2.0.1.builder.generate",
+        "peekOfCode": "def generate_css_from_scss(data):\n  print \"Generate CSS From SCSS\"\n  scss_file_path = os.path.join(SCSS_FOLDER_PATH, 'ionicons.scss')\n  css_file_path = os.path.join(CSS_FOLDER_PATH, 'ionicons.css')\n  css_min_file_path = os.path.join(CSS_FOLDER_PATH, 'ionicons.min.css')\n  cmd = \"sass %s %s --style compact\" % (scss_file_path, css_file_path)\n  call(cmd, shell=True)\n  print \"Generate Minified CSS From SCSS\"\n  cmd = \"sass %s %s --style compressed\" % (scss_file_path, css_min_file_path)\n  call(cmd, shell=True)",
+        "detail": "theme.css.ionicons-2.0.1.builder.generate",
+        "documentation": {}
+    },
+    {
+        "label": "generate_cheatsheet",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.generate",
+        "description": "theme.css.ionicons-2.0.1.builder.generate",
+        "peekOfCode": "def generate_cheatsheet(data):\n  print \"Generate Cheatsheet\"\n  cheatsheet_file_path = os.path.join(ROOT_PATH, 'cheatsheet.html')\n  template_path = os.path.join(BUILDER_PATH, 'cheatsheet', 'template.html')\n  icon_row_path = os.path.join(BUILDER_PATH, 'cheatsheet', 'icon-row.html')\n  f = open(template_path, 'r')\n  template_html = f.read()\n  f.close()\n  f = open(icon_row_path, 'r')\n  icon_row_template = f.read()",
+        "detail": "theme.css.ionicons-2.0.1.builder.generate",
+        "documentation": {}
+    },
+    {
+        "label": "generate_component_json",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.generate",
+        "description": "theme.css.ionicons-2.0.1.builder.generate",
+        "peekOfCode": "def generate_component_json(data):\n  print \"Generate component.json\"\n  d = {\n    \"name\": data['name'],\n    \"repo\": \"driftyco/ionicons\",\n    \"description\": \"The premium icon font for Ionic Framework.\",\n    \"version\": data['version'],\n    \"keywords\": [],\n    \"dependencies\": {},\n    \"development\": {},",
+        "detail": "theme.css.ionicons-2.0.1.builder.generate",
+        "documentation": {}
+    },
+    {
+        "label": "generate_composer_json",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.generate",
+        "description": "theme.css.ionicons-2.0.1.builder.generate",
+        "peekOfCode": "def generate_composer_json(data):\n  print \"Generate composer.json\"\n  d = {\n    \"name\": \"driftyco/ionicons\",\n    \"description\": \"The premium icon font for Ionic Framework.\",\n    \"keywords\": [ \"fonts\", \"icon font\", \"icons\", \"ionic\", \"web font\"],\n    \"homepage\": \"http://ionicons.com/\",\n    \"authors\": [\n      {\n        \"name\": \"Ben Sperry\",",
+        "detail": "theme.css.ionicons-2.0.1.builder.generate",
+        "documentation": {}
+    },
+    {
+        "label": "generate_bower_json",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.generate",
+        "description": "theme.css.ionicons-2.0.1.builder.generate",
+        "peekOfCode": "def generate_bower_json(data):\n  print \"Generate bower.json\"\n  d = {\n    \"name\": data['name'],\n    \"version\": data['version'],\n    \"homepage\": \"https://github.com/driftyco/ionicons\",\n    \"authors\": [\n      \"Ben Sperry <ben@drifty.com>\",\n      \"Adam Bradley <adam@drifty.com>\",\n      \"Max Lynch <max@drifty.com>\"",
+        "detail": "theme.css.ionicons-2.0.1.builder.generate",
+        "documentation": {}
+    },
+    {
+        "label": "get_build_data",
+        "kind": 2,
+        "importPath": "theme.css.ionicons-2.0.1.builder.generate",
+        "description": "theme.css.ionicons-2.0.1.builder.generate",
+        "peekOfCode": "def get_build_data():\n  build_data_path = os.path.join(BUILDER_PATH, 'build_data.json')\n  f = open(build_data_path, 'r')\n  data = json.loads(f.read())\n  f.close()\n  return data\nif __name__ == \"__main__\":\n  main()",
+        "detail": "theme.css.ionicons-2.0.1.builder.generate",
+        "documentation": {}
+    },
+    {
+        "label": "BUILDER_PATH",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.generate",
+        "description": "theme.css.ionicons-2.0.1.builder.generate",
+        "peekOfCode": "BUILDER_PATH = os.path.dirname(os.path.abspath(__file__))\nROOT_PATH = os.path.join(BUILDER_PATH, '..')\nFONTS_FOLDER_PATH = os.path.join(ROOT_PATH, 'fonts')\nCSS_FOLDER_PATH = os.path.join(ROOT_PATH, 'css')\nSCSS_FOLDER_PATH = os.path.join(ROOT_PATH, 'scss')\nLESS_FOLDER_PATH = os.path.join(ROOT_PATH, 'less')\ndef main():\n  generate_font_files()\n  data = get_build_data()\n  rename_svg_glyph_names(data)",
+        "detail": "theme.css.ionicons-2.0.1.builder.generate",
+        "documentation": {}
+    },
+    {
+        "label": "ROOT_PATH",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.generate",
+        "description": "theme.css.ionicons-2.0.1.builder.generate",
+        "peekOfCode": "ROOT_PATH = os.path.join(BUILDER_PATH, '..')\nFONTS_FOLDER_PATH = os.path.join(ROOT_PATH, 'fonts')\nCSS_FOLDER_PATH = os.path.join(ROOT_PATH, 'css')\nSCSS_FOLDER_PATH = os.path.join(ROOT_PATH, 'scss')\nLESS_FOLDER_PATH = os.path.join(ROOT_PATH, 'less')\ndef main():\n  generate_font_files()\n  data = get_build_data()\n  rename_svg_glyph_names(data)\n  generate_scss(data)",
+        "detail": "theme.css.ionicons-2.0.1.builder.generate",
+        "documentation": {}
+    },
+    {
+        "label": "FONTS_FOLDER_PATH",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.generate",
+        "description": "theme.css.ionicons-2.0.1.builder.generate",
+        "peekOfCode": "FONTS_FOLDER_PATH = os.path.join(ROOT_PATH, 'fonts')\nCSS_FOLDER_PATH = os.path.join(ROOT_PATH, 'css')\nSCSS_FOLDER_PATH = os.path.join(ROOT_PATH, 'scss')\nLESS_FOLDER_PATH = os.path.join(ROOT_PATH, 'less')\ndef main():\n  generate_font_files()\n  data = get_build_data()\n  rename_svg_glyph_names(data)\n  generate_scss(data)\n  generate_less(data)",
+        "detail": "theme.css.ionicons-2.0.1.builder.generate",
+        "documentation": {}
+    },
+    {
+        "label": "CSS_FOLDER_PATH",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.generate",
+        "description": "theme.css.ionicons-2.0.1.builder.generate",
+        "peekOfCode": "CSS_FOLDER_PATH = os.path.join(ROOT_PATH, 'css')\nSCSS_FOLDER_PATH = os.path.join(ROOT_PATH, 'scss')\nLESS_FOLDER_PATH = os.path.join(ROOT_PATH, 'less')\ndef main():\n  generate_font_files()\n  data = get_build_data()\n  rename_svg_glyph_names(data)\n  generate_scss(data)\n  generate_less(data)\n  generate_cheatsheet(data)",
+        "detail": "theme.css.ionicons-2.0.1.builder.generate",
+        "documentation": {}
+    },
+    {
+        "label": "SCSS_FOLDER_PATH",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.generate",
+        "description": "theme.css.ionicons-2.0.1.builder.generate",
+        "peekOfCode": "SCSS_FOLDER_PATH = os.path.join(ROOT_PATH, 'scss')\nLESS_FOLDER_PATH = os.path.join(ROOT_PATH, 'less')\ndef main():\n  generate_font_files()\n  data = get_build_data()\n  rename_svg_glyph_names(data)\n  generate_scss(data)\n  generate_less(data)\n  generate_cheatsheet(data)\n  generate_component_json(data)",
+        "detail": "theme.css.ionicons-2.0.1.builder.generate",
+        "documentation": {}
+    },
+    {
+        "label": "LESS_FOLDER_PATH",
+        "kind": 5,
+        "importPath": "theme.css.ionicons-2.0.1.builder.generate",
+        "description": "theme.css.ionicons-2.0.1.builder.generate",
+        "peekOfCode": "LESS_FOLDER_PATH = os.path.join(ROOT_PATH, 'less')\ndef main():\n  generate_font_files()\n  data = get_build_data()\n  rename_svg_glyph_names(data)\n  generate_scss(data)\n  generate_less(data)\n  generate_cheatsheet(data)\n  generate_component_json(data)\n  generate_composer_json(data)",
+        "detail": "theme.css.ionicons-2.0.1.builder.generate",
+        "documentation": {}
+    }
+]
