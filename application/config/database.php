@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => '173.212.221.176',
-	'username' => 'demo_mipos_cloud',
-	'password' => 'demo_mipos_cloud',
-	'database' => 'demo_mipos_cloud',
+	'hostname' => 'localhost',
+	'username' => 'root',
+	'password' => '',
+	'database' => 'salesman',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

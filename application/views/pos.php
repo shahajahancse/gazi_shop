@@ -74,11 +74,11 @@
     if(sidebar_collapse=='true'){
       $("body").addClass('sidebar-collapse');
     }
-  </script> 
+  </script>
   <?php $CI =& get_instance(); ?>
 <div class="wrapper">
-  
-  
+
+
   <header class="main-header">
     <nav class="navbar navbar-static-top">
       <div class="container">
@@ -107,17 +107,17 @@
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
           <ul class="nav navbar-nav">
-            
+
             <!-- User Account Menu -->
             <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Click To View Hold Invoices">
-             
+
               <span class=""><?= $this->lang->line('hold_list'); ?></span>
               <span class="label label-danger hold_invoice_list_count"></span>
             </a>
 
             <ul class="dropdown-menu dropdown-width-lg">
-              
+
               <!-- Menu Body -->
               <li class="user-body">
                 <div class="row">
@@ -132,7 +132,7 @@
                       </tr>
                       </thead>
                       <tbody id="hold_invoice_list" >
-                       
+
                       </tbody>
                     </table>
                   </div>
@@ -218,7 +218,7 @@
 
     <!-- **********************MODALS***************** -->
     <?php include"modals/modal_customer.php"; ?>
-    
+
     <!-- **********************MODALS END***************** -->
     <!-- Main content -->
     <section class="content">
@@ -226,11 +226,11 @@
         <!-- left column -->
         <form class="form-horizontal" id="pos-form" >
         <div class="col-md-7">
-         
+
           <!-- general form elements -->
           <div class="box box-primary">
             <!-- form start -->
-            
+
             <div class="box-header with-border" style="padding-bottom: 0px;">
               <div class="row" >
                 <div class="col-md-12" >
@@ -241,12 +241,12 @@
                   <div class="form-group">
                      <select class="form-control select2" id="warehouse_id" name="warehouse_id"  style="width: 100%;" onkeyup="shift_cursor(event,'mobile')">
                           <?php
-                             
+
                              $query1="select * from db_warehouse where status=1";
                              $q1=$this->db->query($query1);
                              if($q1->num_rows($q1)>0)
-                                { 
-                                  
+                                {
+
                                   foreach($q1->result() as $res1)
                                 {
                                   $selected=($warehouse_id==$res1->id) ? 'selected' : '';
@@ -271,23 +271,23 @@
                   </div>
                   <?php } ?>
                 <?php endif; ?>
-                
+
               </div>
               </div>
-               
-            
-            
-            
+
+
+
+
           </div>
             <!-- /.box-header -->
-            
+
               <input type="hidden" name="<?php echo $this->security->get_csrf_token_name();?>" value="<?php echo $this->security->get_csrf_hash();?>">
               <input type="hidden" value='0' id="hidden_rowcount" name="hidden_rowcount">
               <input type="hidden" value='' id="hidden_invoice_id" name="hidden_invoice_id">
               <input type="hidden" id="base_url" value="<?php echo $base_url;; ?>">
 
               <input type="hidden" value='' id="temp_customer_id" name="temp_customer_id">
-              
+
               <!-- **********************MODALS***************** -->
              <?php include"modals_pos_payment/modal_payments_multi.php"; ?>
               <!-- **********************MODALS END***************** -->
@@ -301,7 +301,7 @@
                       <h4 class="modal-title">Set Discount</h4>
                     </div>
                     <div class="modal-body">
-                      
+
                         <div class="row">
                           <div class="col-md-6">
                             <div class="box-body">
@@ -323,7 +323,7 @@
                             </div>
                           </div>
                         </div>
-                     
+
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
@@ -336,7 +336,7 @@
               </div>
               <!-- /.modal -->
               <!-- **********************MODALS END***************** -->
-              <div class="box-body">                
+              <div class="box-body">
               <div class="row">
                 <div class="col-md-6">
                   <div class="input-group">
@@ -345,9 +345,9 @@
                         <?php
                         $query1="select * from db_customers where status=1";
                         $q1=$this->db->query($query1);
-                        
+
                         if($q1->num_rows($q1)>0)
-                         {   
+                         {
                              foreach($q1->result() as $res1)
                            {
                              echo "<option  value='".$res1->id."'>".$res1->customer_name."</option>";
@@ -364,15 +364,15 @@
                     <span class="input-group-addon pointer" data-toggle="modal" data-target="#customer-modal" title="New Customer?"><i class="fa fa-user-plus text-primary fa-lg"></i></span>
                   </div>
                     <span class="customer_points text-success" style="display: none;"></span>
-                  
-                  
+
+
                 </div>
                 <div class="col-md-6">
                   <div class="input-group">
                     <span class="input-group-addon" title="Select Items"><i class="fa fa-barcode"></i></span>
                      <input type="text" class="form-control" placeholder="Item name/Barcode/Itemcode" id="item_search">
                   </div>
-                </div>                
+                </div>
               </div><!-- row end -->
               <br>
               <div class="row">
@@ -390,23 +390,23 @@
                         </thead>
                         <tbody id="pos-form-tbody" style="font-size: 16px;font-weight: bold;overflow: scroll;">
                           <!-- body code -->
-                        </tbody>        
+                        </tbody>
                         <tfoot>
                           <!-- footer code -->
-                        </tfoot>              
+                        </tfoot>
                       </table>
                     </div>
                   </div>
                 </div>
               </div>
 
-             
-           
+
+
               </div>
               <!-- /.box-body -->
 
-              
-           
+
+
           </div>
           <!-- /.box -->
         </div>
@@ -424,40 +424,40 @@
                     </div>
                     <div class="col-md-5 text-right text-bold font-weight-bold" style="font-size: 19px;">
                       <label><?= $this->lang->line('total_amount'); ?>:</label><br/>
-                      <?= $CI->currency('<span class="tot_amt"></span>');?>      
+                      <?= $CI->currency('<span class="tot_amt"></span>');?>
                     </div>
-                   
+
                   </div>
 
                   <div class="row" style="padding-top:30px">
                     <div class="col-md-5 text-right text-bold font-weight-bold" style="font-size: 19px;">
                         <label><?= $this->lang->line('total_discount'); ?>:<a class="fa fa-pencil-square-o cursor-pointer" data-toggle="modal" data-target="#discount-modal"></a></label><br/>
-                        <?= $CI->currency('<span class="tot_disc"></span>');?>  
+                        <?= $CI->currency('<span class="tot_disc"></span>');?>
                     </div>
                     <div class="col-md-5 text-right text-bold font-weight-bold" style="font-size: 19px;">
                        <label><?= $this->lang->line('grand_total'); ?>:</label><br/>
-                       <?= $CI->currency('<span class="tot_grand"></span>');?>     
+                       <?= $CI->currency('<span class="tot_grand"></span>');?>
                     </div>
-                   
+
                   </div>
 
 
 
                   <div class="row" style="padding-top:85px">
                  <!-- SMS Sender while saving -->
-                      <?php 
+                      <?php
                          //Change Return
                           $send_sms_checkbox='disabled';
                           if($CI->is_sms_enabled()){
                             if(!isset($sales_id)){
-                              $send_sms_checkbox='checked';  
+                              $send_sms_checkbox='checked';
                             }else{
                               $send_sms_checkbox='';
                             }
                           }
 
                     ?>
-                   
+
                     <div class="col-xs-12 ">
                            <div class="checkbox icheck" style="padding-left: 16px;">
                             <label>
@@ -468,14 +468,14 @@
                               </label>
                             </label>
                           </div>
-                            
+
                              <!-- /.box-body -->
-                         
+
                        <!-- /.box -->
-                    </div> 
+                    </div>
                 </div>
                   <div class="row">
-                  
+
                     <?php if(isset($sales_id)){ $btn_id='update';$btn_name="Cash"; ?>
                       <input type="hidden" name="sales_id" id="sales_id" value="<?php echo $sales_id;?>"/>
                     <?php } else{ $btn_id='save';$btn_name="Cash";} ?>
@@ -504,46 +504,46 @@
                 </div>
               </div>
           </div>
-        </div>  
-        </form>    
+        </div>
+        </form>
         <div class="col-md-5"  style="display:none">
           <!-- Horizontal Form -->
           <div class="box box-info">
             <!-- form start -->
-            
+
               <div class="box-body">
-                
+
             <!-- row end -->
-             
+
               <div class="">
                 <div class="" style="display:none">
                   <!-- <div class="form-group"> -->
                    <!--  <div class="col-sm-12"> -->
                       <!-- <style type="text/css">
-                        
+
                       </style> -->
-                     
+
                             <section class="content" >
                               <div class="row search_div" style="overflow-y: scroll;min-height: 100px;max-height: 500px;">
-                              
+
                               </div>
                               <h3 class='text-danger text-center error_div' style="display: none;">Sorry! No Records Found</h3>
                             </section>
-                      
-                         
+
+
                     <!-- </div> -->
                   <!-- </div> -->
                 </div>
               </div>
-           
+
               </div>
               <!-- /.box-body -->
 
-              
-           
+
+
           </div>
           <!-- /.box -->
-          
+
           <!-- /.box -->
         </div>
         <!--/.col (right) -->
@@ -571,7 +571,7 @@
 <script src="<?php echo $theme_link; ?>js/pos.js"></script>
 <script src="<?php echo $theme_link; ?>js/mousetrap.min.js"></script>
 <!-- DROP DOWN -->
-<script src="<?php echo $theme_link; ?>dist/js/bootstrap3-typeahead.min.js"></script>  
+<script src="<?php echo $theme_link; ?>dist/js/bootstrap3-typeahead.min.js"></script>
 <!-- DROP DOWN END-->
 
 
@@ -592,7 +592,7 @@
       $("#item_parent_"+i).show();
     }
     else{
-     console.log("not-found"); 
+     console.log("not-found");
      $("#item_"+i).hide();
      $("#item_parent_"+i).hide();
      error_count--;
@@ -603,7 +603,7 @@
     else{
       $(".error_div").hide();
     }
-    
+
   }
   }
 
@@ -621,7 +621,7 @@ function get_details(){
 //LEFT SIDE: ON CLICK ITEM ADD TO INVOICE LIST
 function addrow(id){
 
-    //CHECK SAME ITEM ALREADY EXIST IN ITEMS TABLE 
+    //CHECK SAME ITEM ALREADY EXIST IN ITEMS TABLE
     var item_check=check_same_item($('#div_'+id).attr('data-item-id'));
     if(!item_check){return false;}
     var rowcount        =$("#hidden_rowcount").val();//0,1,2...
@@ -642,7 +642,7 @@ function addrow(id){
     var remove_btn      ='<a class="fa fa-fw fa-trash-o text-red" style="cursor: pointer;font-size: 20px;" onclick="removerow('+rowcount+')" title="Delete Item?"></a>';
 
     var str=' <tr id="row_'+rowcount+'" data-row="0" data-item-id='+item_id+'>';/*item id*/
-        str+='<td id="td_'+rowcount+'_0">'+ item_name     +'</td>';/* td_0_0 item name*/ 
+        str+='<td id="td_'+rowcount+'_0">'+ item_name     +'</td>';/* td_0_0 item name*/
         str+='<td id="td_'+rowcount+'_1">'+ stock +'</td>';/* td_0_1 item available qty*/
         str+='<td id="td_'+rowcount+'_2">'+ quantity      +'</td>';/* td_0_2 item available qty*/
             info='<input id="sales_price_'+rowcount+'" onblur="set_to_original('+rowcount+','+item_cost+')" onkeyup="update_price('+rowcount+','+item_cost+')" name="sales_price_'+rowcount+'" type="text" class="form-control" value="'+sales_price+'">';
@@ -654,7 +654,7 @@ function addrow(id){
        // str+='<input type="hidden" id="tr_item_per_'+rowcount+'" name="tr_item_per_'+rowcount+'" value="'+gst_per+'">';
         str+='<input type="hidden" id="tr_sales_price_temp_'+rowcount+'" name="tr_sales_price_temp_'+rowcount+'" value="'+sales_price_temp+'">';
 
-        str+='</tr>';   
+        str+='</tr>';
 
     //LEFT SIDE: ADD OR APPEND TO SALES INVOICE TERMINAL
     $('#pos-form-tbody').append(str);
@@ -729,7 +729,7 @@ function item_qty_input(item_id,rowcount){
   var stock=$("#td_"+rowcount+"_1").html();
   if(stock==0){
     toastr["warning"]("item Not Available in stock!");
-    //return;  
+    //return;
   }
   if(parseInt(item_qty)>parseInt(stock)){
     $("#item_qty_"+item_id).val(stock);
@@ -739,12 +739,12 @@ function item_qty_input(item_id,rowcount){
   if(item_qty==0){
     $("#item_qty_"+item_id).val(1);
     toastr["warning"]("You must have atlease one Quantity");
-    //return; 
+    //return;
   }
   /*else{
     $("#item_qty_"+item_id).val(1);
     toastr["warning"]("You must have atlease one Quantity");
-    return; 
+    return;
   }*/
   make_subtotal(item_id,rowcount);
 }
@@ -753,8 +753,8 @@ function zero_stock(){
   toastr["error"]("Out of Stock!");
   return;
 }
-//LEFT SIDE: REMOVE ROW 
-function removerow(id){//id=Rowid  
+//LEFT SIDE: REMOVE ROW
+function removerow(id){//id=Rowid
     $("#row_"+id).remove();
     failed.currentTime = 0;
     failed.play();
@@ -799,7 +799,7 @@ function final_total(){
       }
     }//for end
   }//items_table
-  
+
   total =Math.round(total);
   var discount_amt=calulate_discount(discount_input,discount_type,total);//return value
   set_total(item_qty,total,discount_amt,total-discount_amt);
@@ -840,7 +840,7 @@ function adjust_payments(){
       //console.log((get_id_value("amount_"+i)=='')? 0 : get_id_value("amount_"+i));
     }
   }
-  
+
   //RIGHT SIDE DIV
   var discount_amt=calulate_discount(discount_input,discount_type,total);//return value
 
@@ -852,18 +852,17 @@ function adjust_payments(){
     change_return = Math.abs(parseFloat(balance));
     balance = 0;
   }
-  
-  balance =Math.round(balance);
+
+  balance = Math.round(balance);
   $(".sales_div_tot_qty  ").html(item_qty);
   $(".sales_div_tot_amt  ").html((Math.round(total)).toFixed(2));
-  $(".sales_div_tot_discount ").html((parseFloat(Math.round(discount_amt))).toFixed(2)); 
-  $(".sales_div_tot_payble ").html((parseFloat(Math.round(total-discount_amt))).toFixed(2)); 
+  $(".sales_div_tot_discount ").html((parseFloat(Math.round(discount_amt))).toFixed(2));
+  $(".sales_div_tot_payble ").html((parseFloat(Math.round(total-discount_amt))).toFixed(2));
   $(".sales_div_tot_paid ").html((Math.round(paid_amount)).toFixed(2));
-  $(".sales_div_tot_balance ").html((parseFloat(Math.round(balance))).toFixed(2)); 
-  
+  $(".sales_div_tot_balance ").html((parseFloat(Math.round(balance))).toFixed(2));
+
   /**/
-  $(".sales_div_change_return ").html((change_return).toFixed(2)); 
-  
+  $(".sales_div_change_return ").html((change_return).toFixed(2));
 }
 
 function check_same_item(item_id){
@@ -902,7 +901,7 @@ $(document).ready(function(){
   //DISCOUNT UPDATE
   $(".discount_update").click(function () {
       final_total();
-      $('#discount-modal').modal('toggle');    
+      $('#discount-modal').modal('toggle');
   });
 
   //RIGHT SIDE: CLEAR SEARCH BOX
@@ -956,7 +955,7 @@ $(document).ready(function(){
                 //$json_array[]=$value->item_name;
             }
         }
-        $json_array= json_encode($json_array);        
+        $json_array= json_encode($json_array);
 ?>
 $(document).ready(function() {
 
@@ -967,13 +966,13 @@ scroll: true,
 items: 10,
 limit: 10,
 //showHintOnFocus: 10,
-autoSelect: true, 
-updater: function (item) { 
-   return item; 
+autoSelect: true,
+updater: function (item) {
+   return item;
  // console.log(this.map[item].id);
-}, 
-afterSelect: function (item) { 
-  
+},
+afterSelect: function (item) {
+
   if(item.stock==0){
     toastr["error"]("Out of Stock!");
     $("#item_search").val('');
@@ -1003,7 +1002,7 @@ $('#order_date,#delivery_date,#cheque_date').datepicker({
       format: 'dd-mm-yyyy',
       startView: 2
     });
-    
+
     //Datemask dd-mm-yyyy
     //$("#customer_dob,#birthday_person_dob").inputmask("dd-mm-yyyy", {"placeholder": "dd-mm-yyyy"});
 
