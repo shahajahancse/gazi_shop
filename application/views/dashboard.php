@@ -76,7 +76,7 @@
           <!-- /.col -->
           <div class="col-md-3 col-sm-6 col-xs-12">
              <div class="info-box">
-                <span class="info-box-icon bg-yellow"><i class="fa fa-dollar"></i></span>
+                <span class="info-box-icon bg-yellow"><i class="fa fa-taka">৳</i></span>
                 <div class="info-box-content">
                    <span class="text-bold"><?= $this->lang->line('total_sales_due'); ?></span>
                    <span class="info-box-number"><?= $CI->currency(number_format($sales_due,2,'.','')); ?></span>

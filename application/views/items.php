@@ -196,7 +196,7 @@
                            </div>
                            <!-- /row -->
                            <div class="row">
-                              <div class="form-group col-md-4">
+                              <div class="form-group col-md-3">
                                  <label for="tax_type"><?= $this->lang->line('sales_tax_type'); ?><span class="text-danger">*</span></label>
                                  <select class="form-control select2" id="tax_type" name="tax_type"  style="width: 100%;" >
                                   <?php 
@@ -211,16 +211,23 @@
                                  <span id="tax_type_msg" style="display:none" class="text-danger"></span>
                                  
                               </div>
-                              <div class="form-group col-md-4">
+                              <div class="form-group col-md-3">
                                  <label for="profit_margin"><?= $this->lang->line('profit_margin'); ?>(%) <i class="hover-q " data-container="body" data-toggle="popover" data-placement="top" data-content="<?= $this->lang->line('based_on_purchase_price'); ?>" data-html="true" data-trigger="hover" data-original-title="">
                                   <i class="fa fa-info-circle text-maroon text-black hover-q"></i>
                                 </i></label>
                                  <input type="text" class="form-control only_currency" id="profit_margin" name="profit_margin" placeholder="Profit in %"  value="<?php print $profit_margin; ?>" >
                                  <span id="profit_margin_msg" style="display:none" class="text-danger"></span>
                               </div>
-                              <div class="form-group col-md-4">
+                              <div class="form-group col-md-3">
+                                 <label for="profit_margin">Discount(%) <i class="hover-q " data-container="body" data-toggle="popover" data-placement="top" data-content="<?= $this->lang->line('based_on_purchase_price'); ?>" data-html="true" data-trigger="hover" data-original-title="">
+                                  <i class="fa fa-info-circle text-maroon text-black hover-q"></i>
+                                </i></label>
+                                 <input type="text" class="form-control only_currency" id="discount" name="discount" placeholder="discount"  value="<?php print $discount; ?>" >
+                                 <span id="discount_msg" style="display:none" class="text-danger"></span>
+                              </div>
+                              <div class="form-group col-md-3">
                                  <label for="sales_price" class="control-label"><?= $this->lang->line('sales_price'); ?><span class="text-danger">*</span></label>
-                                 <input type="text" class="form-control only_currency " id="sales_price" name="sales_price" placeholder="Sales Price"  value="<?php print $sales_price; ?>" >
+                                 <input type="text" class="form-control only_currency " id="sales_price" name="sales_price" placeholder="Sales Price" readonly  value="<?php print $sales_price; ?>" >
                                  <span id="sales_price_msg" style="display:none" class="text-danger"></span>
                               </div>
                            </div>

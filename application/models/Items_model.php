@@ -168,12 +168,12 @@ class Items_model extends CI_Model {
 		$query1="insert into db_items(item_code,item_name,brand_id,category_id,sku,unit_id,alert_qty,lot_number,expire_date,
 									price,tax_id,purchase_price,tax_type,profit_margin,
 									sales_price,
-									system_ip,system_name,created_date,created_time,created_by,status)
+									system_ip,system_name,created_date,created_time,created_by,status,discount)
 
 							values('$item_code','$item_name','$brand_id','$category_id','$sku','$unit_id','$alert_qty','$lot_number','$expire_date',
 									'$price','$tax_id','$purchase_price','$tax_type',$profit_margin,
 									'$sales_price',
-									'$SYSTEM_IP','$SYSTEM_NAME','$CUR_DATE','$CUR_TIME','$CUR_USERNAME',1)";
+									'$SYSTEM_IP','$SYSTEM_NAME','$CUR_DATE','$CUR_TIME','$CUR_USERNAME',1,$discount)";
 		
 		$query1=$this->db->simple_query($query1);
 		if(!$query1){
@@ -236,6 +236,7 @@ class Items_model extends CI_Model {
 			$data['sales_price']=$query->sales_price;
 			$data['stock']=$query->stock;
 			$data['lot_number']=$query->lot_number;
+			$data['discount']=$query->discount;
 			$data['expire_date']=(!empty($query->expire_date)) ? show_date($query->expire_date):'';
 			
 			return $data;
@@ -300,6 +301,7 @@ class Items_model extends CI_Model {
 						item_name='$item_name',
 						brand_id='$brand_id',
 						category_id='$category_id',
+						discount='$discount',
 						sku='$sku',
 						unit_id='$unit_id',
 						alert_qty='$alert_qty',

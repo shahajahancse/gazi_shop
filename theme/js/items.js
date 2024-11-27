@@ -281,6 +281,7 @@ $("#tax_id").change(function(event) {
 function calculate_sales_price(){
 	var purchase_price = (isNaN(parseFloat($("#purchase_price").val().trim()))) ? 0 :parseFloat($("#purchase_price").val().trim()); 
 	var profit_margin = (isNaN(parseFloat($("#profit_margin").val().trim()))) ? 0 :parseFloat($("#profit_margin").val().trim()); 
+	var discount = (isNaN(parseFloat($("#discount").val().trim()))) ? 0 :parseFloat($("#discount").val().trim()); 
 	var tax_type = $("#tax_type").val();
 	var sales_price =parseFloat(0);
 	if(tax_type=='Inclusive'){
@@ -290,13 +291,18 @@ function calculate_sales_price(){
 		var price = (isNaN(parseFloat($("#price").val().trim()))) ? 0 :parseFloat($("#price").val().trim()); 
 		sales_price = price + ((price*profit_margin)/parseFloat(100));
 	}
+
+	sales_price = purchase_price - ((purchase_price*discount)/parseFloat(100));
 	$("#sales_price").val(sales_price.toFixed(2));
-	calculate_profit_margin();
+	//calculate_profit_margin();
 }
 $("#tax_type").change(function(event) {
 	calculate_sales_price();
 });
 $("#profit_margin").change(function(event) {
+	calculate_sales_price();
+});
+$("#discount").change(function(event) {
 	calculate_sales_price();
 });
 //END
