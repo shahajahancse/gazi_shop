@@ -30,20 +30,24 @@ class Pos_model extends CI_Model {
 					$single_unit_price = $item_sales_price;
 					$item_sales_price=$item_sales_price+ (($item_sales_price*$item_tax)/100);
 					$item_tax_amt = (($single_unit_price * $item_sales_qty)*$item_tax)/100;
-				}
-				else{//Inclusive	
+				}else{//Inclusive
 					$item_tax_amt=number_format($this->inclusive($item_sales_price,$item_tax),2,'.','');
 					$single_unit_price = $item_sales_price;
 				}
 				$item_amount = ($item_sales_price * $item_sales_qty) + $item_tax_amt;
-				//end 
+				//end
+
+				if ($res2->discount_type == 1) {
+					$discount = round(($res2->purchase_price * $res2->discount) / 100, 2);
+				} else {
+					$discount = $res2->discount;
+				}
 
 	        	if($res2->stock <1){
 	        		$str="zero_stock()";
 	        		$disabled='';
 	        		$bg_color="background-color:#c8c8c8";
-	        	}
-	        	else{
+	        	}else{
 	        		$str="addrow($res2->id)";
 	        		$disabled="disabled=disabled";
 	        		$bg_color="background-color:#a1db75";
@@ -51,13 +55,14 @@ class Pos_model extends CI_Model {
 
 	        	$img_src = (!empty($res2->item_image)) ? base_url(return_item_image_thumb($res2->item_image)) : base_url('theme/images/no_image.png');
 	      ?>
-	      
+
 	        <div class="col-md-3 col-xs-6 " id="item_parent_<?php echo $i;?>" <?php echo $disabled; ?> title='<?php echo $res2->item_name;?>'>
 	          <div class="box box-default item_box" id='div_<?php echo $res2->id;?>' onclick="<?php echo $str; ?>"
 	          				data-item-id='<?php echo $res2->id;?>'
 	          				data-item-name='<?php echo $res2->item_name;?>'
 	          				data-item-available-qty='<?php echo $res2->stock;?>'
 	          				data-item-sales-price='<?php echo $item_sales_price;?>'
+	          				data-item-discount='<?php echo $discount;?>'
 	          				data-item-cost='<?php echo $item_cost;?>'
 	           				style="max-height: 150px;min-height: 150px;cursor: pointer;<?php echo $bg_color; ?>">
 	           	<span class="label label-danger push-right" style="font-weight: bold;font-family: sans-serif;" title="<?php echo $res2->stock; ?> Quantity's in Stock"><?php echo $res2->stock; ?></span>
@@ -69,18 +74,18 @@ class Pos_model extends CI_Model {
 	            </div>
 	          </div>
 	        </div>
-	      
+
 	      <?php
 	          $i++;
 	          }//for end
 	      }//if num_rows() end
-	     
+
 	}
 	//CROSS SITE FILTER
 	public function xss_html_filter($input){
 		return $this->security->xss_clean(html_escape($input));
 	}
-	
+
 	//Save Sales
 	public function pos_save_update(){//Save or update sales
 		$this->db->trans_begin();
@@ -94,7 +99,7 @@ class Pos_model extends CI_Model {
 		}else{ //by multiple payments
 			$by_cash=false;
 		}
-		//end 
+		//end
 
 		$rowcount 			=$hidden_rowcount;
 		$sales_date 		=date("Y-m-d",strtotime($CUR_DATE));
@@ -104,14 +109,14 @@ class Pos_model extends CI_Model {
 		$tot_grand 		= (empty($tot_grand)) ? 'NULL' : $tot_grand;
 		//$tot_grand		=round($tot_amt);
 		$round_off = number_format($tot_grand-$tot_amt,2,'.','');
-		
+
 
 		//FIND CUSTOMER INFORMATION BY ITS ID
 		$q1=$this->db->query("select customer_name,mobile from db_customers where id=$customer_id");
 		$customer_name 	= $q1->row()->customer_name;
 		$mobile 		= $q1->row()->mobile;
 
-		
+
 		if($command=='update'){
 				$sales_entry = array(
 		    				'sales_date' 				=> $sales_date,
@@ -127,7 +132,7 @@ class Pos_model extends CI_Model {
 		    				'round_off' 				=> $round_off,
 		    				'grand_total' 				=> $tot_grand,
 		    			);
-					
+
 				$q3 = $this->db->where('id',$sales_id)->update('db_sales', $sales_entry);
 
 				$q11=$this->db->query("delete from db_salesitems where sales_id='$sales_id'");
@@ -135,19 +140,18 @@ class Pos_model extends CI_Model {
 				if(!$q11 || !$q12){
 					return "failed";
 				}
-		}
-		else{
+		} else{
 			//GET SALES INITIAL
 			$q5=$this->db->query("select sales_init from db_company where id=1");
-			$init=$q5->row()->sales_init;	
-			
+			$init=$q5->row()->sales_init;
+
 
 			//ORDER SALES CREATION
 			$maxid=$this->db->query("SELECT COALESCE(MAX(id),0)+1 AS maxid FROM db_sales")->row()->maxid;
 			$sales_code=$init.str_pad($maxid, 4, '0', STR_PAD_LEFT);
 
 			$sales_entry = array(
-		    				'sales_code' 				=> $sales_code, 
+		    				'sales_code' 				=> $sales_code,
 		    				'sales_date' 				=> $sales_date,
 		    				'sales_status' 				=> 'Final',
 		    				'customer_id' 				=> $customer_id,
@@ -175,26 +179,28 @@ class Pos_model extends CI_Model {
 		}
 		//Import post data from form
 		for($i=0;$i<$rowcount;$i++){
-		
+
 			if(isset($_REQUEST['tr_item_id_'.$i]) && trim($_REQUEST['tr_item_id_'.$i])!=''){
-			
+
 				//RECEIVE VALUES FROM FORM
 				$item_id 	=$this->xss_html_filter(trim($_REQUEST['tr_item_id_'.$i]));
 				$sales_qty 	=$this->xss_html_filter(trim($_REQUEST['item_qty_'.$item_id]));
 				$price_per_unit =$this->xss_html_filter(trim($_REQUEST['sales_price_'.$i]));
-				
+				$dis_per_qty =$this->xss_html_filter(trim($_REQUEST['dis_hide_'.$i]));
+				$dis_too = $dis_per_qty * $sales_qty;
+
 				//Find item ID
 				$q4=$this->db->query("select sales_price,tax_id from db_items where id=$item_id");
 				//$price_per_unit=$q4->row()->sales_price;
 				$tax_id = (empty($q4->row()->tax_id)) ? 'NULL' : $q4->row()->tax_id;
-				//end		
+				//end
 
 				//total of sales price of each item
 				$unit_total_cost = $price_per_unit;
 				$total_cost = $price_per_unit * $sales_qty;
-				//end 
+				//end
 
-				
+
 				$tax_type =$this->db->select('tax_type')->from('db_items')->where('id',$item_id)->get()->row()->tax_type;
 
 				$unit_tax=0;
@@ -205,42 +211,40 @@ class Pos_model extends CI_Model {
 						$unit_tax =$this->db->select('tax')->from('db_tax')->where('id',$tax_id)->get()->row()->tax;
 						$tax_amt = (($unit_tax * $price_per_unit)/100)*$sales_qty;
 						//$total_cost+=$tax_amt;
-					}
-					else{//Inclusive
+					}else{//Inclusive
 						$unit_tax =$this->db->select('tax')->from('db_tax')->where('id',$tax_id)->get()->row()->tax;
 						$tax_amt = $this->inclusive($price_per_unit,$unit_tax);
 					}
 				}
-				
+
 				//$tax_amt = $tax_amt * $sales_qty;
 				if($tax_type=='Exclusive'){
 					//$single_unit_total_cost = $price_per_unit + ($unit_tax * $price_per_unit / 100);
-				}
-				else{//Inclusive
+				}else{//Inclusive
 					//$single_unit_total_cost =$price_per_unit;
 				}
-				
+
 				$single_unit_total_cost =$price_per_unit;
 
 				if($tax_id=='' || $tax_id==0){$tax_id=null;}
 				if($tax_amt=='' || $tax_amt==0){$tax_amt=null;}
 				if($total_cost=='' || $total_cost==0){$total_cost=null;}
-				
+
 				if(!empty($discount_to_all_input) && $discount_to_all_input!=0){
 					$discount_amt =null;
 				}
 				/* ******************************** */
-				
+
 				$salesitems_entry = array(
-		    				'sales_id' 			=> $sales_id, 
-		    				'sales_status'		=> 'Final', 
-		    				'item_id' 			=> $item_id, 
+		    				'sales_id' 			=> $sales_id,
+		    				'sales_status'		=> 'Final',
+		    				'item_id' 			=> $item_id,
 		    				'sales_qty' 		=> $sales_qty,
 		    				'price_per_unit' 	=> $price_per_unit,
 		    				'tax_id' 			=> $tax_id,
 		    				'tax_amt' 			=> $tax_amt,
-		    				'unit_discount_per' => null,
-		    				'discount_amt' 		=> null,
+		    				'unit_discount_per' => $dis_per_qty,
+		    				'discount_amt' 		=> $dis_too,
 		    				'unit_total_cost' 	=> $single_unit_total_cost,
 		    				'total_cost' 		=> $total_cost,
 		    				'status'	 		=> 1,
@@ -253,12 +257,12 @@ class Pos_model extends CI_Model {
 				}
 
 			}
-		
+
 		}//for end
 
 		//UPDATE CUSTMER MULTPLE PAYMENTS
 		for($i=1;$i<=$payment_row_count;$i++){
-		
+
 			if((isset($_REQUEST['amount_'.$i]) && trim($_REQUEST['amount_'.$i])!='') || ($by_cash==true)){
 
 				if($by_cash==true){
@@ -266,8 +270,7 @@ class Pos_model extends CI_Model {
 					$amount 		=$tot_grand;
 					$payment_type 	='Cash';
 					$payment_note 	='Paid By Cash';
-				}
-				else{
+				}else{
 					//RECEIVE VALUES FROM FORM
 					$amount 		=$this->xss_html_filter(trim($_REQUEST['amount_'.$i]));
 					$payment_type 	=$this->xss_html_filter(trim($_REQUEST['payment_type_'.$i]));
@@ -281,9 +284,9 @@ class Pos_model extends CI_Model {
 					$amount =$tot_grand;
 				}
 				//end
-				
+
 				$salespayments_entry = array(
-					'sales_id' 		=> $sales_id, 
+					'sales_id' 		=> $sales_id,
 					'payment_date'		=> $sales_date,//Current Payment with sales entry
 					'payment_type' 		=> $payment_type,
 					'payment' 			=> $amount,
@@ -301,17 +304,17 @@ class Pos_model extends CI_Model {
 
 			    if(!$q7)
 				{
-					echo "q7\n";	
+					echo "q7\n";
 					return "failed";
 				}
-				
+
 			}//if()
-		
+
 		}//for end
 
-	
+
 		//UPDATE itemS QUANTITY IN itemS TABLE
-		$this->load->model('sales_model');				
+		$this->load->model('sales_model');
 		$q6=$this->sales_model->update_sales_payment_status($sales_id);
 		if(!$q6){
 			return "failed";
@@ -325,15 +328,15 @@ class Pos_model extends CI_Model {
 		}
 		//COMMIT RECORD
 		$this->db->trans_commit();
-		
+
 		$sms_info='';
-		if(isset($send_sms) && $customer_id!=1){
+		/* if(isset($send_sms) && $customer_id!=1){
 			if(send_sms_using_template($sales_id,1)==true){
 				$sms_info = 'SMS Has been Sent!';
 			}else{
 				$sms_info = 'Failed to Send SMS';
 			}
-		}
+		} */
 
 		$this->session->set_flashdata('success', 'Success!! Sales Created Successfully!'.$sms_info);
         return "success<<<###>>>$sales_id";
@@ -348,7 +351,7 @@ class Pos_model extends CI_Model {
 
 		$q8=$this->db->query("select COALESCE(SUM(purchase_qty),0) as pu_tot_qty from db_purchaseitems where item_id='$item_id' and purchase_status='Received'");
 		$pu_tot_qty=$q8->row()->pu_tot_qty;
-		
+
 		$q9=$this->db->query("select coalesce(SUM(sales_qty),0) as sl_tot_qty from db_salesitems where item_id='$item_id' and sales_status='Final'");
 		$sl_tot_qty=$q9->row()->sl_tot_qty;
 
@@ -368,8 +371,8 @@ class Pos_model extends CI_Model {
 		else{
 			return false;
 		}
-	}	
-	
+	}
+
 
 	public function edit_pos($sales_id){
 		$data=$this->data;
@@ -382,14 +385,14 @@ class Pos_model extends CI_Model {
 	      $discount_input=$res2->discount_to_all_input;
 	      $discount_type=$res2->discount_to_all_type;
 	      $grand_total=$res2->grand_total;
-	      
+
 
 	      $q3=$this->db->query("SELECT * FROM db_salesitems WHERE sales_id='$sales_id'");
 		  $rows=$q3->num_rows();
 		  if($rows>0){
 		  	$i=0;
-		  	
-		  	foreach ($q3->result() as $res3) { 
+
+		  	foreach ($q3->result() as $res3) {
 		  		$q5=$this->db->query("select a.item_name,a.purchase_price,a.tax_type, a.stock,a.sales_price,b.tax from db_items a,db_tax b where b.id=a.tax_id and a.id=".$res3->item_id);
 		  		$price_per_unit = $res3->price_per_unit;
 		  		$stock=$q5->row()->stock + $res3->sales_qty;
@@ -398,18 +401,18 @@ class Pos_model extends CI_Model {
 	        	/*if($item_tax_type=='Exclusive'){
 	        		$per_item_price_inc_tax=$price_per_unit+(($price_per_unit*$q5->row()->tax)/100);
 				}
-				else{//Inclusive	
+				else{//Inclusive
 					$per_item_price_inc_tax=$price_per_unit;
 				}*/
 				$per_item_price_inc_tax=$price_per_unit;
-				$per_item_price_inc_tax=number_format($per_item_price_inc_tax,2,'.','');	
+				$per_item_price_inc_tax=number_format($per_item_price_inc_tax,2,'.','');
 
 		  		$quantity        ='<div class="input-group input-group-sm"><span class="input-group-btn"><button onclick="decrement_qty('.$res3->item_id.','.$i.')" type="button" class="btn btn-default btn-flat"><i class="fa fa-minus text-danger"></i></button></span>';
 			    $quantity       .='<input typ="text" value="'.$res3->sales_qty.'" class="form-control" onkeyup="item_qty_input('.$res3->item_id.','.$i.')" id="item_qty_'.$res3->item_id.'" name="item_qty_'.$res3->item_id.'">';
 			    $quantity       .='<span class="input-group-btn"><button onclick="increment_qty('.$res3->item_id.','.$i.')" type="button" class="btn btn-default btn-flat"><i class="fa fa-plus text-success"></i></button></span></div>';
 			    $sub_total       =$per_item_price_inc_tax * $res3->sales_qty;
 			    $remove_btn      ='<a class="fa fa-fw fa-trash-o text-red" style="cursor: pointer;font-size: 20px;" onclick="removerow('.$i.')" title="Delete Item?"></a>';
-			    
+
 		  		echo '<tr id="row_'.$i.'" data-row="0" data-item-id="'.$res3->item_id.'" >'; /*item id */
 		  		echo '<td id="td_'.$i.'_0">'.$q5->row()->item_name.'</td>';  /*td_0_0 item name*/
 		  		echo '<td id="td_'.$i.'_1">'.$stock.'</td>';  /*td_0_1 item available qty*/
@@ -421,26 +424,26 @@ class Pos_model extends CI_Model {
 		  		echo '<td id="td_'.$i.'_4" class="text-right" >'.number_format($sub_total,2,'.','').'</td>';    /*td_0_4 item sub_total */
 		  		echo '<td id="td_'.$i.'_5">'.$remove_btn.'</td>';    /* td_0_5 item gst_amt  */
 
-		  		echo '<input type="hidden" name="tr_item_id_'.$i.'" id="tr_item_id_'.$i.'" value="'.$res3->item_id.'">'; 
+		  		echo '<input type="hidden" name="tr_item_id_'.$i.'" id="tr_item_id_'.$i.'" value="'.$res3->item_id.'">';
 		  		echo '<input type="hidden" id="tr_item_per_'.$i.'" name="tr_item_per_'.$i.'" value="'.$res3->tax.'">';
 		  		echo '<input type="hidden" id="tr_sales_price_temp_'.$i.'" name="tr_sales_price_temp_'.$i.'" value="'.$per_item_price_inc_tax.'">';
 		  		echo '</tr>';
-		  		
+
 		  		$i++;
 		  	}//foreach() end
 
 		  	echo "<<<###>>>".$discount_input."<<<###>>>".$discount_type."<<<###>>>".$customer_id;
 
 		  }//if ()
-		 
+
 	    }
 	    else{
 	      print "Record Not Available";
 	    }
-	     
+
 	}//edit_pos()
 
-	
+
 	/* ######################################## HOLD INVOICE ############################# */
 	public function hold_invoice(){
 		$this->db->trans_begin();
@@ -448,15 +451,15 @@ class Pos_model extends CI_Model {
 		extract($this->xss_html_filter(array_merge($this->data,$_POST,$_GET)));
 		$this->db->query("DELETE from temp_holdinvoice where invoice_id='$hidden_invoice_id'");
 		$maxid=$this->db->query("select coalesce(max(id),0)+1 as maxid from temp_holdinvoice")->row()->maxid;
-		
-    	for ($i=0; $i < $hidden_rowcount; $i++) { 
+
+    	for ($i=0; $i < $hidden_rowcount; $i++) {
     		if(isset($_POST['tr_item_id_'.$i])){
     		$item_id=$this->xss_html_filter($_POST['tr_item_id_'.$i]);
 			$item_qty=$this->xss_html_filter($_POST['item_qty_'.$item_id]);
 			$item_price=$this->xss_html_filter($_POST['tr_sales_price_temp_'.$i]);
 			//$tax=$this->xss_html_filter($_POST['tr_item_per_'.$i]);
-			
-			
+
+
     		$q1=$this->db->simple_query("INSERT into temp_holdinvoice(invoice_id,reference_id,invoice_date,
     			item_id,item_qty,item_price,tax,
     			created_date,created_time,created_by,system_ip,system_name,status,pos)
@@ -467,11 +470,11 @@ class Pos_model extends CI_Model {
 				'$CUR_DATE','$CUR_TIME','$CUR_USERNAME','$SYSTEM_IP','$SYSTEM_NAME',1,1)");
     		if(!$q1){
 				return "failed";
-			}	
-			
+			}
+
 		  }//if row exist
     	}//for end()
-	 	
+
 		//COMMIT RECORD
 		$this->db->trans_commit();
         return "success<<<###>>>$maxid";
@@ -486,7 +489,7 @@ class Pos_model extends CI_Model {
 	      $q2=$this->db->query("select * from temp_holdinvoice where status=1 group by invoice_id order by id desc");
 	      if($q2->num_rows()>0){
 	        foreach($q2->result() as $res2){
-	     
+
                   $str =$str."<tr>";
                   $str =$str."<td>".$res2->id."</td>";
                   $str =$str."<td>".show_date($res2->invoice_date)."</td>";
@@ -496,16 +499,16 @@ class Pos_model extends CI_Model {
                   	$str =$str.'<a class="fa fa-fw fa-edit text-success" style="cursor: pointer;font-size: 20px;" onclick="hold_invoice_edit('.$res2->invoice_id.')" title="Edit Invoive?"></a>';
                   $str =$str."</td>";
                 $str =$str."</tr>";
-	     
+
 	          $i++;
 	          }//for end
 	      }//if num_rows() end
 	      else{
-	      	
+
 	      	$str =$str."<tr>";
 	      		$str =$str.'<td colspan="4" class="text-danger text-center">No Records Found</td>';
 	      	$str =$str.'</tr>';
-	      	
+
 	      }
 		return $str;
 	}
@@ -523,7 +526,7 @@ class Pos_model extends CI_Model {
 	public function hold_invoice_edit(){
 		extract($this->xss_html_filter(array_merge($this->data,$_POST,$_GET)));
 		$display_json = array();
-		$sql =$this->db->query("SELECT * from temp_holdinvoice where invoice_id='$invoice_id'");	
+		$sql =$this->db->query("SELECT * from temp_holdinvoice where invoice_id='$invoice_id'");
 		foreach ($sql->result() as $res) {
 		     $json_arr["id"] = $res->id;
 			 $json_arr["item_id"] = $res->item_id;

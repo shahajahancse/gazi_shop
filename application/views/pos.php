@@ -225,7 +225,7 @@
       <div class="row">
         <!-- left column -->
         <form class="form-horizontal" id="pos-form" >
-        <div class="col-md-7">
+        <div class="col-md-8">
 
           <!-- general form elements -->
           <div class="box box-primary">
@@ -381,10 +381,11 @@
                     <div class="col-sm-12" style="overflow-y:auto;height: 66vh;" > <!-- border:1px solid #337ab7; -->
                       <table class="table table-condensed table-bordered table-striped table-responsive items_table" style="">
                         <thead class="bg-primary">
-                          <th width="30%"><?= $this->lang->line('item_name'); ?></th>
+                          <th width="25%"><?= $this->lang->line('item_name'); ?></th>
                           <th width="10%"><?= $this->lang->line('stock'); ?></th>
-                          <th width="25%"><?= $this->lang->line('quantity'); ?></th>
+                          <th width="20%"><?= $this->lang->line('quantity'); ?></th>
                           <th width="15%"><?= $this->lang->line('price_including_tax'); ?></th>
+                          <th width="10%">Discount</th>
                           <th width="15%"><?= $this->lang->line('subtotal'); ?></th>
                           <th width="5%"><i class="fa fa-close"></i></th>
                         </thead>
@@ -412,7 +413,7 @@
         </div>
         <!--/.col (left) -->
         <!-- right column -->
-        <div class="col-md-5" >
+        <div class="col-md-4" >
             <div class="box box-info">
               <div class="box-body">
                 <div class="box-footer bg-gray">
@@ -584,14 +585,11 @@
   var item_count=$(".search_div .search_item").length;
   var error_count=item_count;
   for(i=0; i<item_count; i++){
-    console.log("item_count ->"+i+" =>"+$("#item_"+i).html());
-    console.log($("#item_"+i).html().toUpperCase().indexOf(input.toUpperCase()));
     if($("#item_"+i).html().toUpperCase().indexOf(input.toUpperCase())>-1){
       console.log("found");
       $("#item_"+i).show();
       $("#item_parent_"+i).show();
-    }
-    else{
+    }else{
      console.log("not-found");
      $("#item_"+i).hide();
      $("#item_parent_"+i).hide();
@@ -627,17 +625,22 @@ function addrow(id){
     var rowcount        =$("#hidden_rowcount").val();//0,1,2...
     var item_id         =$('#div_'+id).attr('data-item-id');
     var item_name       =$('#div_'+id).attr('data-item-name');
-    var stock   =$('#div_'+id).attr('data-item-available-qty');
+    var stock           =$('#div_'+id).attr('data-item-available-qty');
     //var gst_per         =$('#div_'+id).attr('data-item-tax-per');
     //var gst_amt         =$('#div_'+id).attr('data-item-gst-amt');
-    var item_cost     =$('#div_'+id).attr('data-item-cost');
+    var item_cost       =$('#div_'+id).attr('data-item-cost');
     var sales_price     =$('#div_'+id).attr('data-item-sales-price');
+    var discount        =$('#div_'+id).attr('data-item-discount');
     var sales_price_temp=sales_price;
         sales_price     =(parseFloat(sales_price)).toFixed(2);
 
     var quantity        ='<div class="input-group input-group-sm"><span class="input-group-btn"><button onclick="decrement_qty('+item_id+','+rowcount+')" type="button" class="btn btn-default btn-flat"><i class="fa fa-minus text-danger"></i></button></span>';
         quantity       +='<input typ="text" value="1" class="form-control" onkeyup="item_qty_input('+item_id+','+rowcount+')" id="item_qty_'+item_id+'" name="item_qty_'+item_id+'">';
+        quantity       +='<input type="hidden" name="dis_hide_'+item_id+'" id="dis_hide_'+item_id+'" value="'+discount+'">';
+
         quantity       +='<span class="input-group-btn"><button onclick="increment_qty('+item_id+','+rowcount+')" type="button" class="btn btn-default btn-flat"><i class="fa fa-plus text-success"></i></button></span></div>';
+
+
     var sub_total       =(parseFloat(1)*parseFloat(sales_price)).toFixed(2);//Initial
     var remove_btn      ='<a class="fa fa-fw fa-trash-o text-red" style="cursor: pointer;font-size: 20px;" onclick="removerow('+rowcount+')" title="Delete Item?"></a>';
 
@@ -647,6 +650,7 @@ function addrow(id){
         str+='<td id="td_'+rowcount+'_2">'+ quantity      +'</td>';/* td_0_2 item available qty*/
             info='<input id="sales_price_'+rowcount+'" onblur="set_to_original('+rowcount+','+item_cost+')" onkeyup="update_price('+rowcount+','+item_cost+')" name="sales_price_'+rowcount+'" type="text" class="form-control" value="'+sales_price+'">';
         str+='<td id="td_'+rowcount+'_3" class="text-right">'+ info   +'</td>';/* td_0_3 item sales price*/
+        str+='<td id="td_'+rowcount+'_6" class="text-right">'+ discount   +'</td>';/* td_0_3 item sales price*/
         str+='<td id="td_'+rowcount+'_4" class="text-right">'+ sub_total     +'</td>';/* td_0_4 item sub_total */
         str+='<td id="td_'+rowcount+'_5">'+ remove_btn    +'</td>';/* td_0_5 item gst_amt */
 
@@ -766,12 +770,16 @@ function make_subtotal(item_id,rowcount){
   var sales_price     =$("#sales_price_"+rowcount).val();
   //var gst_per         =$("#tr_item_per_"+rowcount).val();
   var item_qty        =$("#item_qty_"+item_id).val();
+  var dis_hide        =$("#dis_hide_"+item_id).val();
 
   var tot_sales_price =parseFloat(item_qty)*parseFloat(sales_price);
   //var gst_amt=(tot_sales_price * gst_per)/100;
 
-  var subtotal        =parseFloat(tot_sales_price);
+  var subtotal        = parseFloat(tot_sales_price);
+  var total_discount  = parseFloat(item_qty * dis_hide);
+
   $("#td_"+rowcount+"_4").html(parseFloat(subtotal).toFixed(2));
+  $("#td_"+rowcount+"_6").html(parseFloat(total_discount).toFixed(2));
   final_total();
 }
 function calulate_discount(discount_input,discount_type,total){
@@ -959,33 +967,31 @@ $(document).ready(function(){
 ?>
 $(document).ready(function() {
 
-     $('#item_search').typeahead({
+  $('#item_search').typeahead({
 
-source:<?php echo $json_array; ?>,
-scroll: true,
-items: 10,
-limit: 10,
-//showHintOnFocus: 10,
-autoSelect: true,
-updater: function (item) {
-   return item;
- // console.log(this.map[item].id);
-},
-afterSelect: function (item) {
+    source:<?php echo $json_array; ?>,
+    scroll: true,
+    items: 10,
+    limit: 10,
+    //showHintOnFocus: 10,
+    autoSelect: true,
+    updater: function (item) {
+      return item;
+    // console.log(this.map[item].id);
+    },
+    afterSelect: function (item) {
 
-  if(item.stock==0){
-    toastr["error"]("Out of Stock!");
-    $("#item_search").val('');
-    return;
-  }
-  addrow(item.id);
-  $("#item_search").val('');
+      if(item.stock==0){
+        toastr["error"]("Out of Stock!");
+        $("#item_search").val('');
+        return;
+      }
+      addrow(item.id);
+      $("#item_search").val('');
 
-}
-
-
-});
-     hold_invoice_list();
+    }
+  });
+  hold_invoice_list();
 });
 
 
