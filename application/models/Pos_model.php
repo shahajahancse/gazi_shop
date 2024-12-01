@@ -186,7 +186,7 @@ class Pos_model extends CI_Model {
 				$item_id 	=$this->xss_html_filter(trim($_REQUEST['tr_item_id_'.$i]));
 				$sales_qty 	=$this->xss_html_filter(trim($_REQUEST['item_qty_'.$item_id]));
 				$price_per_unit =$this->xss_html_filter(trim($_REQUEST['sales_price_'.$i]));
-				$dis_per_qty =$this->xss_html_filter(trim($_REQUEST['dis_hide_'.$i]));
+				$dis_per_qty =$this->xss_html_filter(trim($_REQUEST['dis_hide_'.$item_id]));
 				$dis_too = $dis_per_qty * $sales_qty;
 
 				//Find item ID
