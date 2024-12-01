@@ -195,7 +195,7 @@ $lang['purchase_code'			]	=		'Purchase Code';
 $lang['purchase_status'			]	=		'Purchase Status';
 $lang['supplier_name'			]	=		'Supplier Name';
 $lang['unit_cost'			]	=		'Unit Cost';
-$lang['profit_margin'			]	=		'Profit Margin';
+$lang['profit_margin'			]	=		'Profit Margin %';
 $lang['unit_sales_price'			]	=		'Unit Sales Price';
 $lang['supplier_details'			]	=		'Supplier Details';
 $lang['purchase_due'			]	=		'Purchase Due';
@@ -452,3 +452,15 @@ $lang['item_wise'						]	=		'Item Wise';
 $lang['brand_wise'						]	=		'Brand Wise';
 $lang['time'							]	=		'Time';
 $lang['trending_items'					]	=		'Trending Items';
+
+// shahajahan 30-11-2024
+$lang['brand_company_list'			]	=		'Brand Company List';
+$lang['new_brand_company'			]	=		'New Brand Company';
+$lang['add_brand_company'			]	=		'Add Brand Company';
+$lang['brand_company_name'			]	=		'Brand Company Name';
+$lang['brand_company_code'			]	=		'Brand Company Code';
+$lang['brand_company'				]	=		'Brand Company';
+$lang['item_adjustment'				]	=		'Item Adjustment';
+$lang['sl'				            ]	=		'Sl. No.';
+$lang['stock_qty'				    ]	=		'Stock Qty';
+// $lang['brand_company_name'			]	=		'Brand Company Name';

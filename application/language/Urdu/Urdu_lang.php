@@ -425,3 +425,12 @@ $lang['item_wise'						]	=		'آئٹم وار';
 $lang['brand_wise'						]	=		'برانڈ وائز';
 $lang['time'							]	=		'وقت';
 $lang['trending_items'					]	=		'رجحان سازی والے اشیا';
+
+
+
+// shahajahan 30-11-2024
+$lang['brand_company_list'			]	=		'ব্র্যান্ড কোম্পানি তালিকা';
+$lang['new_brand_company'			]	=		'নতুন ব্র্যান্ড কোম্পানি';
+$lang['add_brand_company'			]	=		'ব্র্যান্ড কোম্পানি যুক্ত করুন';
+$lang['brand_company_name'			]	=		'ব্র্যান্ড কোম্পানি নাম';
+$lang['brand_company_code'			]	=		'ব্র্যান্ড কোম্পানি কোড';

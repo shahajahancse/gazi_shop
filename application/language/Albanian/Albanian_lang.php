@@ -424,3 +424,11 @@ $lang['item_wise'						]	=		'Dituria e sendit';
 $lang['brand_wise'						]	=		'I mençur i markës';
 $lang['time'							]	=		'kohë';
 $lang['trending_items'					]	=		'Artikujt Trendi';
+
+
+// shahajahan 30-11-2024
+$lang['brand_company_list'			]	=		'ব্র্যান্ড কোম্পানি তালিকা';
+$lang['new_brand_company'			]	=		'নতুন ব্র্যান্ড কোম্পানি';
+$lang['add_brand_company'			]	=		'ব্র্যান্ড কোম্পানি যুক্ত করুন';
+$lang['brand_company_name'			]	=		'ব্র্যান্ড কোম্পানি নাম';
+$lang['brand_company_code'			]	=		'ব্র্যান্ড কোম্পানি কোড';

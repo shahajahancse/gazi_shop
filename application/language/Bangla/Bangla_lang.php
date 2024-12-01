@@ -425,3 +425,14 @@ $lang['item_wise'						]	=		'আইটেম ওয়াইজ';
 $lang['brand_wise'						]	=		'ব্র্যান্ড ওয়াইজ';
 $lang['time'							]	=		'সময়';
 $lang['trending_items'					]	=		'ট্রেন্ডিং আইটেম';
+
+
+// shahajahan 30-11-2024
+$lang['brand_company_list'			]	=		'ব্র্যান্ড কোম্পানি তালিকা';
+$lang['new_brand_company'			]	=		'নতুন ব্র্যান্ড কোম্পানি';
+$lang['add_brand_company'			]	=		'ব্র্যান্ড কোম্পানি যুক্ত করুন';
+$lang['brand_company_name'			]	=		'ব্র্যান্ড কোম্পানি নাম';
+$lang['brand_company_code'			]	=		'ব্র্যান্ড কোম্পানি কোড';
+
+
+

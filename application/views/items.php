@@ -3,7 +3,7 @@
    <head>
   <!-- TABLES CSS CODE -->
   <?php include"comman/code_css_form.php"; ?>
-  <!-- </copy> -->  
+  <!-- </copy> -->
   </head>
    <body class="hold-transition skin-blue  sidebar-mini">
       <div class="wrapper">
@@ -16,7 +16,7 @@
          $expire_date ='';
          }
          $new_opening_stock ='';
-         
+
          ?>
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
@@ -42,7 +42,7 @@
                <div class="col-md-12">
                   <!-- Horizontal Form -->
                   <div class="box box-info ">
-                     
+
                       <?= form_open('#', array('class' => 'form', 'id' => 'items-form', 'enctype'=>'multipart/form-data', 'method'=>'POST'));?>
                         <input type="hidden" id="base_url" value="<?php echo $base_url;; ?>">
                         <div class="box-body">
@@ -53,39 +53,15 @@
                                  <span id="item_name_msg" style="display:none" class="text-danger"></span>
                               </div>
                               <div class="form-group col-md-4">
-                                 <label for="brand_id">Brand</label>
-                                 <select class="form-control select2" id="brand_id" name="brand_id"  style="width: 100%;"  value="<?php print $brand_id; ?>">
-                                    <?php
-                                       $query1="select * from db_brands where status=1";
-                                       $q1=$this->db->query($query1);
-                                       if($q1->num_rows($q1)>0)
-                                        {  echo '<option value="">-Select-</option>'; 
-                                            foreach($q1->result() as $res1)
-                                          { 
-                                            $selected = ($brand_id==$res1->id)? 'selected' : '';
-                                            echo "<option $selected value='".$res1->id."'>".$res1->brand_name."</option>";
-                                          }
-                                        }
-                                        else
-                                        {
-                                           ?>
-                                    <option value="">No Records Found</option>
-                                    <?php
-                                       }
-                                       ?>
-                                 </select>
-                                 <span id="brand_id_msg" style="display:none" class="text-danger"></span>
-                              </div>
-                              <div class="form-group col-md-4">
                                  <label for="category_id">Category <span class="text-danger">*</span></label>
                                  <select class="form-control select2" id="category_id" name="category_id"  style="width: 100%;"  value="<?php print $category_id; ?>">
                                     <?php
                                        $query1="select * from db_category where status=1";
                                        $q1=$this->db->query($query1);
                                        if($q1->num_rows($q1)>0)
-                                        {  echo '<option value="">-Select-</option>'; 
+                                        {  echo '<option value="">-Select-</option>';
                                             foreach($q1->result() as $res1)
-                                          { 
+                                          {
                                             $selected = ($category_id==$res1->id)? 'selected' : '';
                                             echo "<option $selected value='".$res1->id."'>".$res1->category_name."</option>";
                                           }
@@ -100,7 +76,52 @@
                                  </select>
                                  <span id="category_id_msg" style="display:none" class="text-danger"></span>
                               </div>
+
                               <div class="form-group col-md-4">
+                                 <label for="company_id">Company</label>
+                                 <select class="form-control select2" id="company_id" name="company_id"  style="width: 100%;"  value="<?php print $company_id; ?>">
+                                    <?php
+                                       $query1="select * from db_brand_companies where status=1";
+                                       $q1=$this->db->query($query1);
+                                       if($q1->num_rows($q1)>0) {
+                                          echo '<option value="">-Select-</option>';
+                                          foreach($q1->result() as $res1) {
+                                            $selected = ($company_id==$res1->id)? 'selected' : '';
+                                            echo "<option $selected value='".$res1->id."'>".$res1->company_name."</option>";
+                                          }
+                                       } else { ?>
+                                          <option value="">No Records Found</option>
+                                    <?php } ?>
+                                 </select>
+                                 <span id="company_id_msg" style="display:none" class="text-danger"></span>
+                              </div>
+
+                              <div class="form-group col-md-3">
+                                 <label for="brand_id">Brand</label>
+                                 <select class="form-control select2" id="brand_id" name="brand_id"  style="width: 100%;"  value="<?php print $brand_id; ?>">
+                                    <?php
+                                       $query1="select * from db_brands where status=1";
+                                       $q1=$this->db->query($query1);
+                                       if($q1->num_rows($q1)>0)
+                                        {  echo '<option value="">-Select-</option>';
+                                            foreach($q1->result() as $res1)
+                                          {
+                                            $selected = ($brand_id==$res1->id)? 'selected' : '';
+                                            echo "<option $selected value='".$res1->id."'>".$res1->brand_name."</option>";
+                                          }
+                                        }
+                                        else
+                                        {
+                                           ?>
+                                    <option value="">No Records Found</option>
+                                    <?php
+                                       }
+                                       ?>
+                                 </select>
+                                 <span id="brand_id_msg" style="display:none" class="text-danger"></span>
+                              </div>
+
+                              <div class="form-group col-md-3">
                                  <label for="unit_id" class="control-label"><?= $this->lang->line('unit'); ?><span class="text-danger">*</span></label>
                                  <select class="form-control select2" id="unit_id" name="unit_id"  style="width: 100%;" >
                                     <?php
@@ -108,7 +129,7 @@
                                        $q1=$this->db->query($query1);
                                        if($q1->num_rows($q1)>0)
                                         {
-                                         echo '<option value="">-Select-</option>'; 
+                                         echo '<option value="">-Select-</option>';
                                             foreach($q1->result() as $res1)
                                           {
                                             $selected = ($res1->id==$unit_id)? 'selected' : '';
@@ -125,16 +146,17 @@
                                  </select>
                                  <span id="unit_id_msg" style="display:none" class="text-danger"></span>
                               </div>
-                              <div class="form-group col-md-4">
+                              <div class="form-group col-md-3">
                                  <label for="sku">SKU</label>
                                  <input type="text" class="form-control" id="sku" name="sku" placeholder="" value="<?php print $sku; ?>" >
                                  <span id="sku_msg" style="display:none" class="text-danger"></span>
                               </div>
-                              <div class="form-group col-md-4">
+                              <div class="form-group col-md-3">
                                  <label for="alert_qty" ><?= $this->lang->line('alert_qty'); ?></label>
                                  <input type="number" class="form-control no_special_char" id="alert_qty" name="alert_qty" placeholder="" min="0"  value="<?php print $alert_qty; ?>" >
                                  <span id="alert_qty_msg" style="display:none" class="text-danger"></span>
                               </div>
+
                               <div class="form-group col-md-4">
                                  <label for="lot_number" ><?= $this->lang->line('lot_number'); ?></label>
                                  <input type="text" class="form-control no_special_char" id="lot_number" name="lot_number" placeholder=""  value="<?php print $lot_number; ?>" >
@@ -158,12 +180,12 @@
                            </div>
                            <hr>
                            <div class="row">
-                              <div class="form-group col-md-4">
+                              <div class="form-group col-md-3">
                                  <label for="price"><?= $this->lang->line('price'); ?><span class="text-danger">*</span></label>
                                  <input type="text" class="form-control only_currency" id="price" name="price" placeholder="Price of Item without Tax"  value="<?php print $price; ?>" >
                                  <span id="price_msg" style="display:none" class="text-danger"></span>
                               </div>
-                              <div class="form-group col-md-4">
+                              <div class="form-group col-md-3">
                                  <label for="tax_id" ><?= $this->lang->line('tax'); ?><span class="text-danger">*</span></label>
                                  <select class="form-control select2" id="tax_id" name="tax_id"  style="width: 100%;" >
                                     <?php
@@ -171,9 +193,9 @@
                                        $q1=$this->db->query($query1);
                                        if($q1->num_rows($q1)>0)
                                         {
-                                            echo '<option data-tax="0" value="">-Select-</option>'; 
+                                            echo '<option data-tax="0" value="">-Select-</option>';
                                             foreach($q1->result() as $res1)
-                                          { 
+                                          {
                                             $selected = ($tax_id==$res1->id)? 'selected' : '';
                                             echo "<option $selected data-tax='".$res1->tax."' value='".$res1->id."'>".$res1->tax_name."(".$res1->tax."%)</option>";
                                           }
@@ -188,18 +210,15 @@
                                  </select>
                                  <span id="tax_id_msg" style="display:none" class="text-danger"></span>
                               </div>
-                              <div class="form-group col-md-4">
+                              <div class="form-group col-md-3">
                                  <label for="purchase_price"><?= $this->lang->line('purchase_price'); ?><span class="text-danger">*</span></label>
                                  <input type="text" class="form-control only_currency" id="purchase_price" name="purchase_price" placeholder="Total Price with Tax Amount"  value="<?php print $purchase_price; ?>" readonly='' >
                                  <span id="purchase_price_msg" style="display:none" class="text-danger"></span>
                               </div>
-                           </div>
-                           <!-- /row -->
-                           <div class="row">
                               <div class="form-group col-md-3">
                                  <label for="tax_type"><?= $this->lang->line('sales_tax_type'); ?><span class="text-danger">*</span></label>
                                  <select class="form-control select2" id="tax_type" name="tax_type"  style="width: 100%;" >
-                                  <?php 
+                                  <?php
                                     $inclusive_selected=$exclusive_selected='';
                                     if($tax_type =='Inclusive') { $inclusive_selected='selected'; }
                                     if($tax_type =='Exclusive') { $exclusive_selected='selected'; }
@@ -209,19 +228,30 @@
                                     <option <?= $exclusive_selected ?> value="Exclusive">Exclusive</option>
                                  </select>
                                  <span id="tax_type_msg" style="display:none" class="text-danger"></span>
-                                 
+
                               </div>
+                           </div>
+                           <!-- /row -->
+                           <div class="row">
                               <div class="form-group col-md-3">
-                                 <label for="profit_margin"><?= $this->lang->line('profit_margin'); ?>(%) <i class="hover-q " data-container="body" data-toggle="popover" data-placement="top" data-content="<?= $this->lang->line('based_on_purchase_price'); ?>" data-html="true" data-trigger="hover" data-original-title="">
+                                 <label for="profit_margin"><?= $this->lang->line('profit_margin'); ?> <i class="hover-q " data-container="body" data-toggle="popover" data-placement="top" data-content="<?= $this->lang->line('based_on_purchase_price'); ?>" data-html="true" data-trigger="hover" data-original-title="">
                                   <i class="fa fa-info-circle text-maroon text-black hover-q"></i>
                                 </i></label>
                                  <input type="text" class="form-control only_currency" id="profit_margin" name="profit_margin" placeholder="Profit in %"  value="<?php print $profit_margin; ?>" >
                                  <span id="profit_margin_msg" style="display:none" class="text-danger"></span>
                               </div>
+
                               <div class="form-group col-md-3">
-                                 <label for="profit_margin">Discount(%) <i class="hover-q " data-container="body" data-toggle="popover" data-placement="top" data-content="<?= $this->lang->line('based_on_purchase_price'); ?>" data-html="true" data-trigger="hover" data-original-title="">
-                                  <i class="fa fa-info-circle text-maroon text-black hover-q"></i>
-                                </i></label>
+                                 <label for="discount_type">Discount Type</label>
+                                 <select class="form-control" id="discount_type" name="discount_type"  style="width: 100%;" >
+                                    <option value="">-Select-</option>
+                                    <option <?= $discount_type == 1 ? 'selected':'' ?> value="1">%</option>
+                                    <option <?= $discount_type == 2 ? 'selected':'' ?> value="2">Amount</option>
+                                 </select>
+                                 <span id="discount_type_msg" style="display:none" class="text-danger"></span>
+                              </div>
+                              <div class="form-group col-md-3">
+                                 <label for="profit_margin">Discount</label>
                                  <input type="text" class="form-control only_currency" id="discount" name="discount" placeholder="discount"  value="<?php print $discount; ?>" >
                                  <span id="discount_msg" style="display:none" class="text-danger"></span>
                               </div>
@@ -262,7 +292,7 @@
                                                   $btn_name="Save";
                                                   $btn_id="save";
                                               }
-                                    
+
                                               ?>
                                  <div class="col-md-3 col-md-offset-3">
                                     <button type="button" id="<?php echo $btn_id;?>" class=" btn btn-block btn-success" title="Save Data"><?php echo $btn_name;?></button>
@@ -280,14 +310,14 @@
                   <!--/.col (right) -->
                </div>
                <div class="col-md-12">
-         
+
                     <div class="box">
                       <div class="box-header">
                         <h3 class="box-title text-blue"><?= $this->lang->line('opening_stock_adjustment_records'); ?></h3>
                       </div>
                       <!-- /.box-header -->
                       <div class="box-body table-responsive no-padding">
-                        
+
                         <table class="table table-bordered table-hover " id="report-data" >
                           <thead>
                           <tr class="bg-gray">
@@ -298,7 +328,7 @@
                           </tr>
                           </thead>
                           <tbody>
-                              <?php 
+                              <?php
                                 if(isset($q_id)){
                                   $q3 = $this->db->query("select * from db_stockentry where item_id=$q_id");
                                   if($q3->num_rows()>0){
@@ -323,8 +353,8 @@
                               ?>
                            </tbody>
                         </table>
-                        
-                        
+
+
                       </div>
                       <!-- /.box-body -->
                     </div>

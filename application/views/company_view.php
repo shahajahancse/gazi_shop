@@ -4,9 +4,6 @@
 <head>
 <!-- TABLES CSS CODE -->
 <?php include"comman/code_css_datatable.php"; ?>
-
-<!-- Lightbox -->
-<link rel="stylesheet" href="<?php echo $theme_link; ?>plugins/lightbox/ekko-lightbox.css">
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -22,7 +19,7 @@
     <section class="content-header">
       <h1>
         <?=$page_title;?>
-        <small>View/Search Items</small>
+        <small>View/Search Items Brand</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="<?php echo $base_url; ?>dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -33,7 +30,6 @@
     <!-- Main content -->
     <?= form_open('#', array('class' => '', 'id' => 'table_form')); ?>
     <input type="hidden" id='base_url' value="<?=$base_url;?>">
-
     <section class="content">
       <div class="row">
         <!-- ********** ALERT MESSAGE START******* -->
@@ -43,27 +39,13 @@
           <div class="box">
             <div class="box-header with-border">
               <h3 class="box-title"><?=$page_title;?></h3>
-              <?php if($CI->permissions('items_add')) { ?>
+              <?php if($CI->permissions('brand_add')) { ?>
               <div class="box-tools">
-                <a class="btn btn-block btn-info " href="<?php echo $base_url; ?>items/item_adjustment"><?= $this->lang->line('item_adjustment'); ?></a>
-
-                <a class="btn btn-block btn-info " href="<?php echo $base_url; ?>items/add">
-                <i class="fa fa-plus " ></i> <?= $this->lang->line('new_item'); ?></a>
+                <a class="btn btn-block btn-info" href="<?php echo $base_url; ?>brands/company_add">
+                <i class="fa fa-plus"></i> <?= $this->lang->line('add_brand'); ?></a>
               </div>
-             <?php } ?>
+              <?php } ?>
             </div>
-            <style>
-              .box-header>.box-tools {
-                  position: absolute;
-                  right: 10px;
-                  top: 5px;
-                  display: flex !important;
-                  gap: 10px;
-              }
-              .btn-block+.btn-block {
-                  margin-top: 0px !important;
-              }
-            </style>
             <!-- /.box-header -->
             <div class="box-body">
               <table id="example2" class="table table-bordered table-striped" width="100%">
@@ -72,18 +54,10 @@
                   <th class="text-center">
                     <input type="checkbox" class="group_check checkbox" >
                   </th>
-                  <th><?= $this->lang->line('image'); ?></th>
-                  <th><?= $this->lang->line('item_code'); ?></th>
-                  <th><?= $this->lang->line('item_name'); ?></th>
-                  <th><?= $this->lang->line('brand'); ?></th>
-                  <th><?= $this->lang->line('category'); ?></th>
-                  <th><?= $this->lang->line('lot_number'); ?></th>
-                  <th><?= $this->lang->line('unit'); ?></th>
-                  <th><?= $this->lang->line('available_quantity'); ?></th>
-                  <th><?= $this->lang->line('alert_quantity'); ?></th>
-                  <th><?= $this->lang->line('sales_price'); ?></th>
-                  <th><?= $this->lang->line('tax'); ?></th>
-	         	  	  <th><?= $this->lang->line('status'); ?></th>
+                  <th><?= $this->lang->line('brand_code'); ?></th>
+                  <th><?= $this->lang->line('brand_name'); ?></th>
+                  <th><?= $this->lang->line('description'); ?></th>
+                  <th><?= $this->lang->line('status'); ?></th>
                   <th><?= $this->lang->line('action'); ?></th>
                 </tr>
                 </thead>
@@ -102,7 +76,7 @@
       <!-- /.row -->
     </section>
     <!-- /.content -->
-     <?= form_close();?>
+    <?= form_close();?>
   </div>
   <!-- /.content-wrapper -->
   <?php include"footer.php"; ?>
@@ -116,14 +90,7 @@
 <?php include"comman/code_js_sound.php"; ?>
 <!-- TABLES CODE -->
 <?php include"comman/code_js_datatable.php"; ?>
-<!-- Lightbox -->
-<script src="<?php echo $theme_link; ?>plugins/lightbox/ekko-lightbox.js"></script>
-<script type="text/javascript">
-  $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-            event.preventDefault();
-            $(this).ekkoLightbox();
-        });
-</script>
+
 <script type="text/javascript">
 $(document).ready(function() {
     //datatables
@@ -141,11 +108,11 @@ $(document).ready(function() {
                     multi_delete();
                 }
             },
-            { extend: 'copy', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [2,3,4,5,6,7,8,9,10,11,12]} },
-            { extend: 'excel', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [2,3,4,5,6,7,8,9,10,11,12]} },
-            { extend: 'pdf', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [2,3,4,5,6,7,8,9,10,11,12]} },
-            { extend: 'print', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [2,3,4,5,6,7,8,9,10,11,12]} },
-            { extend: 'csv', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [2,3,4,5,6,7,8,9,10,11,12]} },
+            { extend: 'copy', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4]} },
+            { extend: 'excel', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4]} },
+            { extend: 'pdf', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4]} },
+            { extend: 'print', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4]} },
+            { extend: 'csv', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4]} },
             { extend: 'colvis', className: 'btn bg-teal color-palette btn-flat',text:'Columns' },
 
             ]
@@ -161,7 +128,7 @@ $(document).ready(function() {
         },
         // Load data for the table's content from an Ajax source
         "ajax": {
-            "url": "<?php echo site_url('items/ajax_list')?>",
+            "url": "<?php echo site_url('brands/ajax_company_list')?>",
             "type": "POST",
 
             complete: function (data) {
@@ -180,7 +147,7 @@ $(document).ready(function() {
         //Set column definition initialisation properties.
         "columnDefs": [
         {
-            "targets": [ 0,12 ], //first column / numbering column
+            "targets": [ 0,5 ], //first column / numbering column
             "orderable": false, //set not orderable
         },
         {
@@ -193,12 +160,8 @@ $(document).ready(function() {
     new $.fn.dataTable.FixedHeader( table );
 });
 </script>
-
-
-<script src="<?php echo $theme_link; ?>js/items.js"></script>
-
+<script src="<?php echo $theme_link; ?>js/brand.js"></script>
 <!-- Make sidebar menu hughlighter/selector -->
 <script>$(".<?php echo basename(__FILE__,'.php');?>-active-li").addClass("active");</script>
-
 </body>
 </html>

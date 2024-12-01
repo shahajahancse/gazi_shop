@@ -6,14 +6,14 @@ class Items_model extends CI_Model {
 	//Datatable start
 	var $table = 'db_items as a';
 	var $column_order = array( 'a.id','a.item_image','a.item_code','a.item_name','b.category_name','a.lot_number','c.unit_name','a.stock','a.alert_qty','a.sales_price','d.tax_name','d.tax','a.status','e.brand_name'); //set column field database for datatable orderable
-	var $column_search = array( 'a.id','a.item_image','a.item_code','a.item_name','b.category_name','a.lot_number','c.unit_name','a.stock','a.alert_qty','a.sales_price','d.tax_name','d.tax','a.status','e.brand_name'); //set column field database for datatable searchable 
-	var $order = array('a.id' => 'desc'); // default order 
+	var $column_search = array( 'a.id','a.item_image','a.item_code','a.item_name','b.category_name','a.lot_number','c.unit_name','a.stock','a.alert_qty','a.sales_price','d.tax_name','d.tax','a.status','e.brand_name'); //set column field database for datatable searchable
+	var $order = array('a.id' => 'desc'); // default order
 
 	public function __construct()
 	{
 		parent::__construct();
 	}
-	
+
 	private function _get_datatables_query()
 	{
 		$this->db->select($this->column_order);
@@ -26,15 +26,15 @@ class Items_model extends CI_Model {
 		$this->db->where('b.id=a.category_id');
 		$this->db->where('c.id=a.unit_id');
 		$this->db->where('d.id=a.tax_id');
-		
+
 
 		$i = 0;
-	
-		foreach ($this->column_search as $item) // loop column 
+
+		foreach ($this->column_search as $item) // loop column
 		{
 			if($_POST['search']['value']) // if datatable send POST for search
 			{
-				
+
 				if($i===0) // first loop
 				{
 					$this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
@@ -50,11 +50,11 @@ class Items_model extends CI_Model {
 			}
 			$i++;
 		}
-		
+
 		if(isset($_POST['order'])) // here order processing
 		{
 			$this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
-		} 
+		}
 		else if(isset($this->order))
 		{
 			$order = $this->order;
@@ -96,7 +96,7 @@ class Items_model extends CI_Model {
 	}
 	//Save Cutomers
 	public function verify_and_save(){
-		//Filtering XSS and html escape from user inputs 
+		//Filtering XSS and html escape from user inputs
 		extract($this->security->xss_clean(html_escape(array_merge($this->data,$_POST))));
 
 		$this->db->trans_begin();
@@ -112,17 +112,17 @@ class Items_model extends CI_Model {
 	        $config['max_size']             = 1024;
 	        $config['max_width']            = 1000;
 	        $config['max_height']           = 1000;
-	       
+
 	        $this->load->library('upload', $config);
 
 	        if ( ! $this->upload->do_upload('item_image'))
-	        {	
+	        {
 	                $error = array('error' => $this->upload->display_errors());
 	                print($error['error']);
 	                exit();
 	        }
 	        else
-	        {		
+	        {
 	        	$file_name=$this->upload->data('file_name');
 	        	/*Create Thumbnail*/
 	        	$config['image_library'] = 'gd2';
@@ -135,16 +135,16 @@ class Items_model extends CI_Model {
 				$this->image_lib->resize();
 				//end
 
-	        	
+
 	        }
 		}
-		
+
 		//Validate This items already exist or not
 		$query=$this->db->query("select * from db_items where upper(item_name)=upper('$item_name')");
 		if($query->num_rows()>0){
 			return "Sorry! This Items Name already Exist.";
 		}
-		
+
 		$qs5="select item_init from db_company";
 		$q5=$this->db->query($qs5);
 		$item_init=$q5->row()->item_init;
@@ -165,16 +165,12 @@ class Items_model extends CI_Model {
 
 		$expire_date= (!empty(trim($expire_date))) ? date('Y-m-d',strtotime($expire_date)) : null;
 
-		$query1="insert into db_items(item_code,item_name,brand_id,category_id,sku,unit_id,alert_qty,lot_number,expire_date,
-									price,tax_id,purchase_price,tax_type,profit_margin,
-									sales_price,
-									system_ip,system_name,created_date,created_time,created_by,status,discount)
+		$query1="insert into db_items(item_code,item_name,company_id,brand_id,category_id,sku,unit_id,alert_qty,lot_number,expire_date, price,tax_id,purchase_price,tax_type,profit_margin, sales_price, system_ip,system_name,created_date,created_time,created_by,status,discount_type, discount)
 
-							values('$item_code','$item_name','$brand_id','$category_id','$sku','$unit_id','$alert_qty','$lot_number','$expire_date',
+							values('$item_code','$item_name','$company_id','$brand_id','$category_id','$sku','$unit_id','$alert_qty','$lot_number','$expire_date',
 									'$price','$tax_id','$purchase_price','$tax_type',$profit_margin,
-									'$sales_price',
-									'$SYSTEM_IP','$SYSTEM_NAME','$CUR_DATE','$CUR_TIME','$CUR_USERNAME',1,$discount)";
-		
+									'$sales_price','$SYSTEM_IP','$SYSTEM_NAME','$CUR_DATE','$CUR_TIME','$CUR_USERNAME', 1, '$discount_type',$discount)";
+
 		$query1=$this->db->simple_query($query1);
 		if(!$query1){
 			return "failed";
@@ -187,13 +183,13 @@ class Items_model extends CI_Model {
 			}
 		}
 		//UPDATE itemS QUANTITY IN itemS TABLE
-		$this->load->model('pos_model');				
+		$this->load->model('pos_model');
 		$q6=$this->pos_model->update_items_quantity($item_id);
 		if(!$q6){
 			return "failed";
 		}
 		if ($query1){
-				
+
 				if(!empty($file_name)){
 					//echo "update db_items set item_image ='$file_name' where id=".$item_id;exit();
 					$q1=$this->db->query("update db_items set item_image ='uploads/items/$file_name' where id=".$item_id);
@@ -208,7 +204,7 @@ class Items_model extends CI_Model {
 				//unlink('uploads/items/'.$file_name);
 		        return "failed";
 		}
-		
+
 	}
 
 	//Get items_details
@@ -217,12 +213,12 @@ class Items_model extends CI_Model {
 		$query=$this->db->query("select * from db_items where upper(id)=upper('$id')");
 		if($query->num_rows()==0){
 			show_404();exit;
-		}
-		else{
+		}else{
 			$query=$query->row();
 			$data['q_id']=$query->id;
 			$data['item_code']=$query->item_code;
 			$data['item_name']=$query->item_name;
+			$data['company_id']=$query->company_id;
 			$data['brand_id']=$query->brand_id;
 			$data['category_id']=$query->category_id;
 			$data['sku']=$query->sku;
@@ -236,16 +232,15 @@ class Items_model extends CI_Model {
 			$data['sales_price']=$query->sales_price;
 			$data['stock']=$query->stock;
 			$data['lot_number']=$query->lot_number;
+			$data['discount_type']=$query->discount_type;
 			$data['discount']=$query->discount;
 			$data['expire_date']=(!empty($query->expire_date)) ? show_date($query->expire_date):'';
-			
 			return $data;
 		}
 	}
 	public function update_items(){
-		//Filtering XSS and html escape from user inputs 
+		//Filtering XSS and html escape from user inputs
 		extract($this->security->xss_clean(html_escape(array_merge($this->data,$_POST))));
-		
 		//Validate This items already exist or not
 		$this->db->trans_begin();
 		$query=$this->db->query("select * from db_items where upper(item_name)=upper('$item_name') and id<>$q_id");
@@ -264,7 +259,7 @@ class Items_model extends CI_Model {
 		        $config['max_size']             = 1024;
 		        $config['max_width']            = 1000;
 		        $config['max_height']           = 1000;
-		       
+
 		        $this->load->library('upload', $config);
 
 		        if ( ! $this->upload->do_upload('item_image'))
@@ -274,9 +269,9 @@ class Items_model extends CI_Model {
 		                exit();
 		        }
 		        else
-		        {		
+		        {
 		        	$file_name=$this->upload->data('file_name');
-		        	
+
 		        	/*Create Thumbnail*/
 		        	$config['image_library'] = 'gd2';
 					$config['source_image'] = 'uploads/items/'.$file_name;
@@ -297,10 +292,12 @@ class Items_model extends CI_Model {
 			$alert_qty = (empty(trim($alert_qty))) ? '0' : $alert_qty;
 			$profit_margin = (empty(trim($profit_margin))) ? 'null' : $profit_margin;
 			$expire_date= (!empty(trim($expire_date))) ? date('Y-m-d',strtotime($expire_date)) : 'null';
-			$query1="update db_items set 
+			$query1="update db_items set
 						item_name='$item_name',
+						company_id='$company_id',
 						brand_id='$brand_id',
 						category_id='$category_id',
+						discount_type='$discount_type',
 						discount='$discount',
 						sku='$sku',
 						unit_id='$unit_id',
@@ -313,9 +310,9 @@ class Items_model extends CI_Model {
 						tax_type='$tax_type',
 						profit_margin=$profit_margin,
 						sales_price='$sales_price'
-						$item_image 
+						$item_image
 						where id=$q_id";
-					
+
 			$query1=$this->db->query($query1);
 			if(!$query1){
 				return "failed";
@@ -324,10 +321,10 @@ class Items_model extends CI_Model {
 				$q1=$this->stock_entry($CUR_DATE,$q_id,$new_opening_stock);
 				if(!$q1){
 					return "failed";
-				}			
+				}
 			}
 			//UPDATE itemS QUANTITY IN itemS TABLE
-			$this->load->model('pos_model');				
+			$this->load->model('pos_model');
 			$q6=$this->pos_model->update_items_quantity($q_id);
 			if(!$q6){
 				return "failed";
@@ -364,7 +361,7 @@ class Items_model extends CI_Model {
         }
         else{
             echo "failed";
-        }	
+        }
 	}
 
 
@@ -396,7 +393,7 @@ class Items_model extends CI_Model {
 
 		$this->return_row_with_data($rowcount,$info);
 	}
-	
+
 
 	public function return_row_with_data($rowcount,$info){
 		extract($info);
@@ -417,7 +414,7 @@ class Items_model extends CI_Model {
                      <button onclick="increment_qty(<?=$rowcount;?>)" type="button" class="btn btn-default btn-flat"><i class="fa fa-plus text-success"></i></button></span>
                   </div>
                </td>
-               
+
                <!-- Remove button -->
                <td id="td_<?=$rowcount;?>_16" style="text-align: center;">
                   <a class=" fa fa-fw fa-minus-square text-red" style="cursor: pointer;font-size: 34px;" onclick="removerow(<?=$rowcount;?>)" title="Delete ?" name="td_data_<?=$rowcount;?>_16" id="td_data_<?=$rowcount;?>_16"></a>
@@ -435,7 +432,7 @@ class Items_model extends CI_Model {
 	public function preview_labels(){
 		//print_r($_POST);exit();
 		$CI =& get_instance();
-		//Filtering XSS and html escape from user inputs 
+		//Filtering XSS and html escape from user inputs
 		$company_name=$this->db->query("select company_name from db_company")->row()->company_name;
 		$rowcount = $this->input->post('hidden_rowcount');
 		?>
@@ -446,9 +443,9 @@ class Items_model extends CI_Model {
 					<?php
 					//Import post data from form
 					for($i=1;$i<=$rowcount;$i++){
-					
+
 						if(isset($_POST['tr_item_id_'.$i]) && !empty($_POST['tr_item_id_'.$i])){
-							
+
 
 							$item_id 			=$this->xss_html_filter(trim($_POST['tr_item_id_'.$i]));
 							$item_count 			=$this->xss_html_filter(trim($_POST['td_data_'.$i."_3"]));
@@ -475,16 +472,16 @@ class Items_model extends CI_Model {
 							<?php
 							}
 						}
-					
+
 					}//for end
 					?>
-					
-					
+
+
 				</div>
 			</div>
 		</div>
 		<?php
-		
+
 	}
 
 
@@ -496,7 +493,7 @@ class Items_model extends CI_Model {
 			return "failed";
 		}
 		//UPDATE itemS QUANTITY IN itemS TABLE
-		$this->load->model('pos_model');				
+		$this->load->model('pos_model');
 		$q6=$this->pos_model->update_items_quantity($item_id);
 
 		if(!$q6){

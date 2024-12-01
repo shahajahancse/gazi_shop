@@ -4,24 +4,9 @@ $('#save,#update').click(function (e) {
     //Initially flag set true
     var flag=true;
 
-    function check_field(id)
-    {
-      if(!$("#"+id).val().trim() ) //Also check Others????
-        {
-            $('#'+id+'_msg').fadeIn(200).show().html('Required Field').addClass('required');
-           // $('#'+id).css({'background-color' : '#E8E2E9'});
-            flag=false;
-        }
-        else
-        {
-             $('#'+id+'_msg').fadeOut(200).hide();
-             //$('#'+id).css({'background-color' : '#FFFFFF'});    //White color
-        }
-    }
+    //Validate Input box or selection box should not be blank or empty
+	check_field("brand");
 
-    //Validate Input box or selection box should not be blank or empty	
-	check_field("brand");	
-	
     if(flag==false)
     {
 
@@ -38,7 +23,7 @@ $('#save,#update').click(function (e) {
 						data = new FormData($('#brand-form')[0]);//form name
 						/*Check XSS Code*/
 						if(!xss_validation(data)){ return false; }
-						
+
 						$(".box").append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
 						$("#"+this_id).attr('disabled',true);  //Enable Save or Update button
 						$.ajax({
@@ -49,7 +34,7 @@ $('#save,#update').click(function (e) {
 						contentType: false,
 						processData: false,
 						success: function(result){
-             // alert(result);return;
+             			// alert(result);return;
 							if(result=="success")
 							{
 								//alert("Record Saved Successfully!");
@@ -75,17 +60,17 @@ $('#save,#update').click(function (e) {
 
 
     }//Save end
-	
+
 	else if(this_id=="update")  //Save start
     {
-				
+
 
 					if(confirm("Do You Wants to Update Record ?")){
 						e.preventDefault();
 						data = new FormData($('#brand-form')[0]);//form name
 						/*Check XSS Code*/
 						if(!xss_validation(data)){ return false; }
-						
+
 						$(".box").append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
 						$("#"+this_id).attr('disabled',true);  //Enable Save or Update button
 						$.ajax({
@@ -122,9 +107,30 @@ $('#save,#update').click(function (e) {
 
 
     }//Save end
-	
 
 });
+
+function check_field(id) {
+	if (
+	!$("#" + id)
+		.val()
+		.trim()
+	) {
+	//Also check Others????
+	$("#" + id + "_msg")
+		.fadeIn(200)
+		.show()
+		.html("Required Field")
+		.addClass("required");
+	// $('#'+id).css({'background-color' : '#E8E2E9'});
+	flag = false;
+	} else {
+	$("#" + id + "_msg")
+		.fadeOut(200)
+		.hide();
+	//$('#'+id).css({'background-color' : '#FFFFFF'});    //White color
+	}
+}
 
 
 //On Enter Move the cursor to desigtation Id
@@ -133,19 +139,19 @@ function shift_cursor(kevent,target){
     if(kevent.keyCode==13){
 		$("#"+target).focus();
     }
-	
+
 }
 
 //update status start
 function update_status(id,status)
 {
-	
+
 	$.post("update_status",{id:id,status:status},function(result){
 		if(result=="success")
 				{
 					 toastr["success"]("Status Updated Successfully!");
 				  //alert("Status Updated Successfully!");
-				  success.currentTime = 0; 
+				  success.currentTime = 0;
 				  success.play();
 				  if(status==0)
 				  {
@@ -165,14 +171,14 @@ function update_status(id,status)
 				}
 				else if(result=="failed"){
 					toastr["error"]("Failed to Update Status.Try again!");
-				  failed.currentTime = 0; 
+				  failed.currentTime = 0;
 				  failed.play();
 
 				  return false;
 				}
 				else{
 					toastr["error"](result);
-				  failed.currentTime = 0; 
+				  failed.currentTime = 0;
 				  failed.play();
 				  return false;
 				}
@@ -183,7 +189,7 @@ function update_status(id,status)
 //Delete Record start
 function delete_brand(q_id)
 {
-	
+
    if(confirm("Do You Wants to Delete Record ?")){
    	$(".box").append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
    $.post("delete_brand",{q_id:q_id},function(result){
@@ -209,11 +215,11 @@ function delete_brand(q_id)
 function multi_delete(){
 	//var base_url=$("#base_url").val().trim();
     var this_id=this.id;
-    
+
 		if(confirm("Are you sure ?")){
 			$(".box").append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
 			$("#"+this_id).attr('disabled',true);  //Enable Save or Update button
-			
+
 			data = new FormData($('#table_form')[0]);//form name
 			$.ajax({
 			type: 'POST',
@@ -228,7 +234,7 @@ function multi_delete(){
 				if(result=="success")
 				{
 					toastr["success"]("Record Deleted Successfully!");
-					success.currentTime = 0; 
+					success.currentTime = 0;
 				  	success.play();
 					$('#example2').DataTable().ajax.reload();
 					$(".delete_btn").hide();
@@ -237,13 +243,13 @@ function multi_delete(){
 				else if(result=="failed")
 				{
 				   toastr["error"]("Sorry! Failed to save Record.Try again!");
-				   failed.currentTime = 0; 
+				   failed.currentTime = 0;
 				   failed.play();
 				}
 				else
 				{
 					toastr["error"](result);
-					failed.currentTime = 0; 
+					failed.currentTime = 0;
 				  	failed.play();
 				}
 				$("#"+this_id).attr('disabled',false);  //Enable Save or Update button
@@ -253,3 +259,89 @@ function multi_delete(){
 	}
 	//e.preventDefault
 }
+
+
+$("#company_save,#company_update").click(function (e) {
+  var base_url = $("#base_url").val().trim();
+  //Initially flag set true
+
+  var this_id = this.id;
+
+  if (this_id == "company_save") {
+    //Save start
+    if (confirm("Do You Wants to Save Record ?")) {
+      e.preventDefault();
+      data = new FormData($("#brand-form")[0]); //form name
+      /*Check XSS Code*/
+
+      $(".box").append(
+        '<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>'
+      );
+      $("#" + this_id).attr("disabled", true); //Enable Save or Update button
+      $.ajax({
+        type: "POST",
+        url: base_url + "brands/new_brand_company",
+        data: data,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (result) {
+          // alert(result);return;
+          if (result == "success") {
+            //alert("Record Saved Successfully!");
+            window.location = base_url + "brands/company_view";
+            return;
+          } else if (result == "failed") {
+            toastr["error"]("Sorry! Failed to save Record.Try again!");
+            //	return;
+          } else {
+            toastr["error"](result);
+          }
+          $("#" + this_id).attr("disabled", false); //Enable Save or Update button
+          $(".overlay").remove();
+        },
+      });
+    }
+    //e.preventDefault //Save end
+  } else if (this_id == "update") {
+    //Save start
+    if (confirm("Do You Wants to Update Record ?")) {
+      e.preventDefault();
+      data = new FormData($("#brand-form")[0]); //form name
+      /*Check XSS Code*/
+      if (!xss_validation(data)) {
+        return false;
+      }
+
+      $(".box").append(
+        '<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>'
+      );
+      $("#" + this_id).attr("disabled", true); //Enable Save or Update button
+      $.ajax({
+        type: "POST",
+        url: base_url + "brands/update_brand_company",
+        data: data,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (result) {
+          //alert(result);return;
+          if (result == "success") {
+            //toastr["success"]("Record Updated Successfully!");
+            window.location = base_url + "brands/company_view";
+          } else if (result == "failed") {
+            toastr["error"]("Sorry! Failed to save Record.Try again!");
+            //alert("Sorry! Failed to save Record.Try again");
+            //	return;
+          } else {
+            toastr["error"](result);
+          }
+          $("#" + this_id).attr("disabled", false); //Enable Save or Update button
+          $(".overlay").remove();
+        },
+      });
+    }
+
+    //e.preventDefault
+  } //Save end
+});

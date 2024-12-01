@@ -378,7 +378,7 @@
               <div class="row">
                 <div class="col-md-12">
                   <div class="form-group">
-                    <div class="col-sm-12" style="overflow-y:auto;height: 400px;border:1px solid #337ab7;" >
+                    <div class="col-sm-12" style="overflow-y:auto;height: 66vh;" > <!-- border:1px solid #337ab7; -->
                       <table class="table table-condensed table-bordered table-striped table-responsive items_table" style="">
                         <thead class="bg-primary">
                           <th width="30%"><?= $this->lang->line('item_name'); ?></th>

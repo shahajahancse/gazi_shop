@@ -1,18 +1,13 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Brand_model extends CI_Model {
+class Brand_company_model extends CI_Model {
 
+	// var $table = 'db_brand_companies'; //table name`
 	var $table = 'db_brands';
-	var $table2 = 'db_brand_companies';
-	//set column field database for datatable orderable
-	var $column_order = array(null, 'brand_code','brand_name','description','status');
-	var $column_order2 = array(null, 'company_code','company_name','description','status');
-	//set column field database for datatable searchable
-	var $column_search = array('brand_code','brand_name','description','status');
-	var $column_search2 = array('company_code','company_name','description','status');
-	// default order
-	var $order = array('id' => 'desc');
+	var $column_order = array(null, 'brand_code','brand_name','description','status'); //set column field database for datatable orderable
+	var $column_search = array('brand_code','brand_name','description','status'); //set column field database for datatable searchable
+	var $order = array('id' => 'desc'); // default order
 
 	private function _get_datatables_query()
 	{
@@ -62,55 +57,6 @@ class Brand_model extends CI_Model {
 		return $query->result();
 	}
 
-	private function _get_datatables_query2()
-	{
-
-		$this->db->from($this->table2);
-
-		$i = 0;
-
-		foreach ($this->column_search2 as $item) // loop column
-		{
-			if($_POST['search']['value']) // if datatable send POST for search
-			{
-
-				if($i===0) // first loop
-				{
-					$this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
-					$this->db->like($item, $_POST['search']['value']);
-				}
-				else
-				{
-					$this->db->or_like($item, $_POST['search']['value']);
-				}
-
-				if(count($this->column_search2) - 1 == $i) //last loop
-					$this->db->group_end(); //close bracket
-			}
-			$i++;
-		}
-
-		if(isset($_POST['order'])) // here order processing
-		{
-			$this->db->order_by($this->column_order2[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
-		}
-		else if(isset($this->order))
-		{
-			$order = $this->order;
-			$this->db->order_by(key($order), $order[key($order)]);
-		}
-	}
-
-	function get_datatables2()
-	{
-		$this->_get_datatables_query2();
-		if($_POST['length'] != -1)
-		$this->db->limit($_POST['length'], $_POST['start']);
-		$query = $this->db->get();
-		return $query->result();
-	}
-
-
 	function count_filtered()
 	{
 		$this->_get_datatables_query();
@@ -133,6 +79,7 @@ class Brand_model extends CI_Model {
 		$query=$this->db->query("select * from db_brands where upper(brand_name)=upper('$brand')");
 		if($query->num_rows()>0){
 			return "This Brand Name already Exist.";
+
 		}
 		else{
 			//Create brand unique Number
@@ -141,6 +88,8 @@ class Brand_model extends CI_Model {
 			$maxid=$q1->row()->maxid;
 			$cat_code='CT'.str_pad($maxid, 4, '0', STR_PAD_LEFT);
 			//end
+
+
 
 			$query1="insert into db_brands(brand_code,brand_name,description,status)
 								values('$cat_code','$brand','$description',1)";
@@ -170,22 +119,6 @@ class Brand_model extends CI_Model {
 			return $data;
 		}
 	}
-	// brand company
-	public function get_details2($id, $data){
-		//Validate This brand already exist or not
-		$query=$this->db->query("select * from db_brands where upper(id)=upper('$id')");
-		if($query->num_rows()==0){
-			show_404();exit;
-		} else{
-			$query=$query->row();
-			$data['q_id']=$query->id;
-			$data['brand_code']=$query->company_code;
-			$data['brand_name']=$query->company_name;
-			$data['description']=$query->description;
-			return $data;
-		}
-	}
-
 	public function update_brand(){
 		//Filtering XSS and html escape from user inputs
 		extract($this->security->xss_clean(html_escape(array_merge($this->data,$_POST))));
