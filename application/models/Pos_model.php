@@ -43,7 +43,7 @@ class Pos_model extends CI_Model {
 					$discount = $res2->discount;
 				}
 
-	        	if($res2->stock <1){
+	        	if($res2->stock < 1){
 	        		$str="zero_stock()";
 	        		$disabled='';
 	        		$bg_color="background-color:#c8c8c8";
@@ -60,7 +60,9 @@ class Pos_model extends CI_Model {
 	          <div class="box box-default item_box" id='div_<?php echo $res2->id;?>' onclick="<?php echo $str; ?>"
 	          				data-item-id='<?php echo $res2->id;?>'
 	          				data-item-name='<?php echo $res2->item_name;?>'
+	          				data-item-purchase-price='<?php echo $res2->purchase_price;?>'
 	          				data-item-available-qty='<?php echo $res2->stock;?>'
+	          				data-item-mrp='<?php echo $res2->mr_price;?>'
 	          				data-item-sales-price='<?php echo $item_sales_price;?>'
 	          				data-item-discount='<?php echo $discount;?>'
 	          				data-item-cost='<?php echo $item_cost;?>'
@@ -91,6 +93,7 @@ class Pos_model extends CI_Model {
 		$this->db->trans_begin();
 		extract($this->xss_html_filter(array_merge($this->data,$_POST,$_GET)));
 		//print_r($this->xss_html_filter(array_merge($this->data,$_POST,$_GET)));exit();
+		// dd($_POST);
 
 		//check payment method
 		if(isset($by_cash) && $by_cash==true){ //by cash payment
@@ -199,7 +202,10 @@ class Pos_model extends CI_Model {
 				$unit_total_cost = $price_per_unit;
 				$total_cost = $price_per_unit * $sales_qty;
 				//end
-
+				// shahajahan
+				$mr_price   =$this->xss_html_filter(trim($_REQUEST['mrp_hide_'.$item_id]));
+				$item_adis  =$this->xss_html_filter(trim($_REQUEST['item_adis_'.$item_id]));
+				// shahajahan
 
 				$tax_type =$this->db->select('tax_type')->from('db_items')->where('id',$item_id)->get()->row()->tax_type;
 
@@ -240,11 +246,13 @@ class Pos_model extends CI_Model {
 		    				'sales_status'		=> 'Final',
 		    				'item_id' 			=> $item_id,
 		    				'sales_qty' 		=> $sales_qty,
+		    				'mr_price' 			=> ($mr_price) ? $mr_price : 0,
 		    				'price_per_unit' 	=> $price_per_unit,
 		    				'tax_id' 			=> $tax_id,
 		    				'tax_amt' 			=> $tax_amt,
 		    				'unit_discount_per' => $dis_per_qty,
 		    				'discount_amt' 		=> $dis_too,
+		    				'additional_dis'    => $item_adis,        // Additional Discount
 		    				'unit_total_cost' 	=> $single_unit_total_cost,
 		    				'total_cost' 		=> $total_cost,
 		    				'status'	 		=> 1,

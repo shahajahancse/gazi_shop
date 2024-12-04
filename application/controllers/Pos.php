@@ -12,7 +12,7 @@ class Pos extends MY_Controller {
 	public function is_sms_enabled(){
 		return is_sms_enabled();
 	}
-	
+
 	public function index()
 	{
 		$this->permission_check('sales_add');
@@ -23,9 +23,9 @@ class Pos extends MY_Controller {
 
 	//adding new item from Modal
 	public function newcustomer(){
-	
+
 		$this->form_validation->set_rules('customer_name', 'Customer Name', 'trim|required');
-		
+
 		if ($this->form_validation->run() == TRUE) {
 			$this->load->model('customers_model');
 			$result=$this->customers_model->verify_and_save();
@@ -35,10 +35,10 @@ class Pos extends MY_Controller {
 			$res['id']=$query->row()->id;
 			$res['customer_name']=$query->row()->customer_name;
 			$res['result']=$result;
-			
+
 			echo json_encode($res);
 
-		} 
+		}
 		else {
 			echo "Please Fill Compulsory(* marked) Fields.";
 		}
@@ -86,14 +86,14 @@ class Pos extends MY_Controller {
 	public function add_payment_row(){
 		return $this->load->view('modals_pos_payment/modal_payments_multi_sub');
 	}
-	//Print sales POS invoice 
+	//Print sales POS invoice
 	public function print_invoice_pos($sales_id){
 		if(!$this->permissions('sales_add') && !$this->permissions('sales_edit')){
 			$this->show_access_denied_page();
 		}
 		$data=$this->data;
 		$data['page_title']=$this->lang->line('sales_invoice');
-		$data=array_merge($data,array('sales_id'=>$sales_id));
+		$data = array_merge($data,array('sales_id'=>$sales_id));
 		$this->load->view('sal-invoice-pos',$data);
 	}
 

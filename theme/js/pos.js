@@ -129,13 +129,10 @@ $('.make_sale').click(function (e) {
 $('#save,#update').click(function (e) {
 
 	var base_url=$("#base_url").val().trim();
-
     if($(".items_table tr").length==1){
     	toastr["warning"]("Empty Sales List!!");
 		return;
     }
-
-
 	//RETRIVE ALL DYNAMIC HTML VALUES
     var tot_qty=$(".tot_qty").text();
     var tot_amt=$(".tot_amt").text();
@@ -143,40 +140,32 @@ $('#save,#update').click(function (e) {
     var tot_grand=$(".tot_grand").text();
     var paid_amt=$(".sales_div_tot_paid").text();
     var balance=$(".sales_div_tot_balance").text();
-
-
-
     if(document.getElementById("sales_id")){
     	var command = 'update';
-    }
-    else{
+    }else{
     	var command = 'save';
     }
     var this_btn='place_order';
 
 	swal({ title: "Are you sure?",icon: "warning",buttons: true,dangerMode: true,}).then((sure) => {
-			  if(sure) {//confirmation start
-
-		e.preventDefault();
-		var data = new Array(2);
-		data= new FormData($('#pos-form')[0]);//form name
-		/*Check XSS Code*/
-		if(!xss_validation(data)){ return false; }
-
-		$(".box").append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
-		$("#"+this_btn).attr('disabled',true);  //Enable Save or Update button
-		$.ajax({
-			type: 'POST',
-			url: base_url+'pos/pos_save_update?command='+command+'&tot_qty='+tot_qty+'&tot_amt='+tot_amt+'&tot_disc='+tot_disc+'&tot_grand='+tot_grand+"&paid_amt="+paid_amt+'&balance='+balance+"&by_cash="+true,
-			data: data,
-			cache: false,
-			contentType: false,
-			processData: false,
-			success: function(result){
-				//alert(result);//return;
-
-				result=result.trim().split("<<<###>>>");
-
+		if(sure) {//confirmation start
+			e.preventDefault();
+			var data = new Array(2);
+			data= new FormData($('#pos-form')[0]);//form name
+			/*Check XSS Code*/
+			if(!xss_validation(data)){ return false; }
+			$(".box").append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
+			$("#"+this_btn).attr('disabled',true);  //Enable Save or Update button
+			$.ajax({
+				type: 'POST',
+				url: base_url+'pos/pos_save_update?command='+command+'&tot_qty='+tot_qty+'&tot_amt='+tot_amt+'&tot_disc='+tot_disc+'&tot_grand='+tot_grand+"&paid_amt="+paid_amt+'&balance='+balance+"&by_cash="+true,
+				data: data,
+				cache: false,
+				contentType: false,
+				processData: false,
+				success: function(result){
+					//alert(result);//return;
+					result=result.trim().split("<<<###>>>");
 					if(result[0]=="success")
 					{
 						//window.location=base_url+"pos/print_invoice_pos/"+result[1]+"?redirect=pos", "_blank";
@@ -194,23 +183,20 @@ $('#save,#update').click(function (e) {
 					}
 					else if(result[0]=="failed")
 					{
-					   toastr['error']("Sorry! Failed to save Record.Try again");
+					toastr['error']("Sorry! Failed to save Record.Try again");
 					}
 					else
 					{
 						alert(result);
 					}
 
-				$("#"+this_btn).attr('disabled',false);  //Enable Save or Update button
-				$(".overlay").remove();
-		   }
-	   });
-	} //confirmation sure
-		}); //confirmation end
-
-//e.preventDefault
-
-
+					$("#"+this_btn).attr('disabled',false);  //Enable Save or Update button
+					$(".overlay").remove();
+				}
+			});
+		} //confirmation sure
+	}); //confirmation end
+	//e.preventDefault
 });
 
 
@@ -430,6 +416,8 @@ $('#show_cash_modal').click(function (e) {
     	$('#multiple-payments-modal').modal('toggle');
     }
 	$("#amount_1").val($(".sales_div_tot_payble ").html());
+	$("#amount_1").trigger("onkeyup");
+
 }); //hold_invoice end
 
 $('#add_payment_row').click(function (e) {

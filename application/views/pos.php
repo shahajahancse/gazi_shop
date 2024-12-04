@@ -204,7 +204,7 @@
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper" style="<?=$css;?>">
     <!-- Content Header (Page header) -->
-   <!--  <section class="content-header">
+    <!--  <section class="content-header">
       <h1>
         General Form Elements
         <small>Preview</small>
@@ -379,17 +379,31 @@
                 <div class="col-md-12">
                   <div class="form-group">
                     <div class="col-sm-12" style="overflow-y:auto;height: 66vh;" > <!-- border:1px solid #337ab7; -->
+                      <style>
+                        .input-group-sm>.input-group-btn>.btn {
+                          padding: 3px 7px !important;
+                        }
+                        .form-control {
+                          height: 30px !important;
+                        }
+                        input[type=number]::-webkit-inner-spin-button {
+                          -webkit-appearance: none ! important;
+                        }
+                      </style>
                       <table class="table table-condensed table-bordered table-striped table-responsive items_table" style="">
-                        <thead class="bg-primary">
+                        <thead class="bg-primary" style="font-size: 14px;font-weight: bold;">
                           <th width="25%"><?= $this->lang->line('item_name'); ?></th>
-                          <th width="10%"><?= $this->lang->line('stock'); ?></th>
-                          <th width="20%"><?= $this->lang->line('quantity'); ?></th>
-                          <th width="15%"><?= $this->lang->line('price_including_tax'); ?></th>
-                          <th width="10%">Discount</th>
-                          <th width="15%"><?= $this->lang->line('subtotal'); ?></th>
-                          <th width="5%"><i class="fa fa-close"></i></th>
+                          <!-- <th width="10%">P.Price</th> -->
+                          <th width="7%"><?= $this->lang->line('stock'); ?></th>
+                          <th width="9%">MR.Price</th>
+                          <th width="15%"><?= $this->lang->line('quantity'); ?></th>
+                          <th width="10%">S.Price</th>
+                          <th width="10%">Discounted</th>
+                          <th width="10%">A.Discount</th>
+                          <th width="10%"><?= $this->lang->line('subtotal'); ?></th>
+                          <th width="4%"><i class="fa fa-close"></i></th>
                         </thead>
-                        <tbody id="pos-form-tbody" style="font-size: 16px;font-weight: bold;overflow: scroll;">
+                        <tbody id="pos-form-tbody" style="font-size: 13px;font-weight: bold;overflow: scroll;">
                           <!-- body code -->
                         </tbody>
                         <tfoot>
@@ -400,14 +414,8 @@
                   </div>
                 </div>
               </div>
-
-
-
               </div>
               <!-- /.box-body -->
-
-
-
           </div>
           <!-- /.box -->
         </div>
@@ -462,10 +470,13 @@
                     <div class="col-xs-12 ">
                            <div class="checkbox icheck" style="padding-left: 16px;">
                             <label>
-                              <input type="checkbox" <?=$send_sms_checkbox;?> class="form-control" id="send_sms" name="send_sms" > <label for="sales_discount" class=" control-label"><?= $this->lang->line('send_sms_to_customer'); ?>
-                                <i class="hover-q " data-container="body" data-toggle="popover" data-placement="top" data-content="If checkbox is Disabled! You need to enable it from SMS -> SMS API <br><b>Note:<i>Walk-in Customer will not receive SMS!</i></b>" data-html="true" data-trigger="hover" data-original-title="" title="Do you wants to send SMS ?">
-                                  <i class="fa fa-info-circle text-maroon text-black hover-q"></i>
-                                </i>
+                              <!-- <input type="checkbox" <?=$send_sms_checkbox;?> class="form-control" id="send_sms" name="send_sms" > <label for="sales_discount" class=" control-label"> -->
+                              <input type="hidden" class="form-control" id="send_sms" name="send_sms" >
+                              <label for="sales_discount" class=" control-label">
+                                <!-- <?= $this->lang->line('send_sms_to_customer'); ?> -->
+                                <!-- <i class="hover-q " data-container="body" data-toggle="popover" data-placement="top" data-content="If checkbox is Disabled! You need to enable it from SMS -> SMS API <br><b>Note:<i>Walk-in Customer will not receive SMS!</i></b>" data-html="true" data-trigger="hover" data-original-title="" title="Do you wants to send SMS ?"> -->
+                                  <!-- <i class="fa fa-info-circle text-maroon text-black hover-q"></i>
+                                </i> -->
                               </label>
                             </label>
                           </div>
@@ -577,47 +588,44 @@
 
 
 <script>
-
   //RIGHT SIT DIV:-> FILTER ITEM INTO THE ITEMS LIST
   function search_it(){
-  console.clear();
-  var input = $("#search_it").val().trim();
-  var item_count=$(".search_div .search_item").length;
-  var error_count=item_count;
-  for(i=0; i<item_count; i++){
-    if($("#item_"+i).html().toUpperCase().indexOf(input.toUpperCase())>-1){
-      console.log("found");
-      $("#item_"+i).show();
-      $("#item_parent_"+i).show();
-    }else{
-     console.log("not-found");
-     $("#item_"+i).hide();
-     $("#item_parent_"+i).hide();
-     error_count--;
-    }
-    if(error_count==0){
-      $(".error_div").show();
-    }
-    else{
-      $(".error_div").hide();
-    }
+    console.clear();
+    var input = $("#search_it").val().trim();
+    var item_count=$(".search_div .search_item").length;
+    var error_count=item_count;
+    for(i=0; i<item_count; i++){
+      if($("#item_"+i).html().toUpperCase().indexOf(input.toUpperCase())>-1){
+        // console.log("found");
+        $("#item_"+i).show();
+        $("#item_parent_"+i).show();
+      }else{
+      // console.log("not-found");
+      $("#item_"+i).hide();
+      $("#item_parent_"+i).hide();
+      error_count--;
+      }
+      if(error_count==0){
+        $(".error_div").show();
+      }
+      else{
+        $(".error_div").hide();
+      }
 
+    }
   }
+  //REMOTELY FETCH THE ALL ITEMS OR CATEGORY WISE ITEMS.
+  function get_details(){
+    $(".box").append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
+    $.post("<?php echo $base_url; ?>pos/get_details",{id:$("#category_id").val()},function(result){
+      $(".search_div").html('');
+      $(".search_div").html(result);
+      $(".overlay").remove();
+    });
   }
 
-
-//REMOTELY FETCH THE ALL ITEMS OR CATEGORY WISE ITEMS.
-function get_details(){
-  $(".box").append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
-  $.post("<?php echo $base_url; ?>pos/get_details",{id:$("#category_id").val()},function(result){
-    $(".search_div").html('');
-    $(".search_div").html(result);
-    $(".overlay").remove();
-  });
-}
-
-//LEFT SIDE: ON CLICK ITEM ADD TO INVOICE LIST
-function addrow(id){
+  //LEFT SIDE: ON CLICK ITEM ADD TO INVOICE LIST
+  function addrow(id){
 
     //CHECK SAME ITEM ALREADY EXIST IN ITEMS TABLE
     var item_check=check_same_item($('#div_'+id).attr('data-item-id'));
@@ -625,20 +633,24 @@ function addrow(id){
     var rowcount        =$("#hidden_rowcount").val();//0,1,2...
     var item_id         =$('#div_'+id).attr('data-item-id');
     var item_name       =$('#div_'+id).attr('data-item-name');
+    // var pPrice          =$('#div_'+id).attr('data-item-purchase-price');
     var stock           =$('#div_'+id).attr('data-item-available-qty');
+    var mrp             =$('#div_'+id).attr('data-item-mrp');
     //var gst_per         =$('#div_'+id).attr('data-item-tax-per');
     //var gst_amt         =$('#div_'+id).attr('data-item-gst-amt');
     var item_cost       =$('#div_'+id).attr('data-item-cost');
     var sales_price     =$('#div_'+id).attr('data-item-sales-price');
     var discount        =$('#div_'+id).attr('data-item-discount');
     var sales_price_temp=sales_price;
-        sales_price     =(parseFloat(sales_price)).toFixed(2);
+    sales_price         =(parseFloat(sales_price)).toFixed(2);
 
-    var quantity        ='<div class="input-group input-group-sm"><span class="input-group-btn"><button onclick="decrement_qty('+item_id+','+rowcount+')" type="button" class="btn btn-default btn-flat"><i class="fa fa-minus text-danger"></i></button></span>';
-        quantity       +='<input typ="text" value="1" class="form-control" onkeyup="item_qty_input('+item_id+','+rowcount+')" id="item_qty_'+item_id+'" name="item_qty_'+item_id+'">';
-        quantity       +='<input type="hidden" name="dis_hide_'+item_id+'" id="dis_hide_'+item_id+'" value="'+discount+'">';
+    var quantity ='<div class="input-group input-group-sm"><span class="input-group-btn"><button onclick="decrement_qty('+item_id+','+rowcount+')" type="button" class="btn btn-default btn-flat"><i class="fa fa-minus text-danger"></i></button></span>';
+        quantity +='<input typ="text" value="1" class="form-control" onkeyup="item_qty_input('+item_id+','+rowcount+')" id="item_qty_'+item_id+'" name="item_qty_'+item_id+'">';
 
-        quantity       +='<span class="input-group-btn"><button onclick="increment_qty('+item_id+','+rowcount+')" type="button" class="btn btn-default btn-flat"><i class="fa fa-plus text-success"></i></button></span></div>';
+        quantity +='<input type="hidden" name="dis_hide_'+item_id+'" id="dis_hide_'+item_id+'" value="'+discount+'">';
+        quantity +='<input type="hidden" name="mrp_hide_'+item_id+'" id="mrp_hide_'+item_id+'" value="'+mrp+'">';
+
+        quantity +='<span class="input-group-btn"><button onclick="increment_qty('+item_id+','+rowcount+')" type="button" class="btn btn-default btn-flat"><i class="fa fa-plus text-success"></i></button></span></div>';
 
 
     var sub_total       =(parseFloat(1)*parseFloat(sales_price)).toFixed(2);//Initial
@@ -646,12 +658,19 @@ function addrow(id){
 
     var str=' <tr id="row_'+rowcount+'" data-row="0" data-item-id='+item_id+'>';/*item id*/
         str+='<td id="td_'+rowcount+'_0">'+ item_name     +'</td>';/* td_0_0 item name*/
+        // str+='<td id="td_'+rowcount+'_7">'+ pPrice +'</td>';/* td_0_7 item purchase price*/
         str+='<td id="td_'+rowcount+'_1">'+ stock +'</td>';/* td_0_1 item available qty*/
+        str+='<td id="td_'+rowcount+'_8">'+ mrp +'</td>';/* td_0_8 item MRP*/
         str+='<td id="td_'+rowcount+'_2">'+ quantity      +'</td>';/* td_0_2 item available qty*/
-            info='<input id="sales_price_'+rowcount+'" onblur="set_to_original('+rowcount+','+item_cost+')" onkeyup="update_price('+rowcount+','+item_cost+')" name="sales_price_'+rowcount+'" type="text" class="form-control" value="'+sales_price+'">';
-        str+='<td id="td_'+rowcount+'_3" class="text-right">'+ info   +'</td>';/* td_0_3 item sales price*/
-        str+='<td id="td_'+rowcount+'_6" class="text-right">'+ discount   +'</td>';/* td_0_3 item sales price*/
-        str+='<td id="td_'+rowcount+'_4" class="text-right">'+ sub_total     +'</td>';/* td_0_4 item sub_total */
+
+          info='<input id="sales_price_'+rowcount+'" onblur="set_to_original('+rowcount+','+item_cost+')" onkeyup="update_price('+rowcount+','+item_cost+')" name="sales_price_'+rowcount+'" type="text" class="form-control" value="'+sales_price+'">';
+
+        adis ='<input type="number" value="0" class="form-control" onkeyup="make_subtotal('+item_id+','+rowcount+')" id="item_adis_'+item_id+'" name="item_adis_'+item_id+'" ></input>';
+
+        str+='<td id="td_'+rowcount+'_3" class="text-right">'+ info +'</td>';/* td_0_3 item sales price*/
+        str+='<td id="td_'+rowcount+'_6" class="text-right">'+ discount +'</td>';/* td_0_3 item discount*/
+        str+='<td id="td_'+rowcount+'_7" class="text-right">'+ adis +'</td>';/* td_0_3 item additional discount*/
+        str+='<td id="td_'+rowcount+'_4" class="text-right">'+ sub_total +'</td>';/* td_0_4 item sub_total */
         str+='<td id="td_'+rowcount+'_5">'+ remove_btn    +'</td>';/* td_0_5 item gst_amt */
 
         str+='<input type="hidden" name="tr_item_id_'+rowcount+'" id="tr_item_id_'+rowcount+'" value="'+item_id+'">';
@@ -669,54 +688,53 @@ function addrow(id){
     failed.play();
     //CALCULATE FINAL TOTAL AND OTHER OPERATIONS
     final_total();
-
   }
 
-function update_price(row_id,item_cost){
-  /*Input*/
-  var sales_price=$("#sales_price_"+row_id).val().trim();
-  if(sales_price!='' || sales_price==0) {sales_price = parseFloat(sales_price); }
+  function update_price(row_id,item_cost){
+    /*Input*/
+    var sales_price=$("#sales_price_"+row_id).val().trim();
+    if(sales_price!='' || sales_price==0) {sales_price = parseFloat(sales_price); }
 
-  /*Default set from item master*/
-  var item_price=parseFloat($("#tr_sales_price_temp_"+row_id).val().trim());
+    /*Default set from item master*/
+    var item_price=parseFloat($("#tr_sales_price_temp_"+row_id).val().trim());
 
-  if(sales_price<item_cost){
-    //toastr["warning"]("Minimum Sales Price is "+item_cost);
-    $("#sales_price_"+row_id).parent().addClass('has-error');
-  }else{
-    $("#sales_price_"+row_id).parent().removeClass('has-error');
+    if(sales_price<item_cost){
+      //toastr["warning"]("Minimum Sales Price is "+item_cost);
+      $("#sales_price_"+row_id).parent().addClass('has-error');
+    }else{
+      $("#sales_price_"+row_id).parent().removeClass('has-error');
+    }
+
+    make_subtotal($("#tr_item_id_"+row_id).val(),row_id);
   }
 
-  make_subtotal($("#tr_item_id_"+row_id).val(),row_id);
-}
+  function set_to_original(row_id,item_cost) {
+    /*Input*/
+    var sales_price=$("#sales_price_"+row_id).val().trim();
+    if(sales_price!='' || sales_price==0) {sales_price = parseFloat(sales_price); }
 
-function set_to_original(row_id,item_cost) {
-  /*Input*/
-  var sales_price=$("#sales_price_"+row_id).val().trim();
-  if(sales_price!='' || sales_price==0) {sales_price = parseFloat(sales_price); }
+    /*Default set from item master*/
+    var item_price=parseFloat($("#tr_sales_price_temp_"+row_id).val().trim());
 
-  /*Default set from item master*/
-  var item_price=parseFloat($("#tr_sales_price_temp_"+row_id).val().trim());
-
-  if(sales_price<item_cost){
-    toastr["success"]("Default Price Set "+item_price);
-    $("#sales_price_"+row_id).parent().removeClass('has-error');
-    $("#sales_price_"+row_id).val(item_price);
+    if(sales_price<item_cost){
+      toastr["success"]("Default Price Set "+item_price);
+      $("#sales_price_"+row_id).parent().removeClass('has-error');
+      $("#sales_price_"+row_id).val(item_price);
+    }
+    make_subtotal($("#tr_item_id_"+row_id).val(),row_id);
   }
-  make_subtotal($("#tr_item_id_"+row_id).val(),row_id);
-}
 
 
-//INCREMENT ITEM
-function increment_qty(item_id,rowcount){
-  var item_qty=$("#item_qty_"+item_id).val();
-  var stock=$("#td_"+rowcount+"_1").html();
-  if(parseInt(item_qty)<parseInt(stock)){
-    item_qty=parseFloat(item_qty)+1;
-    $("#item_qty_"+item_id).val(item_qty);
+  //INCREMENT ITEM
+  function increment_qty(item_id,rowcount){
+    var item_qty=$("#item_qty_"+item_id).val();
+    var stock=$("#td_"+rowcount+"_1").html();
+    if(parseInt(item_qty)<parseInt(stock)){
+      item_qty=parseFloat(item_qty)+1;
+      $("#item_qty_"+item_id).val(item_qty);
+    }
+    make_subtotal(item_id,rowcount);
   }
-  make_subtotal(item_id,rowcount);
-}
 //DECREMENT ITEM
 function decrement_qty(item_id,rowcount){
   var item_qty=$("#item_qty_"+item_id).val();
@@ -767,21 +785,36 @@ function removerow(id){//id=Rowid
 
 //MAKE SUBTOTAL
 function make_subtotal(item_id,rowcount){
-  var sales_price     =$("#sales_price_"+rowcount).val();
+  var sales_price     = $("#sales_price_"+rowcount).val();
   //var gst_per         =$("#tr_item_per_"+rowcount).val();
-  var item_qty        =$("#item_qty_"+item_id).val();
-  var dis_hide        =$("#dis_hide_"+item_id).val();
+  var item_qty        = $("#item_qty_"+item_id).val();
+  // shahajahan 03-12-2024
+  var mrp_price       = parseFloat($("#td_"+rowcount+"_8").html()).toFixed(2);
+  var tot_mrp_price   = parseFloat(item_qty)*parseFloat(mrp_price);
+  var dis_hide        = $("#dis_hide_"+item_id).val();
+  var dis_ahide       = (isNaN(parseFloat($("#item_adis_"+item_id).val().trim()))) ? 0 :parseFloat($("#item_adis_"+item_id).val().trim());
 
-  var tot_sales_price =parseFloat(item_qty)*parseFloat(sales_price);
-  //var gst_amt=(tot_sales_price * gst_per)/100;
-
-  var subtotal        = parseFloat(tot_sales_price);
   var total_discount  = parseFloat(item_qty * dis_hide);
-
-  $("#td_"+rowcount+"_4").html(parseFloat(subtotal).toFixed(2));
   $("#td_"+rowcount+"_6").html(parseFloat(total_discount).toFixed(2));
+  // shahajahan 03-12-2024
+
+
+  //var gst_amt=(tot_sales_price * gst_per)/100;
+  var tot_sales_price = parseFloat(item_qty)*parseFloat(sales_price);
+  var subtotal        = parseFloat(tot_sales_price);
+
+  final_sales_price = (parseFloat(dis_ahide) + parseFloat(total_discount) + parseFloat(subtotal)).toFixed(2);
+  // console.log(final_sales_price);
+
+  if (parseFloat(final_sales_price) > parseFloat(tot_mrp_price)) {
+    $("#item_adis_"+item_id).val(0);
+    return false;
+  } else {
+    $("#td_"+rowcount+"_4").html(parseFloat(subtotal).toFixed(2));
+  }
   final_total();
 }
+
 function calulate_discount(discount_input,discount_type,total){
   if(discount_type=='in_percentage'){
     return parseFloat((total*discount_input)/100);

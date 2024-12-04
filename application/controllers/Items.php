@@ -28,7 +28,7 @@ class Items extends MY_Controller {
 		$this->form_validation->set_rules('category_id', 'Category Name', 'trim|required');
 		$this->form_validation->set_rules('unit_id', 'Unit', 'trim|required');
 		$this->form_validation->set_rules('price', 'Item Price', 'trim|required');
-		$this->form_validation->set_rules('tax_id', 'Tax', 'trim|required');
+		// $this->form_validation->set_rules('tax_id', 'Tax', 'trim|required');
 		$this->form_validation->set_rules('purchase_price', 'Purchase Price', 'trim|required');
 		//$this->form_validation->set_rules('profit_margin', 'Profit Margin', 'trim|required');
 		$this->form_validation->set_rules('sales_price', 'Sales Price', 'trim|required');
@@ -56,7 +56,7 @@ class Items extends MY_Controller {
 		$this->form_validation->set_rules('category_id', 'Category Name', 'trim|required');
 		$this->form_validation->set_rules('unit_id', 'Unit', 'trim|required');
 		$this->form_validation->set_rules('price', 'Item Price', 'trim|required');
-		$this->form_validation->set_rules('tax_id', 'Tax', 'trim|required');
+		// $this->form_validation->set_rules('tax_id', 'Tax', 'trim|required');
 		$this->form_validation->set_rules('purchase_price', 'Purchase Price', 'trim|required');
 		//$this->form_validation->set_rules('profit_margin', 'Profit Margin', 'trim|required');
 		$this->form_validation->set_rules('sales_price', 'Sales Price', 'trim|required');

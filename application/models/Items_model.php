@@ -164,12 +164,21 @@ class Items_model extends CI_Model {
 		$profit_margin = (empty(trim($profit_margin))) ? 'null' : $profit_margin;
 
 		$expire_date= (!empty(trim($expire_date))) ? date('Y-m-d',strtotime($expire_date)) : null;
+		// new code 03-11-2024 shahajahan
+		if (trim($discount_type) == 1) {
+			$diss = round(($purchase_price * $discount) / 100, 2);
+		} else {
+			$diss = $discount;
+		}
+		$diff = $mr_price - ($sales_price + $diss);
+		$dif_price = $diff < 0 ? 0 : $diff;
+		// new code 03-11-2024 shahajahan
 
-		$query1="insert into db_items(item_code,item_name,company_id,brand_id,category_id,sku,unit_id,alert_qty,lot_number,expire_date, price,tax_id,purchase_price,tax_type,profit_margin, sales_price, system_ip,system_name,created_date,created_time,created_by,status,discount_type, discount)
+		$query1="insert into db_items(item_code,item_name,company_id,brand_id,category_id,sku,unit_id,alert_qty,lot_number,expire_date, price,tax_id,purchase_price,mr_price,tax_type,profit_margin, sales_price, system_ip,system_name,created_date,created_time,created_by,status,discount_type, discount)
 
 							values('$item_code','$item_name','$company_id','$brand_id','$category_id','$sku','$unit_id','$alert_qty','$lot_number','$expire_date',
-									'$price','$tax_id','$purchase_price','$tax_type',$profit_margin,
-									'$sales_price','$SYSTEM_IP','$SYSTEM_NAME','$CUR_DATE','$CUR_TIME','$CUR_USERNAME', 1, '$discount_type',$discount)";
+									'$price','$tax_id','$purchase_price',$mr_price,'$tax_type',$profit_margin,
+									'$sales_price',$dif_price,'$SYSTEM_IP','$SYSTEM_NAME','$CUR_DATE','$CUR_TIME','$CUR_USERNAME', 1, '$discount_type',$discount)";
 
 		$query1=$this->db->simple_query($query1);
 		if(!$query1){
@@ -246,8 +255,7 @@ class Items_model extends CI_Model {
 		$query=$this->db->query("select * from db_items where upper(item_name)=upper('$item_name') and id<>$q_id");
 		if($query->num_rows()>0){
 			return "This Items Name already Exist.";
-		}
-		else{
+		}else{
 
 			$file_name=$item_image='';
 			if(!empty($_FILES['item_image']['name'])){
@@ -288,6 +296,16 @@ class Items_model extends CI_Model {
 		        }
 			}
 
+			// new code 03-11-2024 shahajahan
+			if (trim($discount_type) == 1) {
+				$diss = round(($purchase_price * $discount) / 100, 2);
+			} else {
+				$diss = $discount;
+			}
+			$diff = $mr_price - ($sales_price + $diss);
+			$dif_price = $diff < 0 ? 0 : $diff;
+			// new code 03-11-2024 shahajahan
+
 			//$stock = $current_opening_stock + $new_opening_stock;
 			$alert_qty = (empty(trim($alert_qty))) ? '0' : $alert_qty;
 			$profit_margin = (empty(trim($profit_margin))) ? 'null' : $profit_margin;
@@ -307,9 +325,11 @@ class Items_model extends CI_Model {
 						price='$price',
 						tax_id='$tax_id',
 						purchase_price='$purchase_price',
+						mr_price='$mr_price',
 						tax_type='$tax_type',
 						profit_margin=$profit_margin,
-						sales_price='$sales_price'
+						sales_price='$sales_price',
+						dif_price='$dif_price'
 						$item_image
 						where id=$q_id";
 
