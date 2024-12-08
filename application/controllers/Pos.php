@@ -6,11 +6,12 @@ class Pos extends MY_Controller {
 		parent::__construct();
 		$this->load_global();
 		$this->load->model('pos_model','pos_model');
-		$this->load->helper('sms_template_helper');
+		// $this->load->helper('sms_template_helper');
 	}
 
 	public function is_sms_enabled(){
-		return is_sms_enabled();
+		return false;
+		//return is_sms_enabled();
 	}
 
 	public function index()

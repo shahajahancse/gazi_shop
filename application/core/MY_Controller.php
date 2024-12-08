@@ -72,7 +72,6 @@ class MY_Controller extends CI_Controller{
             return $this->session->userdata('currency')." ".$value;
           }
           return $this->session->userdata('currency')."".$value;
-          
         }
         else{
           if(!empty($value)){
