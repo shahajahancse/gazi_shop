@@ -62,9 +62,9 @@
                                             class="col-sm-2 control-label"><?= $this->lang->line('user_name'); ?><label
                                                 class="text-danger">*</label></label>
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control input-sm" id="new_user"
-                                                name="new_user" placeholder="" onkeyup="shift_cursor(event,'mobile')"
-                                                value="<?php print $username; ?>" <?=$disabled;?> autofocus>
+                                            <input autocomplete="off" type="text" class="form-control input-sm" id="new_user"
+                                                name="new_user" placeholder="" value='' onkeyup="shift_cursor(event,'mobile')"
+                                                value="<?php print $username; ?>" <?=$disabled;?> >
                                             <span id="new_user_msg" style="display:none" class="text-danger"></span>
                                         </div>
                                     </div>
@@ -125,7 +125,7 @@
                                             class="col-sm-2 control-label"><?= $this->lang->line('password'); ?><label
                                                 class="text-danger">*</label></label>
                                         <div class="col-sm-4">
-                                            <input type="password" class="form-control input-sm"
+                                            <input  type="password" class="form-control input-sm" value=''
                                                 <?php print $disabled; ?> id="pass" name="pass" placeholder=""
                                                 onkeyup="shift_cursor(event,'confirm')">
                                             <span id="pass_msg" style="display:none" class="text-danger"></span>
@@ -207,6 +207,16 @@
     <?php include"comman/code_js_form.php"; ?>
 
     <script src="<?php echo $theme_link; ?>js/users.js"></script>
+    <script>
+        $(document).ready(function() {
+            // console.log('jh');
+            setTimeout(function() {
+                 $('#pass').val('');
+                $('#new_user').val('');
+            }, 600);
+           
+        });
+    </script>
 
     <!-- Make sidebar menu hughlighter/selector -->
     <script>

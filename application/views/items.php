@@ -323,7 +323,7 @@
                                     <button type="button" id="<?php echo $btn_id;?>" class=" btn btn-block btn-success" title="Save Data"><?php echo $btn_name;?></button>
                                  </div>
                                  <div class="col-sm-3">
-                                    <button type="button" class="col-sm-3 btn btn-block btn-warning close_btn" title="Go Dashboard">Close</button>
+                                    <a href="<?=base_url('dashboard');?>" class="col-sm-3 btn btn-block btn-warning close_btn" title="Go Dashboard">Close</a>
                                  </div>
                               </div>
                            </div>

@@ -97,7 +97,7 @@
                               <div class="form-group">
                                 <label for="state">State</label>
                                 <stax_number id="state_msg" class="text-danger text-right pull-right"></stax_number>
-                               <select class="form-control" id="state" name="state"  style="width: 100%;" onkeyup="shift_cursor(event,'state_code')">
+                               <select class="form-control" id="state" name="state"  style="width: 100%;padding: 0px 6px;" onkeyup="shift_cursor(event,'state_code')">
                                   <?php
                                   $query2="select * from db_states where status=1";
                                   $q2=$this->db->query($query2);

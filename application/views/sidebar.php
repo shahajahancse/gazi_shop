@@ -44,22 +44,22 @@
               <?php } ?>
               <?php if($CI->permissions('customers_add')) { ?>
               <li class="border_bottom">
-                <a href="<?php echo $base_url; ?>customers/add" ><h4><i class="fa fa-plus text-green"></i> <?= $this->lang->line('customer'); ?></h4></a>
+                <a href="<?php echo $base_url; ?>customers/add" ><h4><i class="fa fa-plus text-green"></i> <?= $this->lang->line('customers'); ?></h4></a>
               </li>
               <?php } ?>
               <?php if($CI->permissions('suppliers_add')) { ?>
               <li class="border_bottom">
-                <a href="<?php echo $base_url; ?>suppliers/add" ><h4><i class="fa fa-plus text-green"></i> <?= $this->lang->line('supplier'); ?></h4></a>
+                <a href="<?php echo $base_url; ?>suppliers/add" ><h4><i class="fa fa-plus text-green"></i> <?= $this->lang->line('suppliers'); ?></h4></a>
               </li>
               <?php } ?>
               <?php if($CI->permissions('items_add')) { ?>
               <li class="border_bottom">
-                <a href="<?php echo $base_url; ?>items/add" ><h4><i class="fa fa-plus text-green"></i> <?= $this->lang->line('item'); ?></h4></a>
+                <a href="<?php echo $base_url; ?>items/add" ><h4><i class="fa fa-plus text-green"></i> <?= $this->lang->line('items'); ?></h4></a>
               </li>
               <?php } ?>
               <?php if($CI->permissions('expense_add')) { ?>
               <li class="border_bottom">
-                <a href="<?php echo $base_url; ?>expense/add" ><h4><i class="fa fa-plus text-green"></i> <?= $this->lang->line('expense'); ?></h4></a>
+                <a href="<?php echo $base_url; ?>expense/add" ><h4><i class="fa fa-plus text-green"></i> <?= $this->lang->line('expenses'); ?></h4></a>
               </li>
               <?php } ?>
         </ul>

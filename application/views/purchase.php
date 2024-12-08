@@ -220,12 +220,12 @@
                                                    <th rowspan='2' style="width:20%"><?= $this->lang->line('item_name'); ?></th>
                                                    <th rowspan='2' style="width:10%"><?= $this->lang->line('quantity'); ?></th>
                                                    <th rowspan='2' style="width:5%"><?= $this->lang->line('purchase_price'); ?>(<?=$CURRENCY;?>)</th>
-                                                   <th rowspan='2' style="width:7.5%"><?= $this->lang->line('tax'); ?> %</th>
+                                                   <th rowspan='2' style="width:7.5%"><?= $this->lang->line('tax'); ?> (%)</th>
                                                    <th rowspan='2' style="width:7.5%"><?= $this->lang->line('tax_amount'); ?>(<?=$CURRENCY;?>)</th>
                                                    <th rowspan='2' style="width:10%"><?= $this->lang->line('discount'); ?>(%)</th>
-                                                   <th rowspan='2' style="width:7.5%"><?= $this->lang->line('unit_cost'); ?>(<?=$CURRENCY;?>)</th>
+                                                   <th rowspan='2' style="width:9.5%"><?= $this->lang->line('unit_cost'); ?>(<?=$CURRENCY;?>)</th>
                                                    <th rowspan='2' style="width:7.5%"><?= $this->lang->line('total_amount'); ?>(<?=$CURRENCY;?>)</th>
-                                                   <th rowspan='2' style="width:7.5%"><?= $this->lang->line('profit_margin'); ?>(%)</th>
+                                                   <th rowspan='2' style="width:7.5%">Profit Margin(%)</th>
                                                    <th rowspan='2' style="width:7.5%"><?= $this->lang->line('unit_sales_price'); ?>(<?=$CURRENCY;?>)</th>
                                                    <th rowspan='2' style="width:7.5%"><?= $this->lang->line('action'); ?></th>
                                                 </tr>
