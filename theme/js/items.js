@@ -239,6 +239,7 @@ function calculate_purchase_price(){
 	var price = (isNaN(parseFloat($("#price").val().trim()))) ? 0 :parseFloat($("#price").val().trim());
 	var tax = (isNaN(parseFloat($('option:selected', "#tax_id").attr('data-tax')))) ? 0 :parseFloat($('option:selected', "#tax_id").attr('data-tax'));
 	$("#purchase_price").val( (price + (price*tax)/parseFloat(100)).toFixed(2));
+	$("#tax_amt").val((price*tax)/parseFloat(100).toFixed(2));
 	calculate_sales_price();
 }
 $("#price").keyup(function(event) {
@@ -252,62 +253,67 @@ $("#tax_id").change(function(event) {
 function calculate_sales_price(){
 	var purchase_price = (isNaN(parseFloat($("#purchase_price").val().trim()))) ? 0 :parseFloat($("#purchase_price").val().trim());
 	var mr_price = (isNaN(parseFloat($("#mr_price").val().trim()))) ? 0 :parseFloat($("#mr_price").val().trim());
-	var profit_margin = (isNaN(parseFloat($("#profit_margin").val().trim()))) ? 0 :parseFloat($("#profit_margin").val().trim());
 
-	// set tax/vat
-	var sales_price = parseFloat(0);
-	// var tax_type = $("#tax_type").val();
-	/* if(tax_type=='Inclusive'){
-		sales_price = purchase_price + ((purchase_price*profit_margin)/parseFloat(100));
-	}else{
-		// var price = (isNaN(parseFloat($("#price").val().trim()))) ? 0 :parseFloat($("#price").val().trim());
-		sales_price = purchase_price + ((purchase_price*profit_margin)/parseFloat(100));
-	} */
-	var tax_type = (isNaN(parseFloat($('option:selected', "#tax_type").attr('data-taxType')))) ? 0 :parseFloat($('option:selected', "#tax_type").attr('data-taxType'));
-	var profit = (purchase_price * profit_margin) / parseFloat(100);
-	var tax_amt = (purchase_price * tax_type) / parseFloat(100)
-	sales_price = purchase_price;
-	// set tax/vat
-	// console.log(purchase_price + " = " + tax_type + " = " + tax_amt + " = " + profit_margin + " = " + profit + " = " + sales_price);
-
+	// cal profit margin
+	var profit_margin = 0;
+	if (mr_price > purchase_price) {
+		profit_margin = parseFloat((mr_price - purchase_price).toFixed(2));
+	}
+	$("#profit_margin").val(profit_margin);
+	var sales_price = mr_price;
+	// cal profit margin end
 
 	// set discount
+	discount_amt = 0;
 	var discount = (isNaN(parseFloat($("#discount").val().trim()))) ? 0 :parseFloat($("#discount").val().trim());
 	var discount_type = $("#discount_type").val();
 	if (discount_type == 1) {
-    	sales_price = sales_price - ((sales_price * discount) / 100);
+    	sales_price = parseFloat(mr_price).toFixed(2) - (parseFloat(mr_price).toFixed(2) * parseFloat(discount).toFixed(2)) / 100;
 	} else if(discount_type == 2) {
-		sales_price = parseFloat(sales_price - discount);
+		sales_price = parseFloat(mr_price - parseFloat(discount).toFixed(2));
 	}
-	sales_price = sales_price + profit + tax_amt;
-	// console.log(sales_price + " = " + discount + " = " + discount_type);
-
 	// set discount
-	if (mr_price < sales_price) {
+
+	// cal vat and grand price
+	var vat = (isNaN(parseFloat($('option:selected', "#vat_id").attr('data-vat_id')))) ? 0 : parseFloat($('option:selected', "#vat_id").attr('data-vat_id'));
+	var g_sale = sales_price + (sales_price * vat) / parseFloat(100);
+	$("#vat_amt").val((sales_price * vat) / parseFloat(100).toFixed(2));
+	$("#grand_sales_price").val(isNaN(g_sale)? 0 : g_sale.toFixed(2));
+	// cal vat and grand price
+
+
+	// cal sales price
+	if (mr_price < purchase_price) {
 		$("#sales_price").val(0);
+		$("#discount").val(0);
+		$("#vat_amt").val(0);
+		$("#grand_sales_price").val(0);
 	} else if (purchase_price > sales_price) {
 		$("#sales_price").val(0);
-	} else if (purchase_price <= sales_price && sales_price <= mr_price) {
+		$("#discount").val(0);
+		$("#vat_amt").val(0);
+		$("#grand_sales_price").val(0);
+	} else if (sales_price <= mr_price) {
 		$("#sales_price").val(sales_price.toFixed(2));
 	} else {
 		$("#sales_price").val(0);
+		$("#discount").val(0);
+		$("#vat_amt").val(0);
+		$("#grand_sales_price").val(0);
 	}
-	//calculate_profit_margin();
+	// cal sales price
 }
 
-$("#mr_price").change(function (event) {
-  calculate_sales_price();
-});
-$("#tax_type").change(function(event) {
-	calculate_sales_price();
-});
-$("#profit_margin").keyup(function (event) {
+$("#mr_price").keyup(function (event) {
   calculate_sales_price();
 });
 $("#discount_type").change(function (event) {
   calculate_sales_price();
 });
 $("#discount").keyup(function (event) {
+  calculate_sales_price();
+});
+$("#vat_id").change(function (event) {
   calculate_sales_price();
 });
 //END
@@ -320,9 +326,9 @@ function calculate_profit_margin(){
 	var profit_margin = (profit_margin/purchase_price)*parseFloat(100);
 	$("#profit_margin").val(profit_margin.toFixed(2));
 }
-$("#sales_price").change(function(event) {
+/* $("#sales_price").change(function(event) {
 	calculate_profit_margin();
-});
+}); */
 //END
 
 function delete_stock_entry(entry_id){

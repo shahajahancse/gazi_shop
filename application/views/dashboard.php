@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- FORM CSS CODE -->
-<?php include"comman/code_css_datatable.php"; ?>
-<!-- </copy> -->  
-<!-- jvectormap -->
-<link rel="stylesheet" href="<?php echo $theme_link; ?>plugins/jvectormap/jquery-jvectormap-1.2.2.css">
-<style type="text/css">
-   #chart_container {
-   min-width: 320px;
-   max-width: 600px;
-   margin: 0 auto;
-   }
-</style>
-
+  <!-- FORM CSS CODE -->
+  <?php include"comman/code_css_datatable.php"; ?>
+  <!-- </copy> -->
+  <!-- jvectormap -->
+  <link rel="stylesheet" href="<?php echo $theme_link; ?>plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+  <style type="text/css">
+    #chart_container {
+    min-width: 320px;
+    max-width: 600px;
+    margin: 0 auto;
+    }
+  </style>
 </head>
+
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
   <!-- Notification sound -->
@@ -23,15 +23,15 @@
     <source src="<?php echo $theme_link; ?>sound/login.ogg" type="audio/ogg">
   </audio>
   <script type="text/javascript">
-    var login_sound = document.getElementById("login"); 
+    var login_sound = document.getElementById("login");
   </script>
   <!-- Notification end -->
   <script type="text/javascript">
-  <?php if($this->session->flashdata('success')!=''){ ?>
-        login_sound.play();
-  <?php } ?>
+    <?php if($this->session->flashdata('success')!=''){ ?>
+          login_sound.play();
+    <?php } ?>
   </script>
-  
+
   <?php include"sidebar.php"; ?>
 
   <!-- Content Wrapper. Contains page content -->
@@ -46,21 +46,18 @@
         <li class="active"><i class="fa fa-dashboard"></i> Home</li>
       </ol>
     </section><br/>
-    <div class="row">
-    <div class="col-md-12">
-      <!-- ********** ALERT MESSAGE START******* -->
-       <?php include"comman/code_flashdata.php"; ?>
-       <!-- ********** ALERT MESSAGE END******* -->
-     </div>
-     </div>
-     
-     
-      
-        
 
-      
+    <div class="row">
+      <div class="col-md-12">
+        <!-- ********** ALERT MESSAGE START******* -->
+        <?php include"comman/code_flashdata.php"; ?>
+        <!-- ********** ALERT MESSAGE END******* -->
+      </div>
+    </div>
+
     <!-- Main content -->
     <section class="content">
+      <!-- purchase and sale information card start -->
       <div class="row">
           <div class="col-md-3 col-sm-6 col-xs-12">
              <div class="info-box">
@@ -110,9 +107,10 @@
              <!-- /.info-box -->
           </div>
           <!-- /.col -->
-       </div>
-       <!-- /.row -->
-      <!-- Info boxes -->
+      </div>
+      <!-- purchase and sale information card end -->
+
+      <!-- customer and supplier information card start -->
       <div class="row">
       	<div class="col-lg-3 col-xs-6">
           <div class="small-box bg-dream-pink">
@@ -122,7 +120,7 @@
             <div class="icon">
               <i class="fa fa-group "></i>
             </div>
-            <?php if($CI->session->userdata('inv_userid')==1){ ?> 
+            <?php if($CI->session->userdata('inv_userid')==1){ ?>
             <a href="<?= base_url('customers') ?>" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i>
         	</a>
         	<?php } ?>
@@ -136,7 +134,7 @@
             <div class="icon">
               <i class="fa fa-group "></i>
             </div>
-            <?php if($CI->session->userdata('inv_userid')==1){ ?> 
+            <?php if($CI->session->userdata('inv_userid')==1){ ?>
             <a href="<?= base_url('suppliers') ?>" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i>
         	</a>
         	<?php } ?>
@@ -150,7 +148,7 @@
             <div class="icon">
               <i class="ion ion-ios-paper-outline"></i>
             </div>
-            <?php if($CI->session->userdata('inv_userid')==1){ ?> 
+            <?php if($CI->session->userdata('inv_userid')==1){ ?>
             <a href="<?= base_url('purchase') ?>" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i>
         	</a>
         	<?php } ?>
@@ -164,23 +162,21 @@
             <div class="icon">
               <i class="ion ion-ios-paper-outline"></i>
             </div>
-            <?php if($CI->session->userdata('inv_userid')==1){ ?> 
+            <?php if($CI->session->userdata('inv_userid')==1){ ?>
             <a href="<?= base_url('sales') ?>" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i>
         	</a>
         	<?php } ?>
           </div>
         </div>
-
         <!-- fix for small devices only -->
         <div class="clearfix visible-sm-block"></div>
-
-        <!-- /.col -->
-        
       </div>
-      <!-- /.row -->
-     <div class="row">
-     <div class="col-md-8">
-     	<!-- BAR CHART -->
+      <!-- customer and supplier information card end -->
+
+      <!-- purchase and sale bar chart information start and item list -->
+      <div class="row">
+        <div class="col-md-8">
+     	    <!-- BAR CHART -->
           <div class="box box-success">
             <div class="box-header with-border">
               <h3 class="box-title"><?= $this->lang->line('purchase_and_sales_bar_chart'); ?></h3>
@@ -202,8 +198,6 @@
         </div>
         <!-- /.col -->
         <div class="col-md-4">
-
-
           <!-- PRODUCT LIST -->
           <div class="box box-primary">
             <div class="box-header with-border">
@@ -211,8 +205,8 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body table-responsive">
-              
-              
+
+
                       <table class="table table-bordered table-responsive">
                         <tr>
                           <td>Sl.No</td>
@@ -225,7 +219,7 @@
                     $qs5="SELECT item_name,sales_price FROM db_items where status=1 ORDER BY id desc limit 5";
                     $q5=$this->db->query($qs5);
                     if($q5->num_rows() >0){
-                      
+
                       foreach($q5->result() as $res5){
                         ?>
                         <tr>
@@ -233,13 +227,13 @@
                           <td><?php echo $res5->item_name; ?></td>
                           <td><?php echo $CI->currency($res5->sales_price); ?></td>
                         </tr>
-                        
+
                         <?php
                       }
                     }
                     ?>
                     </tbody>
-                    <?php if($CI->session->userdata('inv_userid')==1){ ?> 
+                    <?php if($CI->session->userdata('inv_userid')==1){ ?>
                       <tfoot>
                       <tr>
                         <td colspan="3" class="text-center"><a href="<?php echo $base_url; ?>items" class="uppercase"><?= $this->lang->line('view_all'); ?></a></td>
@@ -247,118 +241,109 @@
                     </tfoot>
                     <?php } ?>
                   </table>
-                
-               
-            
-            </div>
-            <!-- /.box-body -->
-          
-          </div>
-          <!-- /.box -->
-        </div>
-        <!-- /.col -->
-     </div>
-     
-      <!-- ############################# GRAPHS ############################## -->
-     
-      <!-- /.row -->
-      <div class="row">
-        <!-- /.row -->
-     
-     <div class="col-md-5">
-          <div class="box box-primary">
-            <div class="box-header">
-              <h3 class="box-title"><?= $this->lang->line('expired_items'); ?></h3>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body table-responsive">
-              <table id="example3" class=" datatable table table-bordered table-hover">
-                <thead>
-                <tr>
-                  <th>#</th>
-                  <th><?= $this->lang->line('item_code'); ?></th>
-                  <th><?= $this->lang->line('item_name'); ?></th>
-                  <th><?= $this->lang->line('category_name'); ?></th>
-                  <th><?= $this->lang->line('expire_date'); ?></th>
-                </tr>
-                </thead>
-                <tbody>
-        <?php
-        $qs6="SELECT a.item_name,a.item_code,b.category_name,a.expire_date from db_items as a,db_category as b where b.id=a.category_id and a.expire_date<='".date("Y-m-d")."' and a.status=1";
-        $q6=$this->db->query($qs6);
-       
-        if($q6->num_rows()>0){
-          $i=1;
-          foreach ($q6->result() as $row){
-            echo "<tr>";
-            echo "<td>".$i++."</td>";
-            echo "<td>".$row->item_code."</td>";
-            echo "<td>".$row->item_name."</td>";
-            echo "<td>".$row->category_name."</td>";
-            echo "<td>".show_date($row->expire_date)."</td>";
-            echo "</tr>";
-          }
-        }
-        ?>
-        
-                </tbody>
-                
-              </table>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
-        </div>
-        <!-- /.col -->
-        <!-- /.col (LEFT) -->
-        <div class="col-md-7">
-          <div class="box box-primary">
-            <div class="box-header">
-              <h3 class="box-title"><?= $this->lang->line('stock_alert'); ?></h3>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body table-responsive">
-              <table id="example2" class="table table-bordered table-hover">
-                <thead>
-                <tr>
-                  <th>#</th>
-                  <th><?= $this->lang->line('category_name'); ?></th>
-                  <th><?= $this->lang->line('item_name'); ?></th>
-                  <th><?= $this->lang->line('stock'); ?></th>
-                </tr>
-                </thead>
-                <tbody>
-        <?php
-        $qs4="SELECT b.category_name,a.item_name,a.stock FROM db_items a,db_category b WHERE 
-              a.stock<=a.alert_qty and b.id=a.category_id and a.status=1 GROUP BY a.id";
 
-        $q4=$this->db->query($qs4);
-       
-        if($q4->num_rows()>0){
-          $i=1;
-          foreach ($q4->result() as $row){
-            echo "<tr>";
-            echo "<td>".$i++."</td>";
-            echo "<td>".$row->category_name."</td>";
-            echo "<td>".$row->item_name."</td>";
-            echo "<td>".$row->stock."</td>";
-            echo "</tr>";
-          }
-        }
-        ?>
-        
-                </tbody>
-                
-              </table>
+
+
             </div>
             <!-- /.box-body -->
+
           </div>
           <!-- /.box -->
-
         </div>
-        <!-- /.col (RIGHT) -->
       </div>
-      <div class="row">
+      <!-- purchase and sale bar chart information start and item list -->
+
+      <!-- ############################# GRAPHS ############################## -->
+        <div class="row">
+          <div class="col-md-5">
+            <div class="box box-primary">
+              <div class="box-header">
+                <h3 class="box-title"><?= $this->lang->line('expired_items'); ?></h3>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body table-responsive">
+                <table id="example3" class=" datatable table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th><?= $this->lang->line('item_code'); ?></th>
+                      <th><?= $this->lang->line('item_name'); ?></th>
+                      <th><?= $this->lang->line('category_name'); ?></th>
+                      <th><?= $this->lang->line('expire_date'); ?></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+                      $qs6="SELECT a.item_name,a.item_code,b.category_name,a.expire_date from db_items as a,db_category as b where b.id=a.category_id and a.expire_date<='".date("Y-m-d")."' and a.status=1";
+                      $q6=$this->db->query($qs6);
+
+                      if($q6->num_rows()>0){
+                        $i=1;
+                        foreach ($q6->result() as $row){
+                          echo "<tr>";
+                          echo "<td>".$i++."</td>";
+                          echo "<td>".$row->item_code."</td>";
+                          echo "<td>".$row->item_name."</td>";
+                          echo "<td>".$row->category_name."</td>";
+                          echo "<td>".show_date($row->expire_date)."</td>";
+                          echo "</tr>";
+                        }
+                      }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.box-body -->
+            </div>
+          </div>
+          <!-- /.col -->
+
+          <!-- /.col (LEFT) -->
+          <div class="col-md-7">
+            <div class="box box-primary">
+              <div class="box-header">
+                <h3 class="box-title"><?= $this->lang->line('stock_alert'); ?></h3>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body table-responsive">
+                <table id="example2" class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th><?= $this->lang->line('category_name'); ?></th>
+                      <th><?= $this->lang->line('item_name'); ?></th>
+                      <th><?= $this->lang->line('stock'); ?></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+                      $qs4="SELECT b.category_name,a.item_name,a.stock FROM db_items a,db_category b WHERE
+                        a.stock<=a.alert_qty and b.id=a.category_id and a.status=1 GROUP BY a.id";
+                      $q4=$this->db->query($qs4);
+
+                      if($q4->num_rows()>0){
+                        $i=1;
+                        foreach ($q4->result() as $row){
+                          echo "<tr>";
+                          echo "<td>".$i++."</td>";
+                          echo "<td>".$row->category_name."</td>";
+                          echo "<td>".$row->item_name."</td>";
+                          echo "<td>".$row->stock."</td>";
+                          echo "</tr>";
+                        }
+                      }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+          </div>
+          <!-- /.col (RIGHT) -->
+        </div>
+
+        <div class="row">
           <!-- /.col -->
           <div class=" col-sm-12 col-md-12 col-lg-12 col-xs-12">
              <!-- PRODUCT LIST -->
@@ -372,49 +357,50 @@
              <!-- /.box -->
           </div>
           <!-- /.col -->
-       </div>
-      <?php 
-        //Bar chart information
-        $jan_pur=$feb_pur=$mar_pur=$apr_pur=$may_pur=$jun_pur=$jul_pur=$aug_pur=$sep_pur=$oct_pur=$nov_pur=$dec_pur=0;
-        $jan_sal=$feb_sal=$mar_sal=$apr_sal=$may_sal=$jun_sal=$jul_sal=$aug_sal=$sep_sal=$oct_sal=$nov_sal=$dec_sal=0;
+        </div>
 
-        $q1=$this->db->query("SELECT COALESCE(SUM(grand_total),0) AS pur_total,MONTH(purchase_date) AS purchase_date FROM db_purchase where purchase_status='Received'  GROUP BY MONTH(purchase_date) ");
-        if($q1->num_rows() >0){
-          foreach($q1->result() as $res1){
-            if($res1->purchase_date == '1'){ $jan_pur = $res1->pur_total; }
-            else if($res1->purchase_date == '2'){ $feb_pur = $res1->pur_total; }
-            else if($res1->purchase_date == '3'){ $mar_pur = $res1->pur_total; }
-            else if($res1->purchase_date == '4'){ $apr_pur = $res1->pur_total; }
-            else if($res1->purchase_date == '5'){ $may_pur = $res1->pur_total; }
-            else if($res1->purchase_date == '6'){ $jun_pur = $res1->pur_total; }
-            else if($res1->purchase_date == '7'){ $jul_pur = $res1->pur_total; }
-            else if($res1->purchase_date == '8'){ $aug_pur = $res1->pur_total; }
-            else if($res1->purchase_date == '9'){ $sep_pur = $res1->pur_total; }
-            else if($res1->purchase_date == '10'){ $oct_pur = $res1->pur_total; }
-            else if($res1->purchase_date == '11'){ $nov_pur = $res1->pur_total; }
-            else if($res1->purchase_date == '12'){ $dec_pur = $res1->pur_total; }
-          }
-        }
+        <?php
+          //Bar chart information
+          $jan_pur=$feb_pur=$mar_pur=$apr_pur=$may_pur=$jun_pur=$jul_pur=$aug_pur=$sep_pur=$oct_pur=$nov_pur=$dec_pur=0;
+          $jan_sal=$feb_sal=$mar_sal=$apr_sal=$may_sal=$jun_sal=$jul_sal=$aug_sal=$sep_sal=$oct_sal=$nov_sal=$dec_sal=0;
 
-        //DONUS CHART
-        $q2=$this->db->query("SELECT COALESCE(SUM(grand_total),0) AS sal_total,MONTH(sales_date) AS sales_date FROM db_sales where sales_status='Final' GROUP BY MONTH(sales_date)");
-        if($q2->num_rows() >0){
-          foreach($q2->result() as $res2){
-            if($res2->sales_date == '1'){ $jan_sal = $res2->sal_total; }
-            else if($res2->sales_date == '2'){ $feb_sal = $res2->sal_total; }
-            else if($res2->sales_date == '3'){ $mar_sal = $res2->sal_total; }
-            else if($res2->sales_date == '4'){ $apr_sal = $res2->sal_total; }
-            else if($res2->sales_date == '5'){ $may_sal = $res2->sal_total; }
-            else if($res2->sales_date == '6'){ $jun_sal = $res2->sal_total; }
-            else if($res2->sales_date == '7'){ $jul_sal = $res2->sal_total; }
-            else if($res2->sales_date == '8'){ $aug_sal = $res2->sal_total; }
-            else if($res2->sales_date == '9'){ $sep_sal = $res2->sal_total; }
-            else if($res2->sales_date == '10'){ $oct_sal = $res2->sal_total; }
-            else if($res2->sales_date == '11'){ $nov_sal = $res2->sal_total; }
-            else if($res2->sales_date == '12'){ $dec_sal = $res2->sal_total; }
+          $q1=$this->db->query("SELECT COALESCE(SUM(grand_total),0) AS pur_total,MONTH(purchase_date) AS purchase_date FROM db_purchase where purchase_status='Received'  GROUP BY MONTH(purchase_date) ");
+          if($q1->num_rows() >0){
+            foreach($q1->result() as $res1){
+              if($res1->purchase_date == '1'){ $jan_pur = $res1->pur_total; }
+              else if($res1->purchase_date == '2'){ $feb_pur = $res1->pur_total; }
+              else if($res1->purchase_date == '3'){ $mar_pur = $res1->pur_total; }
+              else if($res1->purchase_date == '4'){ $apr_pur = $res1->pur_total; }
+              else if($res1->purchase_date == '5'){ $may_pur = $res1->pur_total; }
+              else if($res1->purchase_date == '6'){ $jun_pur = $res1->pur_total; }
+              else if($res1->purchase_date == '7'){ $jul_pur = $res1->pur_total; }
+              else if($res1->purchase_date == '8'){ $aug_pur = $res1->pur_total; }
+              else if($res1->purchase_date == '9'){ $sep_pur = $res1->pur_total; }
+              else if($res1->purchase_date == '10'){ $oct_pur = $res1->pur_total; }
+              else if($res1->purchase_date == '11'){ $nov_pur = $res1->pur_total; }
+              else if($res1->purchase_date == '12'){ $dec_pur = $res1->pur_total; }
+            }
           }
-        }
-      ?>
+
+          //DONUS CHART
+          $q2=$this->db->query("SELECT COALESCE(SUM(grand_total),0) AS sal_total,MONTH(sales_date) AS sales_date FROM db_sales where sales_status='Final' GROUP BY MONTH(sales_date)");
+          if($q2->num_rows() >0){
+            foreach($q2->result() as $res2){
+              if($res2->sales_date == '1'){ $jan_sal = $res2->sal_total; }
+              else if($res2->sales_date == '2'){ $feb_sal = $res2->sal_total; }
+              else if($res2->sales_date == '3'){ $mar_sal = $res2->sal_total; }
+              else if($res2->sales_date == '4'){ $apr_sal = $res2->sal_total; }
+              else if($res2->sales_date == '5'){ $may_sal = $res2->sal_total; }
+              else if($res2->sales_date == '6'){ $jun_sal = $res2->sal_total; }
+              else if($res2->sales_date == '7'){ $jul_sal = $res2->sal_total; }
+              else if($res2->sales_date == '8'){ $aug_sal = $res2->sal_total; }
+              else if($res2->sales_date == '9'){ $sep_sal = $res2->sal_total; }
+              else if($res2->sales_date == '10'){ $oct_sal = $res2->sal_total; }
+              else if($res2->sales_date == '11'){ $nov_sal = $res2->sal_total; }
+              else if($res2->sales_date == '12'){ $dec_sal = $res2->sal_total; }
+            }
+          }
+        ?>
       <!-- ############################# GRAPHS END############################## -->
     </section>
     <!-- /.content -->
@@ -575,7 +561,7 @@
                  name: 'Item',
                  colorByPoint: true,
                  data: [
-                 <?php 
+                 <?php
             //PIE CHART
             $q3=$this->db->query("SELECT COALESCE(SUM(b.sales_qty),0) AS sales_qty, a.item_name FROM db_items AS a, db_salesitems AS b ,db_sales AS c WHERE a.id=b.`item_id` AND b.sales_id=c.`id` AND c.`sales_status`='Final' GROUP BY a.id");
             if($q3->num_rows() >0){

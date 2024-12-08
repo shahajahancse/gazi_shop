@@ -45,7 +45,8 @@ class Items extends MY_Controller {
 		$this->permission_check('items_edit');
 		$data=$this->data;
 		$this->load->model('items_model');
-		$result=$this->items_model->get_details($id,$data);
+		$result = $this->items_model->get_details($id,$data);
+		// dd($result);
 		$data=array_merge($data,$result);
 		$data['page_title']=$this->lang->line('items');
 		$this->load->view('items', $data);

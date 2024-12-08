@@ -17,16 +17,12 @@ class Items_model extends CI_Model {
 	private function _get_datatables_query()
 	{
 		$this->db->select($this->column_order);
-		$this->db->from($this->table);
-		$this->db->from('db_category as b');
-		$this->db->from('db_units as c');
-		$this->db->from('db_tax as d');
 		$this->db->select("CASE WHEN e.brand_name IS NULL THEN '' ELSE e.brand_name END AS brand_name");
-		$this->db->join('db_brands as e','e.id=a.brand_id','left');
-		$this->db->where('b.id=a.category_id');
-		$this->db->where('c.id=a.unit_id');
-		$this->db->where('d.id=a.tax_id');
-
+		$this->db->from($this->table);
+		$this->db->join('db_category as b', 'b.id = a.category_id', 'left');
+		$this->db->join('db_units as c', 'c.id = a.unit_id', 'left');
+		$this->db->join('db_tax as d', 'd.id = a.tax_id', 'left');
+		$this->db->join('db_brands as e', 'e.id=a.brand_id', 'left');
 
 		$i = 0;
 
@@ -108,37 +104,32 @@ class Items_model extends CI_Model {
 			$new_name = time();
 			$config['file_name'] = $new_name;
 			$config['upload_path']          = './uploads/items/';
-	        $config['allowed_types']        = 'jpg|png|jpeg';
-	        $config['max_size']             = 1024;
-	        $config['max_width']            = 1000;
-	        $config['max_height']           = 1000;
+			$config['allowed_types']        = 'jpg|png|jpeg';
+			$config['max_size']             = 2048;
+			$config['max_width']            = 1000;
+			$config['max_height']           = 1000;
 
-	        $this->load->library('upload', $config);
+	      	$this->load->library('upload', $config);
 
 	        if ( ! $this->upload->do_upload('item_image'))
 	        {
-	                $error = array('error' => $this->upload->display_errors());
-	                print($error['error']);
-	                exit();
+	            $error = array('error' => $this->upload->display_errors());
+	            print($error['error']);
+	            exit();
 	        }
 	        else
 	        {
-	        	$file_name=$this->upload->data('file_name');
-	        	/*Create Thumbnail*/
+        		$file_name=$this->upload->data('file_name');
 	        	$config['image_library'] = 'gd2';
 				$config['source_image'] = 'uploads/items/'.$file_name;
 				$config['create_thumb'] = TRUE;
 				$config['maintain_ratio'] = TRUE;
-				$config['width']         = 75;
-				$config['height']       = 50;
+				/*$config['width']         = 75;
+				$config['height']       = 50;*/
 				$this->load->library('image_lib', $config);
 				$this->image_lib->resize();
-				//end
-
-
 	        }
 		}
-
 		//Validate This items already exist or not
 		$query=$this->db->query("select * from db_items where upper(item_name)=upper('$item_name')");
 		if($query->num_rows()>0){
@@ -161,30 +152,53 @@ class Items_model extends CI_Model {
 		//$stock = $current_opening_stock + $new_opening_stock;
 
 		$alert_qty = empty(trim($alert_qty)) ? '0' : $alert_qty;
-		$profit_margin = (empty(trim($profit_margin))) ? 'null' : $profit_margin;
+		$profit_margin = (empty(trim($profit_margin))) ? '0' : $profit_margin;
 
 		$expire_date= (!empty(trim($expire_date))) ? date('Y-m-d',strtotime($expire_date)) : null;
-		// new code 03-11-2024 shahajahan
-		if (trim($discount_type) == 1) {
-			$diss = round(($purchase_price * $discount) / 100, 2);
-		} else {
-			$diss = $discount;
-		}
-		$diff = $mr_price - ($sales_price + $diss);
-		$dif_price = $diff < 0 ? 0 : $diff;
-		// new code 03-11-2024 shahajahan
 
-		$query1="insert into db_items(item_code,item_name,company_id,brand_id,category_id,sku,unit_id,alert_qty,lot_number,expire_date, price,tax_id,purchase_price,mr_price,tax_type,profit_margin, sales_price, system_ip,system_name,created_date,created_time,created_by,status,discount_type, discount)
+		/*$query1="insert into db_items(item_code,item_name,company_id,brand_id,category_id,sku,unit_id,alert_qty,lot_number,expire_date, price,tax_id,purchase_price,mr_price,vat_id,profit_margin, sales_price, system_ip,system_name,created_date,created_time,created_by,status,discount_type, discount)
 
-							values('$item_code','$item_name','$company_id','$brand_id','$category_id','$sku','$unit_id','$alert_qty','$lot_number','$expire_date',
-									'$price','$tax_id','$purchase_price',$mr_price,'$tax_type',$profit_margin,
-									'$sales_price',$dif_price,'$SYSTEM_IP','$SYSTEM_NAME','$CUR_DATE','$CUR_TIME','$CUR_USERNAME', 1, '$discount_type',$discount)";
+							values('$item_code','$item_name','$company_id','$brand_id','$category_id','$sku','$unit_id','$alert_qty','$lot_number','$expire_date', '$price','$tax_id', '$purchase_price','$mr_price','$vat_id','$profit_margin','$sales_price',$dif_price,'$SYSTEM_IP','$SYSTEM_NAME','$CUR_DATE','$CUR_TIME','$CUR_USERNAME', 1, '$discount_type','$discount')";
 
-		$query1=$this->db->simple_query($query1);
+		$query1 = $this->db->simple_query($query1);
 		if(!$query1){
 			return "failed";
-		}
+		}*/
+
+		$data = array(
+		    'item_code' => $item_code,
+		    'item_name' => $item_name,
+		    'category_id' => $category_id,
+		    'company_id' => $company_id,
+		    'brand_id' => $brand_id,
+		    'unit_id' => $unit_id,
+		    'sku' => $sku,
+		    'alert_qty' => $alert_qty,
+		    'lot_number' => $lot_number,
+		    'expire_date' => $expire_date,
+		    'price' => $price,
+		    'tax_id' => $tax_id,
+		    'tax_amt' => $tax_amt,
+		    'purchase_price' => $purchase_price,
+		    'mr_price' => $mr_price,
+		    'profit_margin' => $profit_margin,
+		    'discount_type' => $discount_type,
+		    'discount' => $discount,
+		    'sales_price' => $sales_price,
+		    'vat_id' => $vat_id,
+		    'vat_amt' => $vat_amt,
+		    'grand_sales_price' => $grand_sales_price,
+		    'system_ip' => $SYSTEM_IP,
+		    'system_name' => $SYSTEM_NAME,
+		    'created_date' => $CUR_DATE,
+		    'created_time' => $CUR_TIME,
+		    'created_by' => $CUR_USERNAME,
+		    'status' => 1,
+		);
+
+		$this->db->insert('db_items', $data);
 		$item_id = $this->db->insert_id();
+
 		if(!empty($new_opening_stock) && $new_opening_stock!=0){
 			$q1=$this->stock_entry($CUR_DATE,$item_id,$new_opening_stock);
 			if(!$q1){
@@ -197,7 +211,8 @@ class Items_model extends CI_Model {
 		if(!$q6){
 			return "failed";
 		}
-		if ($query1){
+
+		if ($item_id){
 
 				if(!empty($file_name)){
 					//echo "update db_items set item_image ='$file_name' where id=".$item_id;exit();
@@ -207,23 +222,22 @@ class Items_model extends CI_Model {
 				$this->db->trans_commit();
 				$this->session->set_flashdata('success', 'Success!! New Item Added Successfully!');
 		        return "success";
-		}
-		else{
+		}else{
 				$this->db->trans_rollback();
 				//unlink('uploads/items/'.$file_name);
 		        return "failed";
 		}
-
 	}
 
 	//Get items_details
 	public function get_details($id,$data){
 		//Validate This items already exist or not
-		$query=$this->db->query("select * from db_items where upper(id)=upper('$id')");
+		$query = $this->db->query("select * from db_items where upper(id)=upper('$id')");
+
 		if($query->num_rows()==0){
 			show_404();exit;
 		}else{
-			$query=$query->row();
+			$query = $query->row();
 			$data['q_id']=$query->id;
 			$data['item_code']=$query->item_code;
 			$data['item_name']=$query->item_name;
@@ -235,10 +249,14 @@ class Items_model extends CI_Model {
 			$data['alert_qty']=$query->alert_qty;
 			$data['price']=$query->price;
 			$data['tax_id']=$query->tax_id;
+			$data['tax_amt']=$query->tax_amt;
+			$data['mr_price']=$query->mr_price;
 			$data['purchase_price']=$query->purchase_price;
-			$data['tax_type']=$query->tax_type;
 			$data['profit_margin']=$query->profit_margin;
 			$data['sales_price']=$query->sales_price;
+			$data['vat_id']=$query->vat_id;
+			$data['vat_amt']=$query->vat_amt;
+			$data['grand_sales_price']=$query->grand_sales_price;
 			$data['stock']=$query->stock;
 			$data['lot_number']=$query->lot_number;
 			$data['discount_type']=$query->discount_type;
@@ -259,7 +277,6 @@ class Items_model extends CI_Model {
 
 			$file_name=$item_image='';
 			if(!empty($_FILES['item_image']['name'])){
-
 				$new_name = time();
 				$config['file_name'] = $new_name;
 				$config['upload_path']          = './uploads/items/';
@@ -296,16 +313,6 @@ class Items_model extends CI_Model {
 		        }
 			}
 
-			// new code 03-11-2024 shahajahan
-			if (trim($discount_type) == 1) {
-				$diss = round(($purchase_price * $discount) / 100, 2);
-			} else {
-				$diss = $discount;
-			}
-			$diff = $mr_price - ($sales_price + $diss);
-			$dif_price = $diff < 0 ? 0 : $diff;
-			// new code 03-11-2024 shahajahan
-
 			//$stock = $current_opening_stock + $new_opening_stock;
 			$alert_qty = (empty(trim($alert_qty))) ? '0' : $alert_qty;
 			$profit_margin = (empty(trim($profit_margin))) ? 'null' : $profit_margin;
@@ -324,12 +331,14 @@ class Items_model extends CI_Model {
 						expire_date='$expire_date',
 						price='$price',
 						tax_id='$tax_id',
+						tax_amt='$tax_amt',
 						purchase_price='$purchase_price',
 						mr_price='$mr_price',
-						tax_type='$tax_type',
+						vat_id='$vat_id',
+						vat_amt='$vat_amt',
 						profit_margin=$profit_margin,
 						sales_price='$sales_price',
-						dif_price='$dif_price'
+						grand_sales_price='$grand_sales_price'
 						$item_image
 						where id=$q_id";
 
