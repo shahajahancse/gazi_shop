@@ -59,6 +59,7 @@ class Tax extends MY_Controller {
 		foreach ($list as $tax) {
 			$no++;
 			$row = array();
+			
 			$row[] = '<input type="checkbox" name="checkbox[]" value='.$tax->id.' class="checkbox column_checkbox" >';
 			$row[] = $tax->tax_name;
 			$row[] = $tax->tax;

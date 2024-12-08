@@ -33,7 +33,10 @@
 		$company_postcode	=$res1->postcode;
 		$company_gst_no		=$res1->gst_no;//Goods and Service Tax Number (issued by govt.)
 		$company_vat_number		=$res1->vat_no;//Goods and Service Tax Number (issued by govt.)
+		//dd(5555);
+
 	?>
+
 	<!-- Customer info end -->
 	<!-- Sales info -->
 	<?php
@@ -98,11 +101,19 @@
 			$str="(Fixed)";
 		}
 
-		if(!empty($customer_country)){
-			$customer_country = $this->db->query("select country from db_country where id='$customer_country'")->row()->country;
+		if (!empty($customer_country)) {
+			$q = $this->db->query("select country from db_country where id = ?", array($customer_country));
+			if ($q->num_rows() > 0) {
+				$row = $q->row();
+				$customer_country = $row->country;
+			}
 		}
-		if(!empty($customer_state)){
-			$customer_state = $this->db->query("select state from db_states where id='$customer_state'")->row()->state;
+		if (!empty($customer_state)) {
+			$q = $this->db->query("select state from db_states where id = ?", array($customer_state));
+			if ($q->num_rows() > 0) {
+				$row = $q->row();
+				$customer_state = $row->state;
+			}
 		}
     ?>
 	<!-- Sales info end -->
@@ -171,6 +182,8 @@
 				</table>
 			</td>
 		</tr>
+		<?php 
+		?>
 		<!-- invoice header end -->
 		<!-- invoice items details and summation table -->
 		<tr>
@@ -180,45 +193,62 @@
 						<tr style="border-top-style: dashed;border-bottom-style: dashed;border-width: 0.1px;">
 							<th class="class1">#</th>
 							<th class="class1"><?= $this->lang->line('description'); ?></th>
-							<th class="class2">Mr.Price</th>
-							<th class="class2"><?= $this->lang->line('quantity'); ?></th>
+							<th class="class2">MRP</th>
+							<th class="class2">QTY</th>
 							<!-- <th class="class2"><?= $this->lang->line('price'); ?></th> -->
 							<th class="class2"><?= $this->lang->line('total'); ?></th>
-							<th class="class2">Discount</th>
-							<th class="class2">Net Pay</th>
+							<!-- <th class="class2">Discount</th>
+							<th class="class2">Net Pay</th> -->
 						</tr>
 					</thead>
 					<!-- invoice items details -->
 					<tbody style="border-bottom-style: dashed;border-width: 0.1px;">
 						<?php
 							$i=0;
-							$tot_qty = 0;
-							$tot_mrp = 0;
-							$tot_dis = 0;
-							$tax_amt = 0;
-							$subtotal = 0;
+							$total_mrp=0;
+							$over_all_discount=0;
+							$total_price=0;
+							$total_tax_amt=0;
+
+
+
+							
 							$q2=$this->db->query("select b.item_name,a.mr_price,a.sales_qty,a.unit_total_cost,a.price_per_unit,a.tax_amt,c.tax,a.discount_amt,a.additional_dis,a.total_cost from db_salesitems a,db_items b,db_tax c where c.id=a.tax_id and b.id=a.item_id and a.sales_id='$sales_id'");
 			            	foreach ($q2->result() as $res2) {
+								//dd($res2);
 								$mrp_cost = ($res2->mr_price*$res2->sales_qty);
 								$dis_cost = $res2->discount_amt + $res2->additional_dis;
-								echo "<tr>";
+
+
+								echo "<tr style='border-top-style: dashed;border-width: 0.1px;'>";
 								echo "<td class='class3' valign='top'>".++$i."</td>";
 								echo "<td class='class3'>".$res2->item_name."</td>";
 								echo "<td class='classr class3'>".$res2->mr_price."</td>";
 								echo "<td class='classr class3'>".$res2->sales_qty."</td>";
 								echo "<td class='classr class3'>".number_format(($mrp_cost),2,'.','')."</td>";
-								echo "<td class='classr class3' >".number_format(($dis_cost),2,'.','')."</td>";
-								echo "<td class='classr class3' >".number_format(($res2->total_cost),2,'.','')."</td>";
 								echo "</tr>";
-								//$tot_qty+=$res2->sales_qty;
-								$tot_mrp = $tot_mrp + $mrp_cost;
-								$tot_dis = $tot_dis + $dis_cost;
-								// $tax_amt  = $res2->tax_amt;
-								$subtotal = $subtotal + ($res2->total_cost);
+								echo "<tr style='border-bottom-style: dashed;border-width: 0.1px;'>";
+								echo "<td class='class3' valign='top'></td>";
+								echo "<td class='class3'>Discount</td>";
+								echo "<td class='classr class3'></td>";
+								echo "<td class='classr class3'></td>";
+								echo "<td class='classr class3'>".number_format(($dis_cost),2,'.','')."</td>";
+								echo "</tr>";
+								echo "<tr>";
+								echo "<td class='class3' valign='top'></td>";
+								echo "<td class='class3'>SubTotal</td>";
+								echo "<td class='classr class3'></td>";
+								echo "<td class='classr class3'></td>";
+								echo "<td class='classr class3'>".number_format(($mrp_cost-$dis_cost),2,'.','')."</td>";
+								echo "</tr>";
+
+								$total_mrp += $mrp_cost;
+								$over_all_discount += $dis_cost;
+								$total_price += ($mrp_cost-$dis_cost);
+								$total_tax_amt += $res2->tax_amt;
+								
 							}
-								$tax_amt = $tot_mrp - ($tot_dis + $grand_total + $tot_discount_to_all_amt);
-								$tot_dis = $tot_dis + $tot_discount_to_all_amt;
-								//   $before_tax = $subtotal-$tax_amt;
+								
 						?>
 				   </tbody>
 					<!-- invoice items end -->
@@ -227,35 +257,37 @@
 						<!-- <tr><td colspan="5"><hr></td></tr>    -->
 						<tr >
 							<!-- <?= $this->lang->line('before_tax'); ?> -->
-							<td style="  class3" colspan="4" align="right">Total Amount</td>
-							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format(($tot_mrp),2,'.','');?></td>
+							<td style="  class3" colspan="4" align="right">Total</td>
+							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format(($total_mrp),2,'.','');?></td>
 						</tr>
 						<tr >
-							<td style=" padding-left: 2px; padding-right: 2px;" colspan="4" align="right"><?= $this->lang->line('tax_amount'); ?></td>
-							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format(($tax_amt),2,'.','');?></td>
+							<td style=" padding-left: 2px; padding-right: 2px;" colspan="4" align="right">Over All Discount</td>
+							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format(($over_all_discount),2,'.','');?></td>
 						</tr>
-						<!-- <tr >
-							<td style=" padding-left: 2px; padding-right: 2px;" colspan="4" align="right"><?= $this->lang->line('subtotal'); ?></td>
-							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format(($subtotal),2,'.','');?></td>
-						</tr> -->
-						<!-- <tr>
-							<td style=' padding-left: 2px; padding-right: 2px;' colspan='4' align='right'>Tax Amt</td>
-							<td style=' padding-left: 2px; padding-right: 2px;' align='right'><?= number_format(($tax_amt),2,'.','');?></td>
-						</tr> -->
-						<?php //if(!empty($tot_discount_to_all_amt) && $tot_discount_to_all_amt!=0) {?>
-						<tr>
-							<td style=" padding-left: 2px; padding-right: 2px;" colspan="4" align="right"><?= $this->lang->line('discount'); ?></td>
-							<!-- <?= ($discount_to_all_type=='in_percentage') ? $discount_to_all_input .'%' : $discount_to_all_input.'[Fixed]';?> -->
-							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format(($tot_dis),2,'.',''); ?></td>
+						<tr >
+							<td style=" padding-left: 2px; padding-right: 2px;" colspan="4" align="right">Discount</td>
+							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format(($tot_discount_to_all_amt),2,'.','');?></td>
 						</tr>
-						<?php //} ?>
+						<tr style="border-top-style: dashed;border-width: 0.1px;">
+							<td style=" padding-left: 2px; padding-right: 2px;" colspan="4" align="right">Total Amount</td>
+							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format(($total_mrp-($over_all_discount+$tot_discount_to_all_amt)),2,'.','');?></td>
+						</tr>
+
+						<tr style="border-top-style: dashed;border-width: 0.1px;">
+							<td style=" padding-left: 2px; padding-right: 2px;" colspan="4" align="right">Vat</td>
+							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format(($total_tax_amt),2,'.','');?></td>
+						</tr>
+
+						<tr style="border-top-style: dashed;border-width: 0.1px;">
+							<td style=" padding-left: 2px; padding-right: 2px;" colspan="4" align="right">Grand total</td>
+							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format(($total_mrp-($over_all_discount+$tot_discount_to_all_amt)),2,'.','');?></td>
+						</tr>
+
+						
 
 
 						<!-- <tr><td style="border-bottom-style: dashed;border-width: 0.1px;" colspan="5"></td></tr>   -->
-						<tr>
-							<td style=" padding-left: 2px; padding-right: 2px;" colspan="4" align="right"><?= $this->lang->line('total'); ?></td>
-							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= $grand_total; ?></td>
-						</tr>
+						
 
 						<!-- change_return_status -->
 						<?php if(change_return_status()) {

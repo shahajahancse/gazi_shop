@@ -44,7 +44,7 @@
                                  <div class="col-md-12">
                                     <!-- form start -->
                                        <input type="hidden" id="base_url" value="<?php echo $base_url;; ?>">
-                                          <button type="button" class="btn btn-info pull-right btnExport_3" title="Download Data in Excel Format">Excel</button>
+                                          <button type="button" class="btn btn-info pull-right btnExport_i" title="Download Data in Excel Format">Excel</button>
                                           <br><br>
                                           <div class="table-responsive">
                                           <table class="table table-bordered table-hover " id="report-data" >
@@ -78,7 +78,7 @@
                                  <div class="col-md-12">
                                     <!-- form start -->
                                        <input type="hidden" id="base_url" value="<?php echo $base_url;; ?>">
-                                          <button type="button" class="btn btn-info pull-right btnExport_4" title="Download Data in Excel Format">Excel</button>
+                                          <button type="button" class="btn btn-info pull-right btnExport_b" title="Download Data in Excel Format">Excel</button>
                                           <br><br>
                                           <div class="table-responsive">
                                           <table class="table table-bordered table-hover " id="brand_wise_stock" >
@@ -131,15 +131,18 @@
 
 <script src="<?php echo $theme_link; ?>js/sheetjs.js" type="text/javascript"></script>
 <script>
-function convert_excel(type, fn, dl) {
-    var elt = document.getElementById('report-data');
+function convert_excel(who,type, fn, dl) {
+    var elt = document.getElementById(who);
     var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
     return dl ?
         XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
         XLSX.writeFile(wb, fn || ('Sales-Report.' + (type || 'xlsx')));
 }
-$(".btnExport").click(function(event) {
- convert_excel('xlsx');
+$(".btnExport_i").click(function(event) {
+ convert_excel('report-data','xlsx');
+});
+$(".btnExport_b").click(function(event) {
+ convert_excel('brand_wise_stock','xlsx');
 });
 </script>
 <script type="text/javascript">

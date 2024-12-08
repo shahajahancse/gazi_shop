@@ -75,9 +75,11 @@ class Tax_group extends MY_Controller {
 		
 		$data = array();
 		$no = $_POST['start'];
-		foreach ($list as $tax) {
+		foreach ($list as $key => $tax) {
 			$no++;
 			$row = array();
+			
+			$row[] = $key+1; ;
 			
 			$row[] = $tax->tax_name;
 			$row[] = $tax->tax;

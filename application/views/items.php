@@ -210,7 +210,7 @@
                               </div>
                               <div class="form-group col-md-2">
                                  <label for="tax_amt">Vat Amount </label>
-                                 <input type="text" class="form-control only_currency" id="tax_amt" name="tax_amt" placeholder="Vat Amount"  value="<?php print $tax_amt; ?>" readonly>
+                                 <input type="text" class="form-control only_currency" id="tax_amt" name="tax_amt" placeholder="Vat Amount"  value="<?= isset($tax_amt) ? $tax_amt : '' ?>" readonly>
                                  <span id="tax_amt_msg" style="display:none" class="text-danger"></span>
                               </div>
                               <div class="form-group col-md-2">
@@ -220,7 +220,7 @@
                               </div>
                               <div class="form-group col-md-2">
                                  <label for="mr_price">MR. Price <span class="text-danger"> * </span></label>
-                                 <input type="text" class="form-control only_currency" id="mr_price" name="mr_price" placeholder="Item MR. Price"  value="<?php print $mr_price; ?>" >
+                                 <input type="text" class="form-control only_currency" id="mr_price" name="mr_price" placeholder="Item MR. Price"  value="<?= isset($mr_price) ? $mr_price : '' ?>" >
                                  <span id="mr_price_msg" style="display:none" class="text-danger"></span>
                               </div>
                               <div class="form-group col-md-2">
@@ -242,19 +242,19 @@
                                  <label for="discount_type">Discount Type</label>
                                  <select class="form-control" id="discount_type" name="discount_type"  style="width: 100%;" >
                                     <option value="">-Select-</option>
-                                    <option <?= $discount_type == 1 ? 'selected':'' ?> value="1">percentage</option>
-                                    <option <?= $discount_type == 2 ? 'selected':'' ?> value="2">Fixed</option>
+                                    <option <?= isset($discount_type) && $discount_type == 1 ? 'selected':'' ?> value="1">percentage</option>
+                                    <option <?= isset($discount_type) && $discount_type == 2 ? 'selected':'' ?> value="2">Fixed</option>
                                  </select>
                                  <span id="discount_type_msg" style="display:none" class="text-danger"></span>
                               </div>
                               <div class="form-group col-md-2">
                                  <label for="discount">Discount</label>
-                                 <input type="text" class="form-control only_currency" id="discount" name="discount" placeholder="discount"  value="<?php print $discount; ?>" >
+                                 <input type="text" class="form-control only_currency" id="discount" name="discount" placeholder="discount"  value="<?php print isset($discount) ? $discount : ''; ?>" >
                                  <span id="discount_msg" style="display:none" class="text-danger"></span>
                               </div>
                               <div class="form-group col-md-2">
                                  <label for="sales_price" class="control-label"><?= $this->lang->line('sales_price'); ?><span class="text-danger">*</span></label>
-                                 <input type="text" class="form-control only_currency " id="sales_price" name="sales_price" placeholder="Sales Price" readonly  value="<?php print $sales_price; ?>" >
+                                 <input type="text" class="form-control only_currency " id="sales_price" name="sales_price" placeholder="Sales Price" readonly  value="<?php print isset($sales_price) ? $sales_price : ''; ?>" >
                                  <span id="sales_price_msg" style="display:none" class="text-danger"></span>
                               </div>
                               <div class="form-group col-md-2">
@@ -276,12 +276,12 @@
                               </div>
                               <div class="form-group col-md-2">
                                  <label for="vat_amt" class="control-label">Vat Amount</label>
-                                 <input type="text" class="form-control only_currency " id="vat_amt" name="vat_amt" placeholder="Sales Price" readonly  value="<?php print $vat_amt; ?>" >
+                                 <input type="text" class="form-control only_currency " id="vat_amt" name="vat_amt" placeholder="Sales Price" readonly  value="<?php print isset($vat_amt) ? $vat_amt : ''; ?>" >
                                  <span id="vat_amt_msg" style="display:none" class="text-danger"></span>
                               </div>
                               <div class="form-group col-md-2">
                                  <label for="grand_sales_price" class="control-label">Grand Sales</label>
-                                 <input type="text" class="form-control only_currency " id="grand_sales_price" name="grand_sales_price" placeholder="Sales Price" readonly  value="<?php print $grand_sales_price; ?>" >
+                                 <input type="text" class="form-control only_currency " id="grand_sales_price" name="grand_sales_price" placeholder="Sales Price" readonly  value="<?php print isset($grand_sales_price) ? $grand_sales_price : ''; ?>" >
                                  <span id="grand_sales_price_msg" style="display:none" class="text-danger"></span>
                               </div>
                            </div>

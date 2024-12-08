@@ -96,6 +96,7 @@
               <table id="example3" class="table table-bordered table-striped" width="100%">
                 <thead class="bg-primary ">
                 <tr>
+                  <th><?= $this->lang->line('sl'); ?></th>
                   <th><?= $this->lang->line('tax_name'); ?></th>
                   <th><?= $this->lang->line('tax'); ?>(%)</th>
                   <th><?= $this->lang->line('sub_taxes'); ?></th>

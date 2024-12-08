@@ -337,7 +337,7 @@ class Pos_model extends CI_Model {
 		//COMMIT RECORD
 		$this->db->trans_commit();
 
-		$sms_info='';
+		 $sms_info='';
 		/* if(isset($send_sms) && $customer_id!=1){
 			if(send_sms_using_template($sales_id,1)==true){
 				$sms_info = 'SMS Has been Sent!';
@@ -348,8 +348,6 @@ class Pos_model extends CI_Model {
 
 		$this->session->set_flashdata('success', 'Success!! Sales Created Successfully!'.$sms_info);
         return "success<<<###>>>$sales_id";
-
-
 	}
 
 	public function update_items_quantity($item_id){
