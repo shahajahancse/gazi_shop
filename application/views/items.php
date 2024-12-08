@@ -46,6 +46,7 @@
                       <?= form_open('#', array('class' => 'form', 'id' => 'items-form', 'enctype'=>'multipart/form-data', 'method'=>'POST'));?>
                         <input type="hidden" id="base_url" value="<?php echo $base_url;; ?>">
                         <div class="box-body">
+                           <!-- Item common details -->
                            <div class="row">
                               <div class="form-group col-md-4">
                                  <label for="item_name"><?= $this->lang->line('item_name'); ?><span class="text-danger">*</span></label>
@@ -179,34 +180,31 @@
                               </div>
                            </div>
                            <hr>
+                           <!-- Item common details end -->
+
+                           <!-- Item Price details -->
                            <div class="row">
                               <div class="form-group col-md-3">
-                                 <label for="price"><?= $this->lang->line('price'); ?><span class="text-danger">*</span></label>
+                                 <label for="price">Item Price<span class="text-danger"> *</span></label>
                                  <input type="text" class="form-control only_currency" id="price" name="price" placeholder="Price of Item without Tax"  value="<?php print $price; ?>" >
                                  <span id="price_msg" style="display:none" class="text-danger"></span>
                               </div>
                               <div class="form-group col-md-3">
-                                 <label for="tax_id" ><?= $this->lang->line('tax'); ?><span class="text-danger">*</span></label>
+                                 <label for="tax_id" >Vat<span class="text-danger"> *</span></label>
                                  <select class="form-control select2" id="tax_id" name="tax_id"  style="width: 100%;" >
                                     <?php
                                        $query1="select * from db_tax where status=1";
                                        $q1=$this->db->query($query1);
-                                       if($q1->num_rows($q1)>0)
-                                        {
+                                       if($q1->num_rows($q1)>0){
                                             echo '<option data-tax="0" value="">-Select-</option>';
-                                            foreach($q1->result() as $res1)
+                                          foreach($q1->result() as $res1)
                                           {
                                             $selected = ($tax_id==$res1->id)? 'selected' : '';
                                             echo "<option $selected data-tax='".$res1->tax."' value='".$res1->id."'>".$res1->tax_name."(".$res1->tax."%)</option>";
                                           }
-                                        }
-                                        else
-                                        {
-                                           ?>
-                                    <option value="">No Records Found</option>
-                                    <?php
-                                       }
-                                       ?>
+                                       } else { ?>
+                                          <option value="">No Records Found</option>
+                                    <?php } ?>
                                  </select>
                                  <span id="tax_id_msg" style="display:none" class="text-danger"></span>
                               </div>
@@ -216,23 +214,37 @@
                                  <span id="purchase_price_msg" style="display:none" class="text-danger"></span>
                               </div>
                               <div class="form-group col-md-3">
-                                 <label for="tax_type"><?= $this->lang->line('sales_tax_type'); ?><span class="text-danger">*</span></label>
-                                 <select class="form-control select2" id="tax_type" name="tax_type"  style="width: 100%;" >
-                                  <?php
-                                    $inclusive_selected=$exclusive_selected='';
-                                    if($tax_type =='Inclusive') { $inclusive_selected='selected'; }
-                                    if($tax_type =='Exclusive') { $exclusive_selected='selected'; }
-
-                                  ?>
-                                    <option <?= $inclusive_selected ?> value="Inclusive">Inclusive</option>
-                                    <option <?= $exclusive_selected ?> value="Exclusive">Exclusive</option>
-                                 </select>
-                                 <span id="tax_type_msg" style="display:none" class="text-danger"></span>
-
+                                 <label for="mr_price">MR. Price<span class="text-danger"> *</span></label>
+                                 <input type="text" class="form-control only_currency" id="mr_price" name="mr_price" placeholder="Item MR. Price"  value="<?php print $mr_price; ?>" >
+                                 <span id="mr_price_msg" style="display:none" class="text-danger"></span>
                               </div>
                            </div>
-                           <!-- /row -->
                            <div class="row">
+                              <div class="form-group col-md-3">
+                                 <label for="tax_type"><?= $this->lang->line('sales_tax_type'); ?><span class="text-danger">*</span></label>
+                                 <select class="form-control select2" id="tax_type" name="tax_type"  style="width: 100%;" >
+                                    <?php
+                                       if($q1->num_rows($q1)>0){
+                                            echo '<option data-taxType="0" value="">-Select-</option>';
+                                          foreach($q1->result() as $res1)
+                                          {
+                                            $selected = ($tax_type==$res1->id)? 'selected' : '';
+                                            echo "<option $selected data-taxType='".$res1->tax."' value='".$res1->id."'>".$res1->tax_name."(".$res1->tax."%)</option>";
+                                          }
+                                       } else { ?>
+                                          <option value="">No Records Found</option>
+                                    <?php } ?>
+
+                                    <!-- <?php
+                                       $inclusive_selected=$exclusive_selected='';
+                                       if($tax_type =='Inclusive') { $inclusive_selected='selected'; }
+                                       if($tax_type =='Exclusive') { $exclusive_selected='selected'; }
+                                    ?>
+                                    <option <?= $inclusive_selected ?> value="Inclusive">Inclusive</option>
+                                    <option <?= $exclusive_selected ?> value="Exclusive">Exclusive</option> -->
+                                 </select>
+                                 <span id="tax_type_msg" style="display:none" class="text-danger"></span>
+                              </div>
                               <div class="form-group col-md-3">
                                  <label for="profit_margin"><?= $this->lang->line('profit_margin'); ?> <i class="hover-q " data-container="body" data-toggle="popover" data-placement="top" data-content="<?= $this->lang->line('based_on_purchase_price'); ?>" data-html="true" data-trigger="hover" data-original-title="">
                                   <i class="fa fa-info-circle text-maroon text-black hover-q"></i>
@@ -240,8 +252,7 @@
                                  <input type="text" class="form-control only_currency" id="profit_margin" name="profit_margin" placeholder="Profit in %"  value="<?php print $profit_margin; ?>" >
                                  <span id="profit_margin_msg" style="display:none" class="text-danger"></span>
                               </div>
-
-                              <div class="form-group col-md-3">
+                              <div class="form-group col-md-2">
                                  <label for="discount_type">Discount Type</label>
                                  <select class="form-control" id="discount_type" name="discount_type"  style="width: 100%;" >
                                     <option value="">-Select-</option>
@@ -250,17 +261,18 @@
                                  </select>
                                  <span id="discount_type_msg" style="display:none" class="text-danger"></span>
                               </div>
-                              <div class="form-group col-md-3">
+                              <div class="form-group col-md-2">
                                  <label for="profit_margin">Discount</label>
                                  <input type="text" class="form-control only_currency" id="discount" name="discount" placeholder="discount"  value="<?php print $discount; ?>" >
                                  <span id="discount_msg" style="display:none" class="text-danger"></span>
                               </div>
-                              <div class="form-group col-md-3">
+                              <div class="form-group col-md-2">
                                  <label for="sales_price" class="control-label"><?= $this->lang->line('sales_price'); ?><span class="text-danger">*</span></label>
                                  <input type="text" class="form-control only_currency " id="sales_price" name="sales_price" placeholder="Sales Price" readonly  value="<?php print $sales_price; ?>" >
                                  <span id="sales_price_msg" style="display:none" class="text-danger"></span>
                               </div>
                            </div>
+                           <!-- Item Price and -->
                            <!-- /row -->
                            <hr>
                            <div class="row">

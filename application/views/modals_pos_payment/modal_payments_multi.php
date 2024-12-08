@@ -1,5 +1,5 @@
 <div class="modal fade" id="multiple-payments-modal">
-  
+
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header header-custom">
@@ -8,13 +8,13 @@
         <h4 class="modal-title text-center">Payments</h4>
       </div>
       <div class="modal-body">
-        
+
     <div class="row">
       <!-- LEFT HAND -->
       <div class="col-md-8">
         <div>
 
-        <?php 
+        <?php
           $atleast_one_payments = 'true';
           if(isset($sales_id) && $sales_id!='') { //For Save Operation or for new entry
 
@@ -29,7 +29,7 @@
             <div class="box box-solid bg-gray">
               <div class="box-body">
                 <div class="row">
-           
+
                   <div class="col-md-6">
                     <div class="">
                     <label for="amount_<?= $i;?>">Amount</label>
@@ -58,7 +58,7 @@
                     </div>
                   </div>
               <div class="clearfix"></div>
-          </div>  
+          </div>
           <div class="row">
                  <div class="col-md-12">
                     <div class="">
@@ -67,28 +67,28 @@
                       <span id="payment_note_<?= $i;?>_msg" style="display:none" class="text-danger"></span>
                     </div>
                  </div>
-                  
+
               <div class="clearfix"></div>
-          </div>   
+          </div>
           </div>
           </div>
         </div><!-- col-md-12 -->
         <?php } //foreach() ?>
-      <?php } //num_rows if() 
+      <?php } //num_rows if()
             else{
               $atleast_one_payments ='true';
             }
       ?>
-         
-    <?php 
-     } 
+
+    <?php
+     }
      if($atleast_one_payments=='true'){ ?>
         <input type="hidden" name="payment_row_count" id='payment_row_count' value="1">
         <div class="col-md-12  payments_div">
           <div class="box box-solid bg-gray">
             <div class="box-body">
               <div class="row">
-         
+
                 <div class="col-md-6">
                   <div class="">
                   <label for="amount_1">Amount</label>
@@ -116,7 +116,7 @@
                   </div>
                 </div>
             <div class="clearfix"></div>
-        </div>  
+        </div>
         <div class="row">
                <div class="col-md-12">
                   <div class="">
@@ -125,16 +125,16 @@
                     <span id="payment_note_1_msg" style="display:none" class="text-danger"></span>
                   </div>
                </div>
-                
+
             <div class="clearfix"></div>
-        </div>   
+        </div>
         </div>
         </div>
       </div><!-- col-md-12 -->
     <?php } ?>
 
     </div>
-      
+
 
 
       <div class="row">
@@ -152,8 +152,8 @@
       <!-- RIGHT HAND -->
       <div class="col-md-4">
 
-        
-        
+
+
 
         <div class="col-md-12">
 
@@ -209,14 +209,14 @@
                   </div>
                 </div>
                 <!--  -->
-                                      
+
               </div>
                     <!-- /.box-body -->
                   </div>
         </div>
       </div>
     </div>
-        
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Close</button>
