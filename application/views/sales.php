@@ -91,6 +91,7 @@
                                        <select class="form-control select2" id="customer_id" name="customer_id"  style="width: 100%;" onkeyup="shift_cursor(event,'mobile')">
                                           <?php
                                              
+                                             echo "<option value=''>-- Select Customer Name-- </option>";
                                              $query1="select * from db_customers where status=1";
                                              $q1=$this->db->query($query1);
                                              if($q1->num_rows($q1)>0)
