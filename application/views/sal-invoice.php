@@ -107,11 +107,19 @@
     $payment_status=$res3->payment_status;
     $pos=$res3->pos;
     
-    if(!empty($customer_country)){
-      $customer_country = $this->db->query("select country from db_country where id='$customer_country'")->row()->country;  
+    if (!empty($customer_country)) {
+      $q = $this->db->query("select country from db_country where id = ?", array($customer_country));
+      if ($q->num_rows() > 0) {
+        $row = $q->row();
+        $customer_country = $row->country;
+      }
     }
-    if(!empty($customer_state)){
-      $customer_state = $this->db->query("select state from db_states where id='$customer_state'")->row()->state;  
+    if (!empty($customer_state)) {
+      $q = $this->db->query("select state from db_states where id = ?", array($customer_state));
+      if ($q->num_rows() > 0) {
+        $row = $q->row();
+        $customer_state = $row->state;
+      }
     }
     
     ?>

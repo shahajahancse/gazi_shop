@@ -350,7 +350,7 @@
                          {
                              foreach($q1->result() as $res1)
                            {
-                             echo "<option  value='".$res1->id."'>".$res1->customer_name."</option>";
+                             echo "<option  value='".$res1->id."'>".$res1->customer_name.'-'.$res1->mobile.''."</option>";
                            }
                          }
                          else
@@ -397,9 +397,10 @@
                           <th width="7%"><?= $this->lang->line('stock'); ?></th>
                           <th width="9%">MR.Price</th>
                           <th width="15%"><?= $this->lang->line('quantity'); ?></th>
+                          <!-- <th width="9%">tax</th> -->
                           <th width="10%">S.Price</th>
                           <th width="10%">Discounted</th>
-                          <th width="10%">A.Discount</th>
+                          <th width="10%"  style="display: none">A.Discount</th>
                           <th width="10%"><?= $this->lang->line('subtotal'); ?></th>
                           <th width="4%"><i class="fa fa-close"></i></th>
                         </thead>
@@ -640,6 +641,7 @@
     //var gst_amt         =$('#div_'+id).attr('data-item-gst-amt');
     var item_cost       =$('#div_'+id).attr('data-item-cost');
     var sales_price     =$('#div_'+id).attr('data-item-sales-price');
+    var item_tax_amt     =$('#div_'+id).attr('data-item_tax_amt');
     var discount        =$('#div_'+id).attr('data-item-discount');
     var sales_price_temp=sales_price;
     sales_price         =(parseFloat(sales_price)).toFixed(2);
@@ -662,14 +664,15 @@
         str+='<td id="td_'+rowcount+'_1">'+ stock +'</td>';/* td_0_1 item available qty*/
         str+='<td id="td_'+rowcount+'_8">'+ mrp +'</td>';/* td_0_8 item MRP*/
         str+='<td id="td_'+rowcount+'_2">'+ quantity      +'</td>';/* td_0_2 item available qty*/
+        // str+='<td id="td_'+rowcount+'_9">'+ item_tax_amt +'</td>';/* td_0_9 item tax amount*/
 
-          info='<input id="sales_price_'+rowcount+'" onblur="set_to_original('+rowcount+','+item_cost+')" onkeyup="update_price('+rowcount+','+item_cost+')" name="sales_price_'+rowcount+'" type="text" class="form-control" value="'+sales_price+'">';
+        info='<input id="sales_price_'+rowcount+'" onblur="set_to_original('+rowcount+','+item_cost+')" onkeyup="update_price('+rowcount+','+item_cost+')" name="sales_price_'+rowcount+'" type="text" class="form-control" value="'+sales_price+'">';
 
         adis ='<input type="number" value="0" class="form-control" onkeyup="make_subtotal('+item_id+','+rowcount+')" id="item_adis_'+item_id+'" name="item_adis_'+item_id+'" ></input>';
 
         str+='<td id="td_'+rowcount+'_3" class="text-right">'+ info +'</td>';/* td_0_3 item sales price*/
         str+='<td id="td_'+rowcount+'_6" class="text-right">'+ discount +'</td>';/* td_0_3 item discount*/
-        str+='<td id="td_'+rowcount+'_7" class="text-right">'+ adis +'</td>';/* td_0_3 item additional discount*/
+        str+='<td id="td_'+rowcount+'_7" class="text-right" style="display:none">'+ adis +'</td>';/* td_0_3 item additional discount*/
         str+='<td id="td_'+rowcount+'_4" class="text-right">'+ sub_total +'</td>';/* td_0_4 item sub_total */
         str+='<td id="td_'+rowcount+'_5">'+ remove_btn    +'</td>';/* td_0_5 item gst_amt */
 

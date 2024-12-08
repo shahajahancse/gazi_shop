@@ -20,17 +20,21 @@ class Import extends MY_Controller {
     }
 
 	public function import_customers_csv() {
+        
                 extract($this->xss_html_filter(array_merge($this->data)));
                 $filename = $_FILES["import_file"]["name"];
                 
                 if($_FILES['import_file']['size'] > 0)
-                {   
-                    
-                	$config['upload_path']          = './uploads/csv/customers';
+                {  
+                	$upload_path='./uploads/csv/customers';
+                	if (!file_exists($upload_path)) {
+			    		mkdir($upload_path, 0777, true);
+			    	}
+                	$config['upload_path']          = $upload_path;
 	                $config['allowed_types']        = 'csv';
 	                $this->load->library('upload', $config);
-
 	                if ( ! $this->upload->do_upload('import_file')){
+
 			                $error = array('error' => $this->upload->display_errors());
 			                print($error['error']);
 			                exit();
