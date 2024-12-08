@@ -184,13 +184,13 @@
 
                            <!-- Item Price details -->
                            <div class="row">
-                              <div class="form-group col-md-3">
+                              <div class="form-group col-md-2">
                                  <label for="price">Item Price<span class="text-danger"> *</span></label>
                                  <input type="text" class="form-control only_currency" id="price" name="price" placeholder="Price of Item without Tax"  value="<?php print $price; ?>" >
                                  <span id="price_msg" style="display:none" class="text-danger"></span>
                               </div>
-                              <div class="form-group col-md-3">
-                                 <label for="tax_id" >Vat<span class="text-danger"> *</span></label>
+                              <div class="form-group col-md-2">
+                                 <label for="tax_id" >Purchase Vat (%)</label>
                                  <select class="form-control select2" id="tax_id" name="tax_id"  style="width: 100%;" >
                                     <?php
                                        $query1="select * from db_tax where status=1";
@@ -200,7 +200,7 @@
                                           foreach($q1->result() as $res1)
                                           {
                                             $selected = ($tax_id==$res1->id)? 'selected' : '';
-                                            echo "<option $selected data-tax='".$res1->tax."' value='".$res1->id."'>".$res1->tax_name."(".$res1->tax."%)</option>";
+                                            echo "<option $selected data-tax='".$res1->tax."' value='".$res1->id."'>" .$res1->tax. " %</option>";
                                           }
                                        } else { ?>
                                           <option value="">No Records Found</option>
@@ -208,61 +208,47 @@
                                  </select>
                                  <span id="tax_id_msg" style="display:none" class="text-danger"></span>
                               </div>
-                              <div class="form-group col-md-3">
-                                 <label for="purchase_price"><?= $this->lang->line('purchase_price'); ?><span class="text-danger">*</span></label>
-                                 <input type="text" class="form-control only_currency" id="purchase_price" name="purchase_price" placeholder="Total Price with Tax Amount"  value="<?php print $purchase_price; ?>" readonly='' >
+                              <div class="form-group col-md-2">
+                                 <label for="tax_amt">Vat Amount </label>
+                                 <input type="text" class="form-control only_currency" id="tax_amt" name="tax_amt" placeholder="Vat Amount"  value="<?php print $tax_amt; ?>" readonly>
+                                 <span id="tax_amt_msg" style="display:none" class="text-danger"></span>
+                              </div>
+                              <div class="form-group col-md-2">
+                                 <label for="purchase_price"><?= $this->lang->line('purchase_price'); ?><span class="text-danger"> * </span></label>
+                                 <input type="text" class="form-control only_currency" id="purchase_price" name="purchase_price" placeholder="Total Price with Vat Amount"  value="<?php print $purchase_price; ?>" readonly>
                                  <span id="purchase_price_msg" style="display:none" class="text-danger"></span>
                               </div>
-                              <div class="form-group col-md-3">
-                                 <label for="mr_price">MR. Price<span class="text-danger"> *</span></label>
+                              <div class="form-group col-md-2">
+                                 <label for="mr_price">MR. Price <span class="text-danger"> * </span></label>
                                  <input type="text" class="form-control only_currency" id="mr_price" name="mr_price" placeholder="Item MR. Price"  value="<?php print $mr_price; ?>" >
                                  <span id="mr_price_msg" style="display:none" class="text-danger"></span>
                               </div>
-                           </div>
-                           <div class="row">
-                              <div class="form-group col-md-3">
-                                 <label for="tax_type"><?= $this->lang->line('sales_tax_type'); ?><span class="text-danger">*</span></label>
-                                 <select class="form-control select2" id="tax_type" name="tax_type"  style="width: 100%;" >
-                                    <?php
-                                       if($q1->num_rows($q1)>0){
-                                            echo '<option data-taxType="0" value="">-Select-</option>';
-                                          foreach($q1->result() as $res1)
-                                          {
-                                            $selected = ($tax_type==$res1->id)? 'selected' : '';
-                                            echo "<option $selected data-taxType='".$res1->tax."' value='".$res1->id."'>".$res1->tax_name."(".$res1->tax."%)</option>";
-                                          }
-                                       } else { ?>
-                                          <option value="">No Records Found</option>
-                                    <?php } ?>
-
-                                    <!-- <?php
-                                       $inclusive_selected=$exclusive_selected='';
-                                       if($tax_type =='Inclusive') { $inclusive_selected='selected'; }
-                                       if($tax_type =='Exclusive') { $exclusive_selected='selected'; }
-                                    ?>
-                                    <option <?= $inclusive_selected ?> value="Inclusive">Inclusive</option>
-                                    <option <?= $exclusive_selected ?> value="Exclusive">Exclusive</option> -->
-                                 </select>
-                                 <span id="tax_type_msg" style="display:none" class="text-danger"></span>
+                              <div class="form-group col-md-2">
+                                 <label for="profit_margin"> Profit Margin </label>
+                                 <input type="text" class="form-control only_currency" id="profit_margin" readonly name="profit_margin" placeholder="Max Profit Amount"  value="<?php print $profit_margin; ?>" >
+                                 <span id="profit_margin_msg" style="display:none" class="text-danger"></span>
                               </div>
-                              <div class="form-group col-md-3">
+                           </div>
+
+                           <div class="row">
+                              <!-- <div class="form-group col-md-3">
                                  <label for="profit_margin"><?= $this->lang->line('profit_margin'); ?> <i class="hover-q " data-container="body" data-toggle="popover" data-placement="top" data-content="<?= $this->lang->line('based_on_purchase_price'); ?>" data-html="true" data-trigger="hover" data-original-title="">
                                   <i class="fa fa-info-circle text-maroon text-black hover-q"></i>
                                 </i></label>
                                  <input type="text" class="form-control only_currency" id="profit_margin" name="profit_margin" placeholder="Profit in %"  value="<?php print $profit_margin; ?>" >
                                  <span id="profit_margin_msg" style="display:none" class="text-danger"></span>
-                              </div>
+                              </div> -->
                               <div class="form-group col-md-2">
                                  <label for="discount_type">Discount Type</label>
                                  <select class="form-control" id="discount_type" name="discount_type"  style="width: 100%;" >
                                     <option value="">-Select-</option>
-                                    <option <?= $discount_type == 1 ? 'selected':'' ?> value="1">%</option>
-                                    <option <?= $discount_type == 2 ? 'selected':'' ?> value="2">Amount</option>
+                                    <option <?= $discount_type == 1 ? 'selected':'' ?> value="1">percentage</option>
+                                    <option <?= $discount_type == 2 ? 'selected':'' ?> value="2">Fixed</option>
                                  </select>
                                  <span id="discount_type_msg" style="display:none" class="text-danger"></span>
                               </div>
                               <div class="form-group col-md-2">
-                                 <label for="profit_margin">Discount</label>
+                                 <label for="discount">Discount</label>
                                  <input type="text" class="form-control only_currency" id="discount" name="discount" placeholder="discount"  value="<?php print $discount; ?>" >
                                  <span id="discount_msg" style="display:none" class="text-danger"></span>
                               </div>
@@ -270,6 +256,33 @@
                                  <label for="sales_price" class="control-label"><?= $this->lang->line('sales_price'); ?><span class="text-danger">*</span></label>
                                  <input type="text" class="form-control only_currency " id="sales_price" name="sales_price" placeholder="Sales Price" readonly  value="<?php print $sales_price; ?>" >
                                  <span id="sales_price_msg" style="display:none" class="text-danger"></span>
+                              </div>
+                              <div class="form-group col-md-2">
+                                 <label for="vat_id">Sales Vat (%)</label>
+                                 <select class="form-control select2" id="vat_id" name="vat_id"  style="width: 100%;" >
+                                    <?php
+                                       if($q1->num_rows($q1)>0){
+                                          echo '<option data-vat_id="0" value="">-Select-</option>';
+                                          foreach($q1->result() as $res1)
+                                          {
+                                            $selected = ($vat_id == $res1->id)? 'selected' : '';
+                                            echo "<option $selected data-vat_id='".$res1->tax."' value='".$res1->id."'>".$res1->tax." %</option>";
+                                          }
+                                       } else { ?>
+                                          <option value="">No Records Found</option>
+                                    <?php } ?>
+                                 </select>
+                                 <span id="vat_id_msg" style="display:none" class="text-danger"></span>
+                              </div>
+                              <div class="form-group col-md-2">
+                                 <label for="vat_amt" class="control-label">Vat Amount</label>
+                                 <input type="text" class="form-control only_currency " id="vat_amt" name="vat_amt" placeholder="Sales Price" readonly  value="<?php print $vat_amt; ?>" >
+                                 <span id="vat_amt_msg" style="display:none" class="text-danger"></span>
+                              </div>
+                              <div class="form-group col-md-2">
+                                 <label for="grand_sales_price" class="control-label">Grand Sales</label>
+                                 <input type="text" class="form-control only_currency " id="grand_sales_price" name="grand_sales_price" placeholder="Sales Price" readonly  value="<?php print $grand_sales_price; ?>" >
+                                 <span id="grand_sales_price_msg" style="display:none" class="text-danger"></span>
                               </div>
                            </div>
                            <!-- Item Price and -->
