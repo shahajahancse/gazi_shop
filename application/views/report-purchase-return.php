@@ -151,9 +151,9 @@
                   <th style=""><?= $this->lang->line('return_date'); ?></th>
                   <th style=""><?= $this->lang->line('purchase_code'); ?></th>
                   <th style=""><?= $this->lang->line('supplier_name'); ?></th>
-                  <th style=""><?= $this->lang->line('invoice_total'); ?>(<?= $CI->currency(); ?>)</th>
-                  <th style=""><?= $this->lang->line('paid_amount'); ?>(<?= $CI->currency(); ?>)</th>
-                  <th style=""><?= $this->lang->line('due_amount'); ?>(<?= $CI->currency(); ?>)</th>
+                  <th style="text-algin"><?= $this->lang->line('invoice_total'); ?>(<?= $CI->currency(); ?>)</th>
+                  <th style="text-algin"><?= $this->lang->line('paid_amount'); ?>(<?= $CI->currency(); ?>)</th>
+                  <th style="text-algin"><?= $this->lang->line('due_amount'); ?>(<?= $CI->currency(); ?>)</th>
                 </tr>
                 </thead>
                 <tbody id="tbodyid">
