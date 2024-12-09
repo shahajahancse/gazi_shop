@@ -745,14 +745,14 @@ class Purchase_returns_model extends CI_Model {
 			          Purchase Information:
 			          <address>
 			            <b>Invoice #<?php echo  $return_code; ?></b><br>
-			            <b>Date :<?php echo  show_date($return_date); ?></b><br>
-			            <b>Grand Total :<?php echo $grand_total; ?></b><br>
+			            <b>Date : <?php echo  show_date($return_date); ?></b><br>
+			            <b>Grand Total : <?php echo $grand_total; ?></b><br>
 			          </address>
 			        </div>
 			        <!-- /.col -->
 			        <div class="col-sm-4 invoice-col">
-			          <b>Paid Amount :<span><?php echo number_format($paid_amount,2,'.',''); ?></span></b><br>
-			          <b>Due Amount :<span id='due_amount_temp'><?php echo number_format($due_amount,2,'.',''); ?></span></b><br>
+			          <b>Paid Amount : <span><?php echo number_format($paid_amount,2,'.',''); ?></span></b><br>
+			          <b>Due Amount : <span id='due_amount_temp'><?php echo number_format($due_amount,2,'.',''); ?></span></b><br>
 			         
 			        </div>
 			        <!-- /.col -->

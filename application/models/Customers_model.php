@@ -84,13 +84,13 @@ class Customers_model extends CI_Model {
 		$state = (!empty($state)) ? $state : 'NULL';
 
 		//Validate This customers already exist or not
-		$query=$this->db->query("select * from db_customers where upper(customer_name)=upper('$customer_name')");
-		if($query->num_rows()>0){
-			return "Sorry!  This Customers Name already Exist.";
-		}
+		// $query=$this->db->query("select * from db_customers where mobile=upper('$customer_name')");
+		// if($query->num_rows()>0){
+		// 	return "Sorry!  This Customers Name already Exist.";
+		// }
 		$query2=$this->db->query("select * from db_customers where mobile='$mobile'");
 		if($query2->num_rows()>0 && !empty($mobile)){
-			return "Sorry! This Mobile Number already Exist.";;
+			return "Sorry! This Mobile Number already Exist.";
 		}
 		
 		$qs5="select customer_init from db_company";

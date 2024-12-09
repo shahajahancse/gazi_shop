@@ -877,6 +877,8 @@ function adjust_payments(){
   //Find customers payment
 
   var payments_row =get_id_value("payment_row_count");
+  console.log(payments_row);
+  
   var paid_amount =0;
   for (var i = 1; i <=payments_row; i++) {
     if(document.getElementById("amount_"+i)){
@@ -1002,7 +1004,7 @@ $(document).ready(function(){
         $json_array= json_encode($json_array);
 ?>
 $(document).ready(function() {
-
+  $('#item_search').focus();
   $('#item_search').typeahead({
 
     source:<?php echo $json_array; ?>,
@@ -1067,6 +1069,7 @@ $('#order_date,#delivery_date,#cheque_date').datepicker({
 <script type="text/javascript">
   Mousetrap.bind('ctrl+m', function(e) {
     e.preventDefault();
+    $('#amount_1').val('').trigger('change');
     $(".show_payments_modal").trigger('click');
   });
   Mousetrap.bind('ctrl+h', function(e) {

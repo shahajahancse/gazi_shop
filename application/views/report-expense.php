@@ -133,8 +133,8 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
-              <thead>
-              <table class="table table-bordered table-hover sales-data ">
+              <table class="table table-bordered table-hover sales-data" id="sales-data">
+                <thead>
                 <tr>
                   <th style="">#</th>
                   <th style=""><?= $this->lang->line('expence_code'); ?></th>
@@ -180,7 +180,7 @@
 <script src="<?php echo $theme_link; ?>js/sheetjs.js" type="text/javascript"></script>
 <script>
 function convert_excel(type, fn, dl) {
-    var elt = document.getElementById('report-data');
+    var elt = document.getElementById('sales-data');
     var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
     return dl ?
         XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :

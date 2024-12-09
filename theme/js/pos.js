@@ -103,6 +103,7 @@ $('.make_sale').click(function (e) {
 							}
 
 						}
+						window.location.reload();
 
 					}
 					else if(result[0]=="failed")

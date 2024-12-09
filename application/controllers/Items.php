@@ -83,10 +83,15 @@ class Items extends MY_Controller {
 		$data = array();
 		$no = $_POST['start'];
 		foreach ($list as $items) {
+			if($items->stock < $items->alert_qty){
+				$alert='red';
+			}else{
+				$alert='';
+			}
 
 			$no++;
 			$row = array();
-			$row[] = '<input type="checkbox" name="checkbox[]" value='.$items->id.' class="checkbox column_checkbox" >';
+			$row[] = '<input type="checkbox" name="checkbox[]" value='.$items->id.' class="checkbox column_checkbox '.$alert.'" >';
 
 
 			$row[] = (!empty($items->item_image)) ? "

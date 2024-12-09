@@ -20,3 +20,12 @@
       <!-- /.tab-pane -->
     </div>
   </aside>
+  <!-- <script>
+    function convert_excel(who,type, fn, dl) {
+    var elt = document.getElementById(who);
+    var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
+    return dl ?
+        XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
+        XLSX.writeFile(wb, fn || ('Sales-Report.' + (type || 'xlsx')));
+}
+  </script> -->

@@ -134,9 +134,9 @@
               </li>
             </ul>
           </li>
-          <li class="hidden-xs">
+          <!-- <li class="hidden-xs">
             <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-          </li>
+          </li> -->
         </ul>
       </div>
     </nav>
@@ -540,12 +540,12 @@
               <?php } ?>
               <li class="change-pass-active-li"><a href="<?php echo $base_url; ?>users/password_reset"><i class="fa fa-lock "></i> <span><?= $this->lang->line('change_password'); ?></span></a></li>
 
-              <?php if($CI->permissions('database_update')) { ?>
+              <!-- <?php //if($CI->permissions('database_update')) { ?>
               <li class="database_updater-active-li"><a href="<?php echo $base_url; ?>/updates"><i class="fa fa-circle-o-notch "></i> <span><?= $this->lang->line('database_updater'); ?></span>
               <span class="pull-right-container">
                     <small class="label pull-right bg-green">new</small>
                   </span></a></li>
-              <?php } ?>
+              <?php //} ?> -->
 
               <?php if($CI->permissions('database_backup')) { ?>
               <li class="dbbackup-active-li"><a href="<?php echo $base_url; ?>users/dbbackup"><i class="fa fa-database "></i> <span><?= $this->lang->line('database_backup'); ?></span></a></li>

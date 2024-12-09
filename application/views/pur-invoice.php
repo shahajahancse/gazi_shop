@@ -132,8 +132,8 @@
           <i><?= $this->lang->line('from'); ?></i>
           <address>
             <strong><?php echo  $company_name; ?></strong><br>
-            <?php echo  $company_address; ?>,
-            <?= $this->lang->line('city'); ?>:<?php echo  $company_city; ?><br>
+            <?php echo  $company_address; ?>,<br>
+            <?= $this->lang->line('city'); ?>: <?php echo  $company_city; ?><br>
             <?= $this->lang->line('phone'); ?>: <?php echo  $company_phone; ?>,
             <?= $this->lang->line('mobile'); ?>: <?php echo  $company_mobile; ?><br>
             <?php echo (!empty(trim($company_email))) ? $this->lang->line('email').": ".$company_email."<br>" : '';?>
@@ -152,17 +152,18 @@
               if(!empty($supplier_address)){
                 echo $supplier_address;
               }
-              if(!empty($supplier_country)){
-                echo $supplier_country;
-              }
+              
               if(!empty($supplier_state)){
-                echo ",".$supplier_state;
+                echo ", ".$supplier_state;
               }
               if(!empty($supplier_city)){
-                echo ",".$supplier_city;
+                echo ", ".$supplier_city;
               }
               if(!empty($supplier_postcode)){
                 echo "-".$supplier_postcode;
+              }
+              if(!empty($supplier_country)){
+                echo  " ". $supplier_country;
               }
             ?>
             <br>
@@ -177,7 +178,7 @@
         <!-- /.col -->
         <div class="col-sm-4 invoice-col">
           <b><?= $this->lang->line('invoice'); ?> #<?php echo  $purchase_code; ?></b><br>
-          <b><?= $this->lang->line('purchase_status'); ?> :<?php echo  $purchase_status; ?></b><br>
+          <b><?= $this->lang->line('purchase_status'); ?> : <?php echo  $purchase_status; ?></b><br>
          
         </div>
         <!-- /.col -->

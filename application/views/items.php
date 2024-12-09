@@ -196,7 +196,6 @@
                                        $query1="select * from db_tax where status=1";
                                        $q1=$this->db->query($query1);
                                        if($q1->num_rows($q1)>0){
-                                            echo '<option data-tax="0" value="">-Select-</option>';
                                           foreach($q1->result() as $res1)
                                           {
                                             $selected = ($tax_id==$res1->id)? 'selected' : '';
@@ -401,6 +400,11 @@
       <!-- TABLES CODE -->
       <?php include"comman/code_js_form.php"; ?>
       <script src="<?php echo $theme_link; ?>js/items.js"></script>
+
+      <script>
+         
+      </script>
+
       <!-- Make sidebar menu hughlighter/selector -->
       <script>$(".<?php echo basename(__FILE__,'.php');?>-active-li").addClass("active");</script>
    </body>
