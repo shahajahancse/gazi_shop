@@ -192,6 +192,7 @@
                               <div class="form-group col-md-2">
                                  <label for="tax_id" >Purchase Vat (%)</label>
                                  <select class="form-control select2" id="tax_id" name="tax_id"  style="width: 100%;" >
+                                    <option value="0.00">-Select-</option>
                                     <?php
                                        $query1="select * from db_tax where status=1";
                                        $q1=$this->db->query($query1);
