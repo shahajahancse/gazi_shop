@@ -4,7 +4,7 @@
 <head>
 <!-- TABLES CSS CODE -->
 <?php include"comman/code_css_form.php"; ?>
-<!-- </copy> -->  
+<!-- </copy> -->
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -23,7 +23,7 @@
     <section class="content-header">
       <h1>
         <?= $this->lang->line('tax'); ?>
-        <small>Add/Update Tax</small>
+        <small>Add/Update Vat</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="<?php echo $base_url; ?>dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -48,7 +48,7 @@
               <input type="hidden" name="<?php echo $this->security->get_csrf_token_name();?>" value="<?php echo $this->security->get_csrf_hash();?>">
               <input type="hidden" id="base_url" value="<?php echo $base_url;; ?>">
               <div class="box-body">
-		
+
 				      <div class="form-group">
       				  <label for="tax_name" class="col-sm-2 control-label"><?= $this->lang->line('tax_name'); ?><label class="text-danger">*</label></label>
                 <div class="col-sm-4">
@@ -59,15 +59,15 @@
               <div class="form-group">
                 <label for="subtax_ids" class="col-sm-2 control-label"><?= $this->lang->line('sub_taxes'); ?><label class="text-danger">*</label></label>
                 <div class="col-sm-4">
-                 <select class="form-control select2" multiple="multiple" id='subtax_ids' name="subtax_ids[]" data-placeholder="Select Tax's" style="width: 100%;">
+                 <select class="form-control select2" multiple="multiple" id='subtax_ids' name="subtax_ids[]" data-placeholder="Select Once" style="width: 100%;">
                   <?php
                        $query1="SELECT * FROM db_tax WHERE (group_bit IS NULL)";
                        $q1=$this->db->query($query1);
                        if($q1->num_rows($q1)>0)
                         {
-                            echo '<option data-tax="0" value="">-Select-</option>'; 
+                            echo '<option data-tax="0" value="">-Select-</option>';
                             foreach($q1->result() as $res1)
-                          { 
+                          {
 
                             $selected = (strpos($subtax_ids, $res1->id) !== false)? 'selected' : '';
                             echo "<option $selected data-tax='".$res1->tax."' value='".$res1->id."'>".$res1->tax_name."</option>";
@@ -109,9 +109,9 @@
                                     $btn_name="Save";
                                     $btn_id="save";
                                 }
-                      
+
                                 ?>
-                                 
+
                    <div class="col-md-3 col-md-offset-3">
                       <button type="button" id="<?php echo $btn_id;?>" class=" btn btn-block btn-success" title="Save Data"><?php echo $btn_name;?></button>
                    </div>

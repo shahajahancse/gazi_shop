@@ -3,7 +3,7 @@
 <head>
 <!-- FORM CSS CODE -->
 <?php include"comman/code_css_form.php"; ?>
-<!-- </copy> -->  
+<!-- </copy> -->
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -16,7 +16,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-       <?= $this->lang->line('send_sms'); ?>
+        <?= $this->lang->line('send_sms'); ?>
       </h1>
       <ol class="breadcrumb">
         <li><a href="<?php echo $base_url; ?>dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -32,7 +32,7 @@
           <!-- Horizontal Form -->
           <div class="col-md-6">
          <div class="box box-primary">
-           
+
             <!-- /.box-header -->
             <!-- form start -->
             <form role="form" id="sms-form" onkeypress="return event.keyCode != 13;">
@@ -49,21 +49,21 @@
                   <textarea type="text" class="form-control" id="message" name="message" placeholder=""></textarea>
                   <span id="message_msg" style="display:none" class="text-danger"></span>
                 </div>
-              
+
               </div>
               <!-- /.box-body -->
 
               <div class="box-footer"> <button type="button" class="btn bg-orange" title="Back to List" onclick="history.back();">Back</button>
-            
+
               <button type="button" id="send" class="btn btn-success" title="Send SMS">Send</button>
-            
+
             <a href='<?php echo $base_url; ?>dashboard'><button type="button" class="btn btn-danger" title="Go Dashboard">Close</button></a>
               </div>
             </form>
           </div>
           <!-- /.box -->
         </div>
-     
+
 
         </div>
         <!--/.col (right) -->
