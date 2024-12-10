@@ -144,9 +144,9 @@
                   <th style=""><?= $this->lang->line('customer_name'); ?></th>
                   <th style=""><?= $this->lang->line('item_name'); ?></th>
                   <th style=""><?= $this->lang->line('item_sales_count'); ?></th>
-                  <th style=""><?= $this->lang->line('invoice_total'); ?>(<?= $CI->currency(); ?>)</th>
-                  <th style=""><?= $this->lang->line('paid_amount'); ?>(<?= $CI->currency(); ?>)</th>
-                  <th style=""><?= $this->lang->line('due_amount'); ?>(<?= $CI->currency(); ?>)</th>
+                  <th style="text-align:right"><?= $this->lang->line('invoice_total'); ?>(<?= $CI->currency(); ?>)</th>
+                  <th style="text-align:right"><?= $this->lang->line('paid_amount'); ?>(<?= $CI->currency(); ?>)</th>
+                  <th style="text-align:right"><?= $this->lang->line('due_amount'); ?>(<?= $CI->currency(); ?>)</th>
                 </tr>
                 </thead>
                 <tbody id="tbodyid">

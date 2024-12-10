@@ -445,7 +445,10 @@ $('#add_payment_row').click(function (e) {
     	$("#"+this_id).attr('disabled',true);
     	/*BUTTON LOAD AND DISABLE END*/
 
-    	var payment_row_count=get_id_value("payment_row_count");
+    	var payment_row_count = get_id_value("payment_row_count");
+		var temp_id = parseInt(payment_row_count)+1;
+		var get_row = create_sub_pay_row();
+
     	$.post(base_url+"pos/add_payment_row",{payment_row_count:payment_row_count},function(result){
     		$('.payments_div').parent().append(result);
     		$("#payment_row_count").val(parseInt(payment_row_count)+1);
@@ -460,6 +463,7 @@ $('#add_payment_row').click(function (e) {
     	});
     }
 }); //hold_invoice end
+
 function remove_row(id){
 	$(".payments_div_"+id).html('');
 	failed.currentTime = 0;

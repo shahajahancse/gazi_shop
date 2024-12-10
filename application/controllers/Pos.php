@@ -84,9 +84,11 @@ class Pos extends MY_Controller {
 	public function hold_invoice_edit(){
 		echo $this->pos_model->hold_invoice_edit();
 	}
+
 	public function add_payment_row(){
 		return $this->load->view('modals_pos_payment/modal_payments_multi_sub');
 	}
+	
 	//Print sales POS invoice
 	public function print_invoice_pos($sales_id){
 		if(!$this->permissions('sales_add') && !$this->permissions('sales_edit')){

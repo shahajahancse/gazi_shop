@@ -467,6 +467,10 @@
                         <?= $CI->currency('<span class="tot_disc"></span>');?>
                     </div>
                     <div class="col-md-5 text-right text-bold font-weight-bold" style="font-size: 19px;">
+                       <label>Total tax:</label><br/>
+                       <?= $CI->currency('<span class="tot_tax"></span>');?>
+                    </div>
+                    <div class="col-md-5 text-right text-bold font-weight-bold" style="font-size: 19px;">
                        <label><?= $this->lang->line('grand_total'); ?>:</label><br/>
                        <?= $CI->currency('<span class="tot_grand"></span>');?>
                     </div>
@@ -663,13 +667,15 @@
     //var gst_amt         =$('#div_'+id).attr('data-item-gst-amt');
     var item_cost       =$('#div_'+id).attr('data-item-cost');
     var sales_price     =$('#div_'+id).attr('data-item-sales-price');
-    var item_tax_amt     =$('#div_'+id).attr('data-item_tax_amt');
+    var item_tax_amt     =$('#div_'+id).attr('data_item_tax_amt');
     var discount        =$('#div_'+id).attr('data-item-discount');
     var sales_price_temp=sales_price;
-    sales_price         =(parseFloat(sales_price)).toFixed(2);
+    sales_price         =(parseFloat(sales_price+item_tax_amt)).toFixed(2);
+    
 
     var quantity ='<div class="input-group input-group-sm"><span class="input-group-btn"><button onclick="decrement_qty('+item_id+','+rowcount+')" type="button" class="btn btn-default btn-flat"><i class="fa fa-minus text-danger"></i></button></span>';
-        quantity +='<input typ="text" value="1" class="form-control" onkeyup="item_qty_input('+item_id+','+rowcount+')" id="item_qty_'+item_id+'" name="item_qty_'+item_id+'">';
+        quantity +='<input type="text" value="1" class="form-control" onkeyup="item_qty_input('+item_id+','+rowcount+')" id="item_qty_'+item_id+'" name="item_qty_'+item_id+'">';
+        quantity +='<input type="hidden" value="'+item_tax_amt+'" class="form-control" id="item_tax_'+item_id+'">';
 
         quantity +='<input type="hidden" name="dis_hide_'+item_id+'" id="dis_hide_'+item_id+'" value="'+discount+'">';
         quantity +='<input type="hidden" name="mrp_hide_'+item_id+'" id="mrp_hide_'+item_id+'" value="'+mrp+'">';
@@ -852,6 +858,7 @@ function calulate_discount(discount_input,discount_type,total){
 function final_total(){
   var total=0;
   var item_qty=0;
+  var total_tax=0;
   var rowcount=$("#hidden_rowcount").val();
   var discount_input=$("#discount_input").val();
   var discount_type=$("#discount_type").val();
@@ -862,25 +869,28 @@ function final_total(){
       total=parseFloat(total)+ + +parseFloat($("#td_"+i+"_4").html()).toFixed(2);
       item_id=$("#tr_item_id_"+i).val();
       item_qty=parseFloat(item_qty)+ + +parseFloat($("#item_qty_"+item_id).val()).toFixed(2);
+      total_tax+=(parseFloat($("#item_tax_"+item_id).val()).toFixed(2))*item_qty;
       }
     }//for end
   }//items_table
 
   total =Math.round(total);
   var discount_amt=calulate_discount(discount_input,discount_type,total);//return value
-  set_total(item_qty,total,discount_amt,total-discount_amt);
+  set_total(item_qty,total,discount_amt,total-discount_amt,total_tax);
 }
-function set_total(tot_qty=0, tot_amt=0, tot_disc=0, tot_grand=0){
+function set_total(tot_qty=0, tot_amt=0, tot_disc=0, tot_grand=0, tot_tax=0){
   $(".tot_qty   ").html(tot_qty);
   $(".tot_amt   ").html((Math.round(tot_amt).toFixed(2)));
   $(".tot_disc  ").html((Math.round(tot_disc).toFixed(2)));
-  $(".tot_grand ").html((Math.round(tot_grand)).toFixed(2));
+  $(".tot_tax  ").html((Math.round(tot_tax).toFixed(2)));
+  $(".tot_grand ").html((Math.round(parseFloat(tot_grand)+parseFloat(tot_tax))).toFixed(2));
 }
 
 //LEFT SIDE: FINAL TOTAL
 function adjust_payments(){
   var total=0;
   var item_qty=0;
+  var total_tax=0;
   var rowcount=$("#hidden_rowcount").val();
   var discount_input=$("#discount_input").val();
   var discount_type=$("#discount_type").val();
@@ -892,10 +902,13 @@ function adjust_payments(){
       total=parseFloat(total)+ + +parseFloat($("#td_"+i+"_4").html()).toFixed(2);
       item_id=$("#tr_item_id_"+i).val();
       item_qty=parseFloat(item_qty)+ + +parseFloat($("#item_qty_"+item_id).val()).toFixed(2);
+      total_tax+=(parseFloat($("#item_tax_"+item_id).val()).toFixed(2))*item_qty;
+
       }
     }//for end
   }//items_table
   total =Math.round(total);
+  total=parseFloat(total)+parseFloat(total_tax);
   //Find customers payment
 
   var payments_row =get_id_value("payment_row_count");

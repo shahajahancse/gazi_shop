@@ -241,6 +241,7 @@
 								echo "<td class='classr class3'></td>";
 								echo "<td class='classr class3'>".number_format(($mrp_cost-$dis_cost),2,'.','')."</td>";
 								echo "</tr>";
+								echo  $res2->tax_amt;
 
 								$total_mrp += $mrp_cost;
 								$over_all_discount += $dis_cost;
@@ -270,9 +271,11 @@
 						</tr>
 						<tr style="border-top-style: dashed;border-width: 0.1px;">
 							<td style=" padding-left: 2px; padding-right: 2px;" colspan="4" align="right">Total Amount</td>
-							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format(($total_mrp-($over_all_discount+$tot_discount_to_all_amt)),2,'.','');?></td>
+							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?=  number_format(($total_mrp-($over_all_discount+$tot_discount_to_all_amt)),2,'.','');?></td>
+							<?php 
+							$total_amout=number_format(($total_mrp-($over_all_discount+$tot_discount_to_all_amt)),2,'.','');
+							?>
 						</tr>
-
 						<tr style="border-top-style: dashed;border-width: 0.1px;">
 							<td style=" padding-left: 2px; padding-right: 2px;" colspan="4" align="right">Vat</td>
 							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format(($total_tax_amt),2,'.','');?></td>
@@ -280,8 +283,10 @@
 
 						<tr style="border-top-style: dashed;border-width: 0.1px;">
 							<td style=" padding-left: 2px; padding-right: 2px;" colspan="4" align="right">Grand total</td>
-							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format(($total_mrp-($over_all_discount+$tot_discount_to_all_amt)),2,'.','');?></td>
-						</tr>
+							     <td style="padding-left: 2px; padding-right: 2px;" align="right">
+                                <?= number_format(($total_amout + $total_tax_amt), 2, '.', ''); ?>
+                            </td>
+                        </tr>
 
 						
 
