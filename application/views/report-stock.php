@@ -53,9 +53,9 @@
                                               <th style="">#</th>
                                               <th style=""><?= $this->lang->line('item_code'); ?></th>
                                               <th style=""><?= $this->lang->line('item_name'); ?></th>
-                                              <th style=""><?= $this->lang->line('unit_price'); ?>(<?= $CI->currency(); ?>)</th>
+                                              <th style="text-align:right"><?= $this->lang->line('unit_price'); ?>(<?= $CI->currency(); ?>)</th>
                                               <th style=""><?= $this->lang->line('tax'); ?></th>
-                                              <th style=""><?= $this->lang->line('sales_price'); ?>(<?= $CI->currency(); ?>)</th>
+                                              <th style="text-align:right"><?= $this->lang->line('sales_price'); ?>(<?= $CI->currency(); ?>)</th>
                                               <th style=""><?= $this->lang->line('current_stock'); ?></th>
                                             </tr>
                                             </thead>
