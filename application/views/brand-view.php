@@ -97,7 +97,7 @@ $(document).ready(function() {
    var table = $('#example2').DataTable({ 
 
       /* FOR EXPORT BUTTONS START*/
-  dom:'<"row margin-bottom-12"<"col-sm-12"<"pull-left"l><"pull-right"fr><"pull-right margin-left-10 "B>>>tip',
+  dom:'<"row margin-bottom-12"<"col-sm-12"<"pull-left"l><"pull-right"fr><"text-center margin-left-10 "B>>>tip',
  /* dom:'<"row"<"col-sm-12"<"pull-left"B><"pull-right">>> <"row margin-bottom-12"<"col-sm-12"<"pull-left"l><"pull-right"fr>>>tip',*/
       buttons: {
         buttons: [

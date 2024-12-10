@@ -144,7 +144,7 @@
                   <th style=""><?= $this->lang->line('customer_name'); ?></th>
                   <th style=""><?= $this->lang->line('payment_type'); ?></th>
                   <th style=""><?= $this->lang->line('payment_note'); ?></th>
-                  <th style=""><?= $this->lang->line('paid_amount'); ?>(<?= $CI->currency(); ?>)</th>
+                  <th style="text-align:right"><?= $this->lang->line('paid_amount'); ?>(<?= $CI->currency(); ?>)</th>
                 </tr>
                 </thead>
                 <tbody id="tbodyid">
