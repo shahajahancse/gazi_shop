@@ -145,7 +145,7 @@ class Items_model extends CI_Model {
 		$qs4="select coalesce(max(id),0)+1 as maxid from db_items";
 		$q1=$this->db->query($qs4);
 		$maxid=$q1->row()->maxid;
-		$item_code=$item_init.str_pad($maxid, 4, '0', STR_PAD_LEFT);
+		$item_code=$item_init.str_pad($maxid, 6, '0', STR_PAD_LEFT);
 		//end
 
 		$new_opening_stock = (empty($new_opening_stock)) ? 0 :$new_opening_stock;

@@ -6,7 +6,7 @@ class Sales_return extends MY_Controller {
 		parent::__construct();
 		$this->load_global();
 		$this->load->model('sales_return_model','sales');
-		$this->load->helper('sms_template_helper');
+		// $this->load->helper('sms_template_helper');
 	}
 
 	public function is_sms_enabled(){
@@ -44,7 +44,7 @@ class Sales_return extends MY_Controller {
 			$this->session->set_flashdata('success','Sales Return Invoice Already Generated!');
 			redirect(base_url('sales_return/edit/'.$q1->row()->id),'refresh');exit();
 		}
-	    
+
 	    $data=$this->data;
 	    $data['sales_id']=$id;;
 	    $data['page_title']=$this->lang->line('sales_return');
@@ -55,18 +55,18 @@ class Sales_return extends MY_Controller {
 
 	/*
 	public function add()
-	{	
+	{
 		$this->permission_check('sales_return_add');
 		$data=$this->data;
 		$data['page_title']=$this->lang->line('sales_return');
 		$this->load->view('sales-return',$data);
 	}*/
-	
+
 
 	public function sales_save_and_update(){
 		$this->form_validation->set_rules('return_date', 'Return Date', 'trim|required');
 		$this->form_validation->set_rules('customer_id', 'Customer Name', 'trim|required');
-		
+
 		if ($this->form_validation->run() == TRUE) {
 	    	$result = $this->sales->verify_save_and_update();
 	    	echo $result;
@@ -74,8 +74,8 @@ class Sales_return extends MY_Controller {
 			echo "Please Fill Compulsory(* marked) Fields.";
 		}
 	}
-	
-	
+
+
 	public function edit($id){
 		$this->permission_check('sales_return_edit');
 		$data=$this->data;
@@ -85,16 +85,16 @@ class Sales_return extends MY_Controller {
 		$data['page_title']=$this->lang->line('sales_return');
 		$this->load->view('sales-return', $data);
 	}
-	
+
 
 	public function ajax_list()
 	{
 		$list = $this->sales->get_datatables();
-		
+
 		$data = array();
 		$no = $_POST['start'];
 		foreach ($list as $sales) {
-			
+
 			$no++;
 			$row = array();
 			$row[] = '<input type="checkbox" name="checkbox[]" value='.$sales->id.' class="checkbox column_checkbox" >';
@@ -181,9 +181,9 @@ class Sales_return extends MY_Controller {
 													<i class="fa fa-fw fa-trash text-red"></i>Delete
 												</a>
 											</li>
-											
+
 										</ul>
-									</div>';			
+									</div>';
 
 			$row[] = $str2;
 
@@ -204,7 +204,7 @@ class Sales_return extends MY_Controller {
 		$id=$this->input->post('id');
 		$status=$this->input->post('status');
 
-		
+
 		$result=$this->sales->update_status($id,$status);
 		return $result;
 	}
@@ -228,14 +228,14 @@ class Sales_return extends MY_Controller {
 	}
 	public function find_item_details(){
 		$id=$this->input->post('id');
-		
+
 		$result=$this->sales->find_item_details($id);
 		echo $result;
 	}
 
 	//sales invoice form
 	public function invoice($id)
-	{	
+	{
 		if(!$this->permissions('sales_return_add') && !$this->permissions('sales_return_edit')){
 			$this->show_access_denied_page();
 		}
@@ -244,8 +244,8 @@ class Sales_return extends MY_Controller {
 		$data['page_title']=$this->lang->line('sales_return_invoice');
 		$this->load->view('sal-return-invoice',$data);
 	}
-	
-	//Print sales invoice 
+
+	//Print sales invoice
 	public function print_invoice($return_id)
 	{
 		if(!$this->permissions('sales_return_add') && !$this->permissions('sales_return_edit')){
@@ -255,10 +255,10 @@ class Sales_return extends MY_Controller {
 		$data=array_merge($data,array('return_id'=>$return_id));
 		$data['page_title']=$this->lang->line('sales_invoice');
 		$this->load->view('print-sales-return-invoice',$data);
-		
+
 	}
 
-	//Print sales POS invoice 
+	//Print sales POS invoice
 	public function print_invoice_pos($return_id)
 	{
 		if(!$this->permissions('sales_return_add') && !$this->permissions('sales_return_edit')){
@@ -273,35 +273,35 @@ class Sales_return extends MY_Controller {
 		if(!$this->permissions('sales_return_add') && !$this->permissions('sales_return_edit')){
 			$this->show_access_denied_page();
 		}
-		
+
 		$data=$this->data;
 		$data['page_title']=$this->lang->line('sales_invoice');
         $data=array_merge($data,array('return_id'=>$return_id));
-      
+
 		$this->load->view('print-sales-return-invoice',$data);
-       
+
 
         // Get output html
         $html = $this->output->get_output();
         // Load pdf library
         $this->load->library('pdf');
-        
+
         // Load HTML content
         $this->dompdf->loadHtml($html);
-        
+
         // (Optional) Setup the paper size and orientation
         $this->dompdf->setPaper('A4', 'portrait');/*landscape or portrait*/
-        
+
         // Render the HTML as PDF
         $this->dompdf->render();
-        
+
         // Output the generated PDF (1 = download and 0 = preview)
         $this->dompdf->stream("Sales_return_invoice_$return_id", array("Attachment"=>0));
 	}
-	
-	
 
-	
+
+
+
 	/*v1.1*/
 	public function return_row_with_data($rowcount,$item_id){
 		echo $this->sales->get_items_info($rowcount,$item_id);
