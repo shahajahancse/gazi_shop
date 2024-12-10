@@ -40,10 +40,10 @@
             <div class="box-header with-border">
               <h3 class="box-title"><?=$page_title;?></h3>
               <?php if($CI->permissions('brand_add')) { ?>
-              <div class="box-tools">
+              <!-- <div class="box-tools">
                 <a class="btn btn-block btn-info" href="<?php echo $base_url; ?>brands/company_add">
                 <i class="fa fa-plus"></i> <?= $this->lang->line('add_brand'); ?></a>
-              </div>
+              </div> -->
               <?php } ?>
             </div>
             <!-- /.box-header -->
@@ -97,7 +97,7 @@ $(document).ready(function() {
    var table = $('#example2').DataTable({
 
       /* FOR EXPORT BUTTONS START*/
-  dom:'<"row margin-bottom-12"<"col-sm-12"<"pull-left"l><"pull-right"fr><"text-center margin-left-10 "B>>>tip',
+  dom:'<"row margin-bottom-12"<"col-sm-12"<"pull-left"l><"pull-right"fr><"pull-right margin-left-10 "B>>>tip',
  /* dom:'<"row"<"col-sm-12"<"pull-left"B><"pull-right">>> <"row margin-bottom-12"<"col-sm-12"<"pull-left"l><"pull-right"fr>>>tip',*/
       buttons: {
         buttons: [

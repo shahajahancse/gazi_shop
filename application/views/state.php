@@ -3,11 +3,11 @@
 <head>
 <!-- TABLES CSS CODE -->
 <?php include"comman/code_css_form.php"; ?>
-<!-- </copy> -->  
+<!-- </copy> -->
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
- 
+
  <?php include"sidebar.php"; ?>
 
 <?php
@@ -23,7 +23,7 @@ if(!isset($state)){
     <section class="content-header">
       <h1>
         <?= $this->lang->line('state'); ?>
-        <small>Add/Update State</small>
+        <small>Add/Update Division </small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="<?php echo $base_url; ?>dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -48,9 +48,9 @@ if(!isset($state)){
               <input type="hidden" name="<?php echo $this->security->get_csrf_token_name();?>" value="<?php echo $this->security->get_csrf_hash();?>">
             	<input type="hidden" id="base_url" value="<?php echo $base_url;; ?>">
               <div class="box-body">
-			   
+
                  <div class="form-group">
-				 
+
 				  <label for="state" class="col-sm-2 control-label"><?= $this->lang->line('state_name'); ?><label class="text-danger">*</label></label>
                   <div class="col-sm-4">
                     <input type="text" class="form-control" id="state" name="state" placeholder="" onkeyup="shift_cursor(event,'country')" value="<?php echo $state; ?>">
@@ -66,7 +66,7 @@ if(!isset($state)){
 						$q1=$this->db->query("select * from db_country where status=1");
 						 if($q1->num_rows()>0)
 						 {
-							echo '<option value="">-Select-</option>'; 
+							echo '<option value="">-Select-</option>';
 							foreach($q1->result() as $res1)
 							 {
 								 echo "<option value='".$res1->country."'>".$res1->country."</option>";
@@ -83,8 +83,8 @@ if(!isset($state)){
 					<span id="country_msg" style="display:none" class="text-danger"></span>
                   </div>
 		        </div>
-				
-								
+
+
               </div>
               <!-- /.box-body -->
 			        <div class="box-footer">
@@ -102,9 +102,9 @@ if(!isset($state)){
                                     $btn_name="Save";
                                     $btn_id="save";
                                 }
-                      
+
                                 ?>
-                                 
+
                    <div class="col-md-3 col-md-offset-3">
                       <button type="button" id="<?php echo $btn_id;?>" class=" btn btn-block btn-success" title="Save Data"><?php echo $btn_name;?></button>
                    </div>
@@ -119,20 +119,20 @@ if(!isset($state)){
             </form>
           </div>
           <!-- /.box -->
-          
+
         </div>
         <!--/.col (right) -->
       </div>
       <!-- /.row -->
-	  
+
     </section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  
+
  <?php include"footer.php"; ?>
 
- 
+
   <!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->
   <div class="control-sidebar-bg"></div>
@@ -150,7 +150,7 @@ if(!isset($state)){
 <?php
 if($country!=""){
 	?>
-	
+
 	$("#country").val('<?php echo $country;?>');
 	<?php
 }

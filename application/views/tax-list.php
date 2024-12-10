@@ -10,7 +10,7 @@
 <div class="wrapper">
 
   <!-- Left side column. contains the logo and sidebar -->
-  
+
   <?php include"sidebar.php"; ?>
 
   <!-- Content Wrapper. Contains page content -->
@@ -19,18 +19,18 @@
     <section class="content-header">
       <h1>
         <?= $this->lang->line('tax_list'); ?>
-        <small>View/Search <?= $this->lang->line('tax'); ?></small>
+        <small>View/Search Vat</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="<?php echo $base_url; ?>dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active"><?= $this->lang->line('tax_list'); ?></li>
-        
+
       </ol>
     </section>
 
     <!-- **********************MODALS***************** -->
     <div class="modal fade" id="taxgroup-modal">
-      
+
     </div>
     <!-- /.modal -->
     <!-- **********************MODALS END***************** -->
@@ -69,15 +69,15 @@
                 </tr>
                 </thead>
                 <tbody>
-				
+
                 </tbody>
-               
+
               </table>
             </div>
             <!-- /.box-body -->
           </div>
           <!-- /.box -->
-          
+
         </div>
         <!-- /.col -->
         <div class="col-xs-12">
@@ -105,15 +105,15 @@
                 </tr>
                 </thead>
                 <tbody>
-        
+
                 </tbody>
-               
+
               </table>
             </div>
             <!-- /.box-body -->
           </div>
           <!-- /.box -->
-          
+
         </div>
         <!-- /.col -->
       </div>
@@ -140,7 +140,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
     //datatables
-   var table = $('#example2').DataTable({ 
+   var table = $('#example2').DataTable({
 
       /* FOR EXPORT BUTTONS START*/
   dom:'<"row margin-bottom-12"<"col-sm-12"<"pull-left"l><"pull-right"fr><"pull-right margin-left-10 "B>>>tip',
@@ -159,7 +159,7 @@ $(document).ready(function() {
             { extend: 'pdf', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3]} },
             { extend: 'print', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3]} },
             { extend: 'csv', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3]} },
-            { extend: 'colvis', className: 'btn bg-teal color-palette btn-flat',text:'Columns' },  
+            { extend: 'colvis', className: 'btn bg-teal color-palette btn-flat',text:'Columns' },
 
             ]
         },
@@ -176,7 +176,7 @@ $(document).ready(function() {
         "ajax": {
             "url": "<?php echo site_url('tax/ajax_list')?>",
             "type": "POST",
-            
+
             complete: function (data) {
              $('.column_checkbox').iCheck({
                 checkboxClass: 'icheckbox_square-orange',
@@ -192,7 +192,7 @@ $(document).ready(function() {
 
         //Set column definition initialisation properties.
         "columnDefs": [
-        { 
+        {
             "targets": [ 0,4 ], //first column / numbering column
             "orderable": false, //set not orderable
         },
@@ -200,7 +200,7 @@ $(document).ready(function() {
             "targets" :[0],
             "className": "text-center",
         },
-        
+
         ],
     });
     new $.fn.dataTable.FixedHeader( table );
@@ -209,7 +209,7 @@ $(document).ready(function() {
 <script type="text/javascript">
 $(document).ready(function() {
     //datatables
-   var table = $('#example3').DataTable({ 
+   var table = $('#example3').DataTable({
 
       /* FOR EXPORT BUTTONS START*/
   dom:'<"row margin-bottom-12"<"col-sm-12"<"pull-left"l><"pull-right"fr><"pull-right margin-left-10 "B>>>tip',
@@ -228,7 +228,7 @@ $(document).ready(function() {
             { extend: 'pdf', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [0,1,2,3,4]} },
             { extend: 'print', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [0,1,2,3,4]} },
             { extend: 'csv', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [0,1,2,3,4]} },
-            { extend: 'colvis', className: 'btn bg-teal color-palette btn-flat',text:'Columns' },  
+            { extend: 'colvis', className: 'btn bg-teal color-palette btn-flat',text:'Columns' },
 
             ]
         },
@@ -245,7 +245,7 @@ $(document).ready(function() {
         "ajax": {
             "url": "<?php echo site_url('tax_group/ajax_list')?>",
             "type": "POST",
-            
+
             complete: function (data) {
              $('.column_checkbox').iCheck({
                 checkboxClass: 'icheckbox_square-orange',
@@ -261,7 +261,7 @@ $(document).ready(function() {
 
         //Set column definition initialisation properties.
         "columnDefs": [
-        { 
+        {
             "targets": [ 0,4 ], //first column / numbering column
             "orderable": false, //set not orderable
         },
@@ -269,7 +269,7 @@ $(document).ready(function() {
             "targets" :[0],
             "className": "text-center",
         },
-        
+
         ],
     });
     new $.fn.dataTable.FixedHeader( table );
@@ -277,6 +277,6 @@ $(document).ready(function() {
 </script>
 <!-- Make sidebar menu hughlighter/selector -->
 <script>$(".<?php echo basename(__FILE__,'.php');?>-active-li").addClass("active");</script>
-		
+
 </body>
 </html>

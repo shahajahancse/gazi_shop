@@ -6,8 +6,8 @@ class Customers_model extends CI_Model {
 	//Datatable start
 	var $table = 'db_customers as a';
 	var $column_order = array('a.id','a.customer_name','a.mobile','a.email','a.status','a.sales_due','a.sales_return_due'); //set column field database for datatable orderable
-	var $column_search = array('a.id','a.customer_name','a.mobile','a.email','a.status','a.sales_due','a.sales_return_due'); //set column field database for datatable searchable 
-	var $order = array('a.id' => 'desc'); // default order 
+	var $column_search = array('a.id','a.customer_name','a.mobile','a.email','a.status','a.sales_due','a.sales_return_due'); //set column field database for datatable searchable
+	var $order = array('a.id' => 'desc'); // default order
 
 	public function __construct()
 	{
@@ -20,12 +20,12 @@ class Customers_model extends CI_Model {
 		$this->db->from($this->table);
 
 		$i = 0;
-	
-		foreach ($this->column_search as $item) // loop column 
+
+		foreach ($this->column_search as $item) // loop column
 		{
 			if($_POST['search']['value']) // if datatable send POST for search
 			{
-				
+
 				if($i===0) // first loop
 				{
 					$this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
@@ -41,11 +41,11 @@ class Customers_model extends CI_Model {
 			}
 			$i++;
 		}
-		
+
 		if(isset($_POST['order'])) // here order processing
 		{
 			$this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
-		} 
+		}
 		else if(isset($this->order))
 		{
 			$order = $this->order;
@@ -78,7 +78,7 @@ class Customers_model extends CI_Model {
 
 	//Save Cutomers
 	public function verify_and_save(){
-		//Filtering XSS and html escape from user inputs 
+		//Filtering XSS and html escape from user inputs
 		extract($this->security->xss_clean(html_escape(array_merge($this->data,$_POST))));
 
 		$state = (!empty($state)) ? $state : 'NULL';
@@ -92,7 +92,7 @@ class Customers_model extends CI_Model {
 		if($query2->num_rows()>0 && !empty($mobile)){
 			return "Sorry! This Mobile Number already Exist.";
 		}
-		
+
 		$qs5="select customer_init from db_company";
 		$q5=$this->db->query($qs5);
 		$customer_init=$q5->row()->customer_init;
@@ -120,7 +120,7 @@ class Customers_model extends CI_Model {
 		else{
 		        return "failed";
 		}
-		
+
 	}
 
 	//Get customers_details
@@ -150,7 +150,7 @@ class Customers_model extends CI_Model {
 		}
 	}
 	public function update_customers(){
-		//Filtering XSS and html escape from user inputs 
+		//Filtering XSS and html escape from user inputs
 		extract($this->security->xss_clean(html_escape(array_merge($this->data,$_POST))));
 
 		if($q_id==1){
@@ -163,7 +163,7 @@ class Customers_model extends CI_Model {
 		$query=$this->db->query("select * from db_customers where upper(customer_name)=upper('$customer_name') and id<>$q_id");
 		if($query->num_rows()>0){
 			return " This Customer's Name already Exist.";
-			
+
 		}
 		else{
 			$query1="update db_customers set customer_name='$customer_name',mobile='$mobile',phone='$phone',
@@ -210,13 +210,13 @@ class Customers_model extends CI_Model {
         }
         else{
             echo "failed";
-        }	
+        }
 	}
 
 	public function show_pay_now_modal($customer_id){
 		$CI =& get_instance();
 		$sales_id='';
-		
+
 		$q2=$this->db->query("select * from db_customers where id=$customer_id");
 		$res2=$q2->row();
 
@@ -242,15 +242,15 @@ class Customers_model extends CI_Model {
 	    //$due_amount =0;//$grand_total - $paid_amount;
 
 	    if(!empty($customer_country)){
-	      $customer_country = $this->db->query("select country from db_country where id='$customer_country'")->row()->country;  
+	      $customer_country = $this->db->query("select country from db_country where id='$customer_country'")->row()->country;
 	    }
 	    if(!empty($customer_state)){
-	      $customer_state = $this->db->query("select state from db_states where id='$customer_state'")->row()->state;  
+	      $customer_state = $this->db->query("select state from db_states where id='$customer_state'")->row()->state;
 	    }
-	    $sum_of_ob_paid = $this->db->query("select coalesce(sum(payment),0) sum_of_ob_paid from db_cobpayments where customer_id=$customer_id")->row()->sum_of_ob_paid; 
+	    $sum_of_ob_paid = $this->db->query("select coalesce(sum(payment),0) sum_of_ob_paid from db_cobpayments where customer_id=$customer_id")->row()->sum_of_ob_paid;
 	    $customer_opening_balance_due = $customer_opening_balance - $sum_of_ob_paid;
 
-	    $q6 = $this->db->query("select coalesce(sum(grand_total),0) as total_sales_amount,coalesce(sum(paid_amount),0) as total_paid_amount from db_sales where customer_id=$customer_id"); 
+	    $q6 = $this->db->query("select coalesce(sum(grand_total),0) as total_sales_amount,coalesce(sum(paid_amount),0) as total_paid_amount from db_sales where customer_id=$customer_id");
 	    $total_sales_amount = $q6->row()->total_sales_amount;
 	    $total_paid_amount = $q6->row()->total_paid_amount;
 	    //$total_sales_due_amount =$total_sales_amount - $total_paid_amount;
@@ -265,7 +265,7 @@ class Customers_model extends CI_Model {
 		        <h4 class="modal-title text-center">Pay Due Payments</h4>
 		      </div>
 		      <div class="modal-body">
-		        
+
 		    <div class="row">
 		      <div class="col-md-12">
 		      	<div class="row invoice-info">
@@ -278,7 +278,7 @@ class Customers_model extends CI_Model {
 			            <?php echo (!empty(trim($customer_email))) ? $this->lang->line('email').": ".$customer_email."<br>" : '';?>
 			            <?php echo (!empty(trim($customer_gst_no))) ? $this->lang->line('gst_number').": ".$customer_gst_no."<br>" : '';?>
 			            <?php echo (!empty(trim($customer_tax_number))) ? $this->lang->line('tax_number').": ".$customer_tax_number."<br>" : '';?>
-			            
+
 			          </address>
 			        </div>
 			        <!-- /.col -->
@@ -303,7 +303,7 @@ class Customers_model extends CI_Model {
 			        			<td class="text-right"><?= $CI->currency($customer_sales_due); ?></td>
 			        		</tr>
 			        	</table>
-			         
+
 			        </div>
 			        <!-- /.col -->
 			      </div>
@@ -355,7 +355,7 @@ class Customers_model extends CI_Model {
 		                  </div>
 		                </div>
 		            <div class="clearfix"></div>
-		        </div>  
+		        </div>
 		        <div class="row">
 		               <div class="col-md-12">
 		                  <div class="">
@@ -364,9 +364,9 @@ class Customers_model extends CI_Model {
 		                    <span id="payment_note_msg" style="display:none" class="text-danger"></span>
 		                  </div>
 		               </div>
-		                
+
 		            <div class="clearfix"></div>
-		        </div>   
+		        </div>
 		        </div>
 		        </div>
 		      </div><!-- col-md-12 -->
@@ -393,7 +393,7 @@ class Customers_model extends CI_Model {
 		//echo "<pre>";print_r($this->security->xss_clean(html_escape(array_merge($this->data,$_POST,$_GET))));exit();
 
 		$this->load->model('sales_model');
-		
+
     	if($amount=='' || $amount==0){$amount=null;}
 
 
@@ -405,13 +405,13 @@ class Customers_model extends CI_Model {
 			$customer_opening_balance=$res2->opening_balance;
 	    	$customer_sales_due=$res2->sales_due;
 
-	    	$sum_of_ob_paid = $this->db->query("select coalesce(sum(payment),0) sum_of_ob_paid from db_cobpayments where customer_id=$customer_id")->row()->sum_of_ob_paid; 
+	    	$sum_of_ob_paid = $this->db->query("select coalesce(sum(payment),0) sum_of_ob_paid from db_cobpayments where customer_id=$customer_id")->row()->sum_of_ob_paid;
 	    	$customer_opening_balance_due = $customer_opening_balance - $sum_of_ob_paid;
 
 
 	    	while($amount>0) {
 
-	    		
+
 	    		//Adjust Opening Balance
 	    		if($amount<=$customer_opening_balance_due && $customer_opening_balance_due>0){
 	    			$row_data = array(	'customer_id' 		=> $customer_id,
@@ -456,7 +456,7 @@ class Customers_model extends CI_Model {
 	    				$sales_id = $res->id;
 	    				if($amount<=$sales_due && $sales_due>0){
 	    					$salespayments_entry = array(
-								'sales_id' 		=> $sales_id, 
+								'sales_id' 		=> $sales_id,
 								'payment_date'		=> date("Y-m-d",strtotime($payment_date)),//Current Payment with sales entry
 								'payment_type' 		=> $payment_type,
 								'payment' 			=> $amount,
@@ -472,7 +472,7 @@ class Customers_model extends CI_Model {
 	    				}
 	    			    if($amount>=$sales_due && $sales_due>0){
 	    					$salespayments_entry = array(
-								'sales_id' 		=> $sales_id, 
+								'sales_id' 		=> $sales_id,
 								'payment_date'		=> date("Y-m-d",strtotime($payment_date)),//Current Payment with sales entry
 								'payment_type' 		=> $payment_type,
 								'payment' 			=> $sales_due,
@@ -489,24 +489,24 @@ class Customers_model extends CI_Model {
 
 	    				$q3 = $this->db->insert('db_salespayments', $salespayments_entry);
 
-	    				
+
 	    				$q10=$this->sales_model->update_sales_payment_status($sales_id);
 						if($q10!=1){
 							return "failed";
 						}
 	    			}
-					
+
 	    		}
-	    		
+
 
 	    	}
-				
-			
+
+
 		}
 		else{
 			return "Please Enter Valid Amount!";
 		}
-		
+
 		$this->db->trans_commit();
 		return "success";
 
@@ -516,7 +516,7 @@ class Customers_model extends CI_Model {
 
 		$CI =& get_instance();
 		$sales_id='';
-		
+
 		$q2=$this->db->query("select * from db_customers where id=$customer_id");
 		$res2=$q2->row();
 
@@ -542,15 +542,15 @@ class Customers_model extends CI_Model {
 	    //$due_amount =0;//$grand_total - $paid_amount;
 
 	    if(!empty($customer_country)){
-	      $customer_country = $this->db->query("select country from db_country where id='$customer_country'")->row()->country;  
+	      $customer_country = $this->db->query("select country from db_country where id='$customer_country'")->row()->country;
 	    }
 	    if(!empty($customer_state)){
-	      $customer_state = $this->db->query("select state from db_states where id='$customer_state'")->row()->state;  
+	      $customer_state = $this->db->query("select state from db_states where id='$customer_state'")->row()->state;
 	    }
-	    //$sum_of_ob_paid = $this->db->query("select coalesce(sum(payment),0) sum_of_ob_paid from db_cobpayments where customer_id=$customer_id")->row()->sum_of_ob_paid; 
+	    //$sum_of_ob_paid = $this->db->query("select coalesce(sum(payment),0) sum_of_ob_paid from db_cobpayments where customer_id=$customer_id")->row()->sum_of_ob_paid;
 	    //$customer_opening_balance_due = $customer_opening_balance - $sum_of_ob_paid;
 
-	    $q6 = $this->db->query("select coalesce(sum(grand_total),0) as total_sales_amount,coalesce(sum(paid_amount),0) as total_paid_amount from db_salesreturn where customer_id=$customer_id"); 
+	    $q6 = $this->db->query("select coalesce(sum(grand_total),0) as total_sales_amount,coalesce(sum(paid_amount),0) as total_paid_amount from db_salesreturn where customer_id=$customer_id");
 	    $total_sales_amount = $q6->row()->total_sales_amount;
 	    $total_paid_amount = $q6->row()->total_paid_amount;
 	    //$total_sales_due_amount =$total_sales_amount - $total_paid_amount;
@@ -565,7 +565,7 @@ class Customers_model extends CI_Model {
 		        <h4 class="modal-title text-center">Pay Sales Return Due Payments</h4>
 		      </div>
 		      <div class="modal-body">
-		        
+
 		    <div class="row">
 		      <div class="col-md-12">
 		      	<div class="row invoice-info">
@@ -578,7 +578,7 @@ class Customers_model extends CI_Model {
 			            <?php echo (!empty(trim($customer_email))) ? $this->lang->line('email').": ".$customer_email."<br>" : '';?>
 			            <?php echo (!empty(trim($customer_gst_no))) ? $this->lang->line('gst_number').": ".$customer_gst_no."<br>" : '';?>
 			            <?php echo (!empty(trim($customer_tax_number))) ? $this->lang->line('tax_number').": ".$customer_tax_number."<br>" : '';?>
-			            
+
 			          </address>
 			        </div>
 			        <!-- /.col -->
@@ -598,7 +598,7 @@ class Customers_model extends CI_Model {
 			        			<td class="text-right"><?= $CI->currency($customer_sales_return_due); ?></td>
 			        		</tr>
 			        	</table>
-			         
+
 			        </div>
 			        <!-- /.col -->
 			      </div>
@@ -650,7 +650,7 @@ class Customers_model extends CI_Model {
 		                  </div>
 		                </div>
 		            <div class="clearfix"></div>
-		        </div>  
+		        </div>
 		        <div class="row">
 		               <div class="col-md-12">
 		                  <div class="">
@@ -659,9 +659,9 @@ class Customers_model extends CI_Model {
 		                    <span id="return_due_payment_note_msg" style="display:none" class="text-danger"></span>
 		                  </div>
 		               </div>
-		                
+
 		            <div class="clearfix"></div>
-		        </div>   
+		        </div>
 		        </div>
 		        </div>
 		      </div><!-- col-md-12 -->
@@ -687,7 +687,7 @@ class Customers_model extends CI_Model {
 		//echo "<pre>";print_r($this->security->xss_clean(html_escape(array_merge($this->data,$_POST,$_GET))));exit();
 
 		$this->load->model('sales_return_model');
-		
+
     	if($amount=='' || $amount==0){$amount=null;}
 
 
@@ -710,7 +710,7 @@ class Customers_model extends CI_Model {
 	    				$return_id = $res->id;
 	    				if($amount<=$sales_due && $sales_due>0){
 	    					$salespayments_entry = array(
-								'return_id' 		=> $return_id, 
+								'return_id' 		=> $return_id,
 								'payment_date'		=> date("Y-m-d",strtotime($payment_date)),//Current Payment with sales entry
 								'payment_type' 		=> $payment_type,
 								'payment' 			=> $amount,
@@ -726,7 +726,7 @@ class Customers_model extends CI_Model {
 	    				}
 	    			    if($amount>=$sales_due && $sales_due>0){
 	    					$salespayments_entry = array(
-								'return_id' 		=> $return_id, 
+								'return_id' 		=> $return_id,
 								'payment_date'		=> date("Y-m-d",strtotime($payment_date)),//Current Payment with sales entry
 								'payment_type' 		=> $payment_type,
 								'payment' 			=> $sales_due,
@@ -743,24 +743,24 @@ class Customers_model extends CI_Model {
 
 	    				$q3 = $this->db->insert('db_salespaymentsreturn', $salespayments_entry);
 
-	    				
+
 	    				$q10=$this->sales_return_model->update_sales_payment_status($return_id);
 						if($q10!=1){
 							return "failed";
 						}
 	    			}
-					
+
 	    		}
-	    		
+
 
 	    	}
-				
-			
+
+
 		}
 		else{
 			return "Please Enter Valid Amount!";
 		}
-		
+
 		$this->db->trans_commit();
 		return "success";
 
