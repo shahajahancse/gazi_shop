@@ -211,7 +211,6 @@ $('#hold_invoice').click(function (e) {
 		failed.play();
 		return;
     }
-
 	swal({
 		title: "Hold Invoice ?",icon: "warning",buttons: true,dangerMode: true,
 		content: {
@@ -219,11 +218,11 @@ $('#hold_invoice').click(function (e) {
 			{
 				placeholder: "Please Enter Reference Number!",
 				type: "text",
-
 				inputAttributes: {
 				    maxlength: '5'
-				  }
-			},},
+				}
+			},
+		},
 		}).then(name => {
 			//If input box blank Throw Error
 			if (!name.trim()){ throw null; return false; }
@@ -240,57 +239,57 @@ $('#hold_invoice').click(function (e) {
 
 		    var this_id=this.id;//id=save or id=update
 
-				e.preventDefault();
-				data = new FormData($('#pos-form')[0]);//form name
-				/*Check XSS Code*/
-				if(!xss_validation(data)){ return false; }
+			e.preventDefault();
+			data = new FormData($('#pos-form')[0]);//form name
+			/*Check XSS Code*/
+			if(!xss_validation(data)){ return false; }
 
-				$(".box").append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
-				$("#"+this_id).attr('disabled',true);  //Enable Save or Update button
-				$.ajax({
-					type: 'POST',
-					url: base_url+'pos/hold_invoice?command='+this_id+'&tot_qty='+tot_qty+'&tot_amt='+tot_amt+'&tot_disc='+tot_disc+'&tot_grand='+tot_grand+"&reference_id="+reference_id,
-					data: data,
-					cache: false,
-					contentType: false,
-					processData: false,
-					success: function(result){
-						//alert(result);return;
-						$("#hidden_invoice_id").val('');
-						result=result.trim().split("<<<###>>>");
+			$(".box").append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
+			$("#"+this_id).attr('disabled',true);  //Enable Save or Update button
+			$.ajax({
+				type: 'POST',
+				url: base_url+'pos/hold_invoice?command='+this_id+'&tot_qty='+tot_qty+'&tot_amt='+tot_amt+'&tot_disc='+tot_disc+'&tot_grand='+tot_grand+"&reference_id="+reference_id,
+				data: data,
+				cache: false,
+				contentType: false,
+				processData: false,
+				success: function(result){
+					//alert(result);return;
+					$("#hidden_invoice_id").val('');
+					result = result.trim().split("<<<###>>>");
 
-							if(result[0]=="success")
-							{
-								$('#pos-form-tbody').html('');
-								//CALCULATE FINAL TOTAL AND OTHER OPERATIONS
-		    					final_total();
+					if(result[0]=="success")
+					{
+						$('#pos-form-tbody').html('');
+						//CALCULATE FINAL TOTAL AND OTHER OPERATIONS
+						final_total();
 
-								//hold_invoice_list();
-								success.currentTime = 0;
-								success.play();
-							}
-							else if(result[0]=="failed")
-							{
-							   toastr['error']("Sorry! Failed to save Record.Try again");
-							}
-							else
-							{
-								alert(result);
-							}
+						//hold_invoice_list();
+						success.currentTime = 0;
+						success.play();
+					}
+					else if(result[0]=="failed")
+					{
+						toastr['error']("Sorry! Failed to save Record.Try again");
+					}
+					else
+					{
+						alert(result);
+					}
 
-						$("#"+this_id).attr('disabled',false);  //Enable Save or Update button
-						$(".overlay").remove();
-				   }
-			   });
+					$("#"+this_id).attr('disabled',false);  //Enable Save or Update button
+					$(".overlay").remove();
+
+					window.location.reload();
+				}
+			});
 			/* ********************************************************** */
-
 		}) //name end
 	.catch(err => {
 	    toastr['error']("Failed!! Invoice Not Saved! <br/>Please Enter Reference Number");
 	    failed.currentTime = 0;
 		failed.play();
 	});//swal end
-
 }); //hold_invoice end
 
 // function hold_invoice_list(){
@@ -302,59 +301,59 @@ $('#hold_invoice').click(function (e) {
 //     $(".hold_invoice_list_count").html('').html(data['tot_count']);
 //   });
 // }
-function hold_invoice_delete(invoice_id){
-	swal({ title: "Are you sure?",icon: "warning",buttons: true,dangerMode: true,}).then((sure) => {
-			  if(sure) {//confirmation start
-	var base_url=$("#base_url").val().trim();
-  $.post(base_url+"pos/hold_invoice_delete/"+invoice_id,{},function(result){
-  	result=result.trim();
-    if(result=='success'){
-    	toastr["success"]("Success! Invoice Deleted!!");
-	    success.currentTime = 0;
-		success.play();
-	    //hold_invoice_list();
-    }
-    else{
-    	toastr['error']("Failed to Delete Invoice! Try again!!");
-    	failed.currentTime = 0;
-		failed.play();
-    }
-  });
-  } //confirmation sure
+
+	function hold_invoice_delete(invoice_id){
+		swal({ title: "Are you sure?",icon: "warning",buttons: true,dangerMode: true,}).then((sure) => {
+			if(sure) {//confirmation start
+				var base_url=$("#base_url").val().trim();
+				$.post(base_url+"pos/hold_invoice_delete/"+invoice_id,{},function(result){
+					result=result.trim();
+					if(result=='success'){
+						toastr["success"]("Success! Invoice Deleted!!");
+						success.currentTime = 0;
+						success.play();
+						//hold_invoice_list();
+					}else{
+						toastr['error']("Failed to Delete Invoice! Try again!!");
+						failed.currentTime = 0;
+						failed.play();
+					}
+					window.location.reload();
+				});
+			} //confirmation sure
 		}); //confirmation end
-}
+	}
 
 function hold_invoice_edit(invoice_id){
 
 	swal({ title: "Are you sure?",icon: "warning",buttons: true,dangerMode: true,}).then((sure) => {
-	if(sure) {//confirmation start
-	var base_url=$("#base_url").val().trim();
+		if(sure) {//confirmation start
+			var base_url=$("#base_url").val().trim();
 
-	$.post(base_url+"pos/hold_invoice_edit?invoice_id="+invoice_id,{},function(result){
-    		//alert(result);
-						$("#hidden_invoice_id").val(invoice_id);
+			$.post(base_url+"pos/hold_invoice_edit?invoice_id="+invoice_id,{},function(result){
+				//alert(result);
+				$("#hidden_invoice_id").val(invoice_id);
 
-						var data = jQuery.parseJSON(result)
+				var data = jQuery.parseJSON(result)
 
-						if(data.length > 0){
-								//	Make empty table list
-								$('#pos-form-tbody').html('');
-								for(k=0;k<data.length;k++){
-									var item_id=data[k]['item_id'];
-									var item_qty=data[k]['item_qty'];
-									for(j=1;j<=item_qty;j++){
-					  					addrow(item_id);
-									}
-					  		}
-					  		//CALCULATE FINAL TOTAL AND OTHER OPERATIONS
-	    					final_total();
+				if(data.length > 0){
+						//	Make empty table list
+						$('#pos-form-tbody').html('');
+						for(k=0;k<data.length;k++){
+							var item_id=data[k]['item_id'];
+							var item_qty=data[k]['item_qty'];
+							for(j=1;j<=item_qty;j++){
+								addrow(item_id);
+							}
+					}
+					//CALCULATE FINAL TOTAL AND OTHER OPERATIONS
+					final_total();
 
-							//hold_invoice_list();
-							success.currentTime = 0;
-							success.play();
-						}
-    	});
-
+					//hold_invoice_list();
+					success.currentTime = 0;
+					success.play();
+				}
+			});
 
 		} //confirmation sure
 	}); //confirmation end

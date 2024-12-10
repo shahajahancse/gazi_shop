@@ -105,6 +105,7 @@
         </div>
         <!-- /.navbar-collapse -->
         <!-- Navbar Right Menu -->
+         <?php $q2=$this->db->query("select * from temp_holdinvoice where status=1 group by invoice_id order by id desc"); ?>
         <div class="navbar-custom-menu">
           <ul class="nav navbar-nav">
 
@@ -113,7 +114,10 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Click To View Hold Invoices">
 
               <span class=""><?= $this->lang->line('hold_list'); ?></span>
-              <span class="label label-danger hold_invoice_list_count"></span>
+              <?php
+                if (!empty($q2->result())) { ?>
+                  <span class="label label-danger hold_invoice_list_count"> <?= $q2->num_rows() ?> </span>
+              <?php } ?>
             </a>
 
             <ul class="dropdown-menu dropdown-width-lg">
@@ -132,7 +136,25 @@
                       </tr>
                       </thead>
                       <tbody id="hold_invoice_list" >
-
+                        <?php
+                          $str="";
+                          $i=0;
+                          if($q2->num_rows()>0){
+                            foreach($q2->result() as $res2){
+                                  $str =$str."<tr>";
+                                  $str =$str."<td>".$res2->id."</td>";
+                                  $str =$str."<td>".show_date($res2->invoice_date)."</td>";
+                                  $str =$str."<td>".$res2->reference_id."</td>";
+                                  $str =$str."<td>";
+                                    $str =$str.'<a class="fa fa-fw fa-trash-o text-red" style="cursor: pointer;font-size: 20px;" onclick="hold_invoice_delete('.$res2->invoice_id.')" title="Delete Invoive?"></a>';
+                                    $str =$str.'<a class="fa fa-fw fa-edit text-success" style="cursor: pointer;font-size: 20px;" onclick="hold_invoice_edit('.$res2->invoice_id.')" title="Edit Invoive?"></a>';
+                                  $str =$str."</td>";
+                                $str =$str."</tr>";
+                              $i++;
+                            }//for end
+                          }
+                          echo $str;
+                        ?>
                       </tbody>
                     </table>
                   </div>
@@ -878,7 +900,7 @@ function adjust_payments(){
 
   var payments_row =get_id_value("payment_row_count");
   console.log(payments_row);
-  
+
   var paid_amount =0;
   for (var i = 1; i <=payments_row; i++) {
     if(document.getElementById("amount_"+i)){
@@ -1029,7 +1051,7 @@ $(document).ready(function() {
 
     }
   });
-  hold_invoice_list();
+  // hold_invoice_list();
 });
 
 
