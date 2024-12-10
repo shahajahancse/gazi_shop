@@ -16,7 +16,7 @@ class Pos_model extends CI_Model {
 		  if(!empty($id)){
 		  	$str="and a.category_id=$id";
 		  }
-	      $q2=$this->db->query("select a.*,b.tax,a.tax_type,a.item_image from db_items a,db_tax b where b.id=a.tax_id and a.status=1 $str order by a.stock desc");
+	      $q2=$this->db->query("select a.*,b.tax,a.tax_type,a.vat_amt,a.item_image from db_items a,db_tax b where b.id=a.tax_id and a.status=1 $str order by a.stock desc");
 	      if($q2->num_rows()>0){
 	        foreach($q2->result() as $res2){
 	        	$item_tax_type = $res2->tax_type;
@@ -31,7 +31,7 @@ class Pos_model extends CI_Model {
 				// 	$item_sales_price=$item_sales_price+ (($item_sales_price*$item_tax)/100);
 				// 	$item_tax_amt = (($single_unit_price * $item_sales_qty)*$item_tax)/100;
 				// }else{//Inclusive
-				$item_tax_amt=number_format(((($item_sales_price * $item_sales_qty)*$item_tax)/100),2,'.','');
+				$item_tax_amt=$res2->vat_amt;
 				//$item_sales_price
 					//$single_unit_price = $item_sales_price;
 				//}
@@ -209,28 +209,31 @@ class Pos_model extends CI_Model {
 				$item_adis  =$this->xss_html_filter(trim($_REQUEST['item_adis_'.$item_id]));
 				// shahajahan
 
-				$tax_type =$this->db->select('tax_type')->from('db_items')->where('id',$item_id)->get()->row()->tax_type;
+				$tax_d =$this->db->select('*')->from('db_items')->where('id',$item_id)->get()->row();
+				$tax_type =$tax_d->tax_type;
 
 				$unit_tax=0;
-				$tax_amt =0;
-				if(!empty($tax_id) && $tax_id!=0){
-					//each unit tax amt
-					$unit_tax =$this->db->select('tax')->from('db_tax')->where('id',$tax_id)->get()->row()->tax;
-					$tax_amt = (($unit_tax * $price_per_unit)/100)*$sales_qty;
-					// if($tax_type=='Exclusive'){
-					// 	//$total_cost+=$tax_amt;
-					// }else{//Inclusive
-					// 	$unit_tax =$this->db->select('tax')->from('db_tax')->where('id',$tax_id)->get()->row()->tax;
-					// 	$tax_amt = $this->inclusive($price_per_unit,$unit_tax);
-					// }
-				}
+				$tax_amt =$tax_d->vat_amt*$sales_qty;
+				// if(!empty($tax_id) && $tax_id!=0){
+				// 	//each unit tax amt
+				// 	$unit_tax =$this->db->select('tax')->from('db_tax')->where('id',$tax_id)->get()->row()->tax;
+				// 	$tax_amt = (($unit_tax * $price_per_unit)/100)*$sales_qty;
+				// 	// if($tax_type=='Exclusive'){
+				// 	// 	//$total_cost+=$tax_amt;
+				// 	// }else{//Inclusive
+				// 	// 	$unit_tax =$this->db->select('tax')->from('db_tax')->where('id',$tax_id)->get()->row()->tax;
+				// 	// 	$tax_amt = $this->inclusive($price_per_unit,$unit_tax);
+				// 	// }
+				// }
 				//dd($price_per_unit);
 
 				
 				$single_unit_total_cost =$price_per_unit;
 
-				if($tax_id=='' || $tax_id==0){$tax_id=null;}
-				if($tax_amt=='' || $tax_amt==0){$tax_amt=null;}
+				
+				if($tax_amt=='' || $tax_amt==0){
+					$tax_amt=null;
+				}
 				if($total_cost=='' || $total_cost==0){$total_cost=null;}
 
 				if(!empty($discount_to_all_input) && $discount_to_all_input!=0){
