@@ -151,7 +151,7 @@ class Pos_model extends CI_Model {
 
 			//ORDER SALES CREATION
 			$maxid=$this->db->query("SELECT COALESCE(MAX(id),0)+1 AS maxid FROM db_sales")->row()->maxid;
-			$sales_code=$init.str_pad($maxid, 4, '0', STR_PAD_LEFT);
+			$sales_code=$init.str_pad($maxid, 10, '0', STR_PAD_LEFT);
 
 			$sales_entry = array(
 		    				'sales_code' 				=> $sales_code,
