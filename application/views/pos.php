@@ -864,15 +864,19 @@ function final_total(){
   var discount_type=$("#discount_type").val();
 
   if($(".items_table tr").length>1){
+
     for(i=0;i<rowcount;i++){
       if(document.getElementById('tr_item_id_'+i)){
       total=parseFloat(total)+ + +parseFloat($("#td_"+i+"_4").html()).toFixed(2);
       item_id=$("#tr_item_id_"+i).val();
       item_qty=parseFloat(item_qty)+ + +parseFloat($("#item_qty_"+item_id).val()).toFixed(2);
-      total_tax+=(parseFloat($("#item_tax_"+item_id).val()).toFixed(2))*item_qty;
+      item_qty_S=parseFloat($("#item_qty_"+item_id).val()).toFixed(2);
+      total_tax+=(parseFloat($("#item_tax_"+item_id).val()).toFixed(2))*item_qty_S;
       }
     }//for end
   }//items_table
+  console.log(total_tax);
+  
 
   total =Math.round(total);
   var discount_amt=calulate_discount(discount_input,discount_type,total);//return value
