@@ -200,7 +200,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="modal-footer">
         <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Close</button>
         <button type="button" class="btn bg-maroon btn-lg make_sale btn-lg">Complete <i class="fa  fa-check "></i></button>
@@ -210,3 +210,7 @@
   </div>
   <!-- /.modal-dialog -->
 </div>
+
+<script>
+  function  create_sub_pay_row(payment_row_count);
+</script>
