@@ -274,7 +274,7 @@
                   </thead>
                   <tbody>
                     <?php
-                      $qs6="SELECT a.item_name,a.item_code,b.category_name,a.expire_date from db_items as a,db_category as b where b.id=a.category_id and a.expire_date<='".date("Y-m-d")."' and a.status=1";
+                      $qs6="SELECT a.item_name,a.item_code,b.category_name,a.expire_date from db_items as a,db_category as b where b.id=a.category_id and a.expire_date<'".date("Y-m-d")."' and a.status=1";
                       $q6=$this->db->query($qs6);
 
                       if($q6->num_rows()>0){
