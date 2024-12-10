@@ -393,6 +393,7 @@ $('.show_payments_modal').click(function (e) {
 		failed.play();
 		return;
     }else{
+		$(".payment-row").remove();
     	adjust_payments();
     	$("#add_payment_row,#payment_type_1").parent().show();
     	$("#amount_1").parent().parent().removeClass('col-md-12').addClass('col-md-6');
@@ -409,6 +410,7 @@ $('#show_cash_modal').click(function (e) {
 		failed.play();
 		return;
     }else{
+		$(".payment-row").remove();
     	adjust_payments();
     	$("#add_payment_row,#payment_type_1").parent().hide();
     	$("#amount_1").focus();

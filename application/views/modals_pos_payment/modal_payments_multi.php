@@ -212,8 +212,8 @@
 </div>
 
 <script>
-  function removeRow(id){//id=Rowid
-    $(".payment-row-"+id).remove();
+  function rowRem(id){//id=Rowid
+    $(".payments_div_"+id).remove();
     failed.currentTime = 0;
     failed.play();
     final_total();
@@ -229,11 +229,11 @@
   function create_sub_pay_row(rowcount) {
     var paymentTypes = <?php echo json_encode($q1); ?>;
     var get_row = `
-      <div class="col-md-12 payment-row payment-row-${rowcount}">
+      <div class="col-md-12 payment-row payments_div_${rowcount}">
         <div class="box box-solid bg-gray">
           <div class="box-header">
             <div class="box-tools pull-right">
-              <button type="button" class="btn btn-box-tool" onclick="removeRow(${rowcount})">
+              <button type="button" class="btn btn-box-tool" onclick="rowRem(${rowcount})">
                 <i class="fa fa-times fa-2x"></i>
               </button>
             </div>
@@ -245,7 +245,7 @@
                   <label for="amount_${rowcount}">Amount</label>
                   <input type="text" class="form-control text-right payment-amount only-currency"
                          id="amount_${rowcount}" name="amount_${rowcount}" placeholder=""
-                         onkeyup="calculatePayments()">
+                         onkeyup="calculate_payments()">
                   <span id="amount_${rowcount}_msg" class="text-danger" style="display:none"></span>
                 </div>
               </div>
