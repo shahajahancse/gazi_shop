@@ -548,7 +548,7 @@ class Reports_model extends CI_Model {
 			$this->db->where("id=$item_id");
 		}
 		if($view_all=="no"){
-			$this->db->where("(expire_date<='$to_date')");
+			$this->db->where("(expire_date<'$to_date')");
 		}
 		$this->db->from("db_items");
 		
