@@ -460,6 +460,7 @@ $('#add_payment_row').click(function (e) {
     	});
     }
 }); //hold_invoice end
+
 function remove_row(id){
 	$(".payments_div_"+id).html('');
 	failed.currentTime = 0;

@@ -26,14 +26,15 @@ class Pos_model extends CI_Model {
 	        	$item_sales_qty = 1;
 
 	        	//Check Exculsive or Inclusive
-	        	if($item_tax_type=='Exclusive'){
-					$single_unit_price = $item_sales_price;
-					$item_sales_price=$item_sales_price+ (($item_sales_price*$item_tax)/100);
-					$item_tax_amt = (($single_unit_price * $item_sales_qty)*$item_tax)/100;
-				}else{//Inclusive
-					$item_tax_amt=number_format($this->inclusive($item_sales_price,$item_tax),2,'.','');
-					$single_unit_price = $item_sales_price;
-				}
+				$single_unit_price = $item_sales_price;
+	        	// if($item_tax_type=='Exclusive'){
+				// 	$item_sales_price=$item_sales_price+ (($item_sales_price*$item_tax)/100);
+				// 	$item_tax_amt = (($single_unit_price * $item_sales_qty)*$item_tax)/100;
+				// }else{//Inclusive
+				$item_tax_amt=number_format(((($item_sales_price * $item_sales_qty)*$item_tax)/100),2,'.','');
+				//$item_sales_price
+					//$single_unit_price = $item_sales_price;
+				//}
 				$item_amount = ($item_sales_price * $item_sales_qty) + $item_tax_amt;
 				//end
 
@@ -66,6 +67,7 @@ class Pos_model extends CI_Model {
 	          				data-item-sales-price='<?php echo $item_sales_price;?>'
 	          				data-item-discount='<?php echo $discount;?>'
 	          				data-item-cost='<?php echo $item_cost;?>'
+	          				data_item_tax_amt='<?php echo $item_tax_amt;?>'
 	           				style="max-height: 150px;min-height: 150px;cursor: pointer;<?php echo $bg_color; ?>">
 	           	<span class="label label-danger push-right" style="font-weight: bold;font-family: sans-serif;" title="<?php echo $res2->stock; ?> Quantity's in Stock"><?php echo $res2->stock; ?></span>
 	            <div class="box-body box-profile">
@@ -93,7 +95,7 @@ class Pos_model extends CI_Model {
 		$this->db->trans_begin();
 		extract($this->xss_html_filter(array_merge($this->data,$_POST,$_GET)));
 		//print_r($this->xss_html_filter(array_merge($this->data,$_POST,$_GET)));exit();
-		// dd($_POST);
+		//dd($_POST);
 
 		//check payment method
 		if(isset($by_cash) && $by_cash==true){ //by cash payment
@@ -213,23 +215,18 @@ class Pos_model extends CI_Model {
 				$tax_amt =0;
 				if(!empty($tax_id) && $tax_id!=0){
 					//each unit tax amt
-					if($tax_type=='Exclusive'){
-						$unit_tax =$this->db->select('tax')->from('db_tax')->where('id',$tax_id)->get()->row()->tax;
-						$tax_amt = (($unit_tax * $price_per_unit)/100)*$sales_qty;
-						//$total_cost+=$tax_amt;
-					}else{//Inclusive
-						$unit_tax =$this->db->select('tax')->from('db_tax')->where('id',$tax_id)->get()->row()->tax;
-						$tax_amt = $this->inclusive($price_per_unit,$unit_tax);
-					}
+					$unit_tax =$this->db->select('tax')->from('db_tax')->where('id',$tax_id)->get()->row()->tax;
+					$tax_amt = (($unit_tax * $price_per_unit)/100)*$sales_qty;
+					// if($tax_type=='Exclusive'){
+					// 	//$total_cost+=$tax_amt;
+					// }else{//Inclusive
+					// 	$unit_tax =$this->db->select('tax')->from('db_tax')->where('id',$tax_id)->get()->row()->tax;
+					// 	$tax_amt = $this->inclusive($price_per_unit,$unit_tax);
+					// }
 				}
+				//dd($price_per_unit);
 
-				//$tax_amt = $tax_amt * $sales_qty;
-				if($tax_type=='Exclusive'){
-					//$single_unit_total_cost = $price_per_unit + ($unit_tax * $price_per_unit / 100);
-				}else{//Inclusive
-					//$single_unit_total_cost =$price_per_unit;
-				}
-
+				
 				$single_unit_total_cost =$price_per_unit;
 
 				if($tax_id=='' || $tax_id==0){$tax_id=null;}
@@ -257,6 +254,7 @@ class Pos_model extends CI_Model {
 		    				'total_cost' 		=> $total_cost,
 		    				'status'	 		=> 1,
 		    			);
+						//dd($salesitems_entry);
 				$q4 = $this->db->insert('db_salesitems', $salesitems_entry);
 
 				$q11=$this->update_items_quantity($item_id);
