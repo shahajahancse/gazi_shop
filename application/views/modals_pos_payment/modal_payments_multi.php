@@ -18,7 +18,7 @@
                   if($q22->num_rows()>0){
                     $atleast_one_payments = 'false';
                     $i=0;
-                    foreach ($q22->result() as $res22) { $i++; ?>  
+                    foreach ($q22->result() as $res22) { $i++; ?>
                       <input type="hidden" name="payment_row_count" id='payment_row_count' value="<?= $i;?>">
                       <div class="col-md-12  payments_div">
                         <div class="box box-solid bg-gray">
@@ -68,11 +68,11 @@
                           </div>
                         </div>
                       </div><!-- col-md-12 -->
-                    <?php } //foreach() 
+                    <?php } //foreach()
                   } else{
                     $atleast_one_payments ='true';
-                  }  
-                } 
+                  }
+                }
               ?>
               <?php if($atleast_one_payments=='true'){ ?>
                 <input type="hidden" name="payment_row_count" id='payment_row_count' value="1">
@@ -212,5 +212,67 @@
 </div>
 
 <script>
-  function  create_sub_pay_row(payment_row_count);
+  function removeRow(id){//id=Rowid
+    $(".payment-row-"+id).remove();
+    failed.currentTime = 0;
+    failed.play();
+    final_total();
+}
+</script>
+
+
+  <?php
+    $q1 = $this->db->query("select * from db_paymenttypes where status=1")->result();
+  ?>
+
+<script>
+  function create_sub_pay_row(rowcount) {
+    var paymentTypes = <?php echo json_encode($q1); ?>;
+    var get_row = `
+      <div class="col-md-12 payment-row payment-row-${rowcount}">
+        <div class="box box-solid bg-gray">
+          <div class="box-header">
+            <div class="box-tools pull-right">
+              <button type="button" class="btn btn-box-tool" onclick="removeRow(${rowcount})">
+                <i class="fa fa-times fa-2x"></i>
+              </button>
+            </div>
+          </div>
+          <div class="box-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div>
+                  <label for="amount_${rowcount}">Amount</label>
+                  <input type="text" class="form-control text-right payment-amount only-currency"
+                         id="amount_${rowcount}" name="amount_${rowcount}" placeholder=""
+                         onkeyup="calculatePayments()">
+                  <span id="amount_${rowcount}_msg" class="text-danger" style="display:none"></span>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div>
+                  <label for="payment_type_${rowcount}">Payment Type</label>
+                  <select class="form-control" id="payment_type_${rowcount}" name="payment_type_${rowcount}">
+                    <option value="">Select</option>
+                    ${paymentTypes.map(type => `<option value="${type.payment_type}">${type.payment_type}</option>`).join('')}
+                  </select>
+                  <span id="payment_type_${rowcount}_msg" class="text-danger" style="display:none"></span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div>
+                  <label for="payment_note_${rowcount}">Payment Note</label>
+                  <textarea class="form-control" id="payment_note_${rowcount}" name="payment_note_${rowcount}" placeholder=""></textarea>
+                  <span id="payment_note_${rowcount}_msg" class="text-danger" style="display:none"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    return get_row;
+  }
 </script>
