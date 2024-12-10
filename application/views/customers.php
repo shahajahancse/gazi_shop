@@ -4,14 +4,14 @@
 <head>
 <!-- TABLES CSS CODE -->
 <?php include"comman/code_css_form.php"; ?>
-<!-- </copy> -->  
+<!-- </copy> -->
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
- 
+
  <?php include"sidebar.php"; ?>
- 
+
   <?php
 
 	if(!isset($customer_name)){
@@ -20,7 +20,7 @@
     $state_code=$customer_code=$company_name=$company_mobile=$opening_balance='';
 	}
  ?>
- 
+
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -47,7 +47,7 @@
         <div class="col-md-12">
           <!-- Horizontal Form -->
           <div class="box box-info ">
-           
+
             <!-- form start -->
             <form class="form-horizontal" id="customers-form" >
               <input type="hidden" name="<?php echo $this->security->get_csrf_token_name();?>" value="<?php echo $this->security->get_csrf_hash();?>">
@@ -63,9 +63,9 @@
           <span id="customer_name_msg" style="display:none" class="text-danger"></span>
                   </div>
                   </div>
-                  
 
-                
+
+
                   <div class="form-group">
                       <label for="mobile" class="col-sm-4 control-label"><?= $this->lang->line('mobile'); ?></label>
 
@@ -74,8 +74,8 @@
           <span id="mobile_msg" style="display:none" class="text-danger"></span>
                   </div>
                   </div>
-                  
-                  
+
+
                    <div class="form-group">
                   <label for="email" class="col-sm-4 control-label"><?= $this->lang->line('email'); ?></label>
                   <div class="col-sm-8">
@@ -109,7 +109,7 @@
                </div>
 
 
-               <div class="col-md-5"> 
+               <div class="col-md-5">
 
 
                   <div class="form-group">
@@ -125,22 +125,21 @@
                   <div class="col-sm-8">
           <select class="form-control select2" id="country" name="country"  style="width: 100%;"  >
             <?php
-            $query1="select * from db_country where status=1";
-            $q1=$this->db->query($query1);
-            if($q1->num_rows($q1)>0)
-             {
-                 foreach($q1->result() as $res1)
-               {
-                $selected = ($country_id==$res1->id)? 'selected' : '';
-                 echo "<option $selected value='".$res1->id."'>".$res1->country."</option>";
-               }
-             }
-             else
-             {
+              $q1 = $this->db->where('status',1)->order_by('country','asc')->get('db_country');
+              if($q1->num_rows($q1)>0)
+              {
+                foreach($q1->result() as $res1)
+                {
+                  $selected = ($country_id==$res1->id)? 'selected' : '';
+                  echo "<option $selected value='".$res1->id."'>".$res1->country."</option>";
+                }
+              }
+              else
+              {
                 ?>
                 <option value="">No Records Found</option>
                 <?php
-             }
+              }
             ?>
                   </select>
           <span id="country_msg" style="display:none" class="text-danger"></span>
@@ -148,15 +147,14 @@
                   </div>
                    <div class="form-group">
                    <label for="state" class="col-sm-4 control-label"><?= $this->lang->line('state'); ?></label>
-                  
+
           <div class="col-sm-8">
                     <select class="form-control select2" id="state" name="state"  style="width: 100%;" >
             <?php
-            $query2="select * from db_states where status=1";
-            $q2=$this->db->query($query2);
+            $q2 = $this->db->where('status',1)->order_by('state','asc')->get('db_states');
             if($q2->num_rows()>0)
              {
-              echo '<option value="">-Select-</option>'; 
+              echo '<option value="">-Select-</option>';
               foreach($q2->result() as $res1)
                {
                 $selected = ($state_id==$res1->id)? 'selected' : '';
@@ -195,13 +193,13 @@
           <span id="address_msg" style="display:none" class="text-danger"></span>
                   </div>
                   </div>
-                   
+
                 </div>
                   <!-- ########### -->
 </div>
-              
-				
-				
+
+
+
               </div>
               <!-- /.box-body -->
 
@@ -220,7 +218,7 @@
                                                   $btn_name="Save";
                                                   $btn_id="save";
                                               }
-                                    
+
                                               ?>
                                  <div class="col-md-3 col-md-offset-3">
                                     <button type="button" id="<?php echo $btn_id;?>" class=" btn btn-block btn-success" title="Save Data"><?php echo $btn_name;?></button>
@@ -234,18 +232,18 @@
             </form>
           </div>
           <!-- /.box -->
-          
+
         </div>
         <!--/.col (right) -->
         <div class="col-md-12">
-         
+
                     <div class="box">
                       <div class="box-header">
                         <h3 class="box-title text-blue"><?= $this->lang->line('opening_balance_payments'); ?></h3>
                       </div>
                       <!-- /.box-header -->
                       <div class="box-body table-responsive no-padding">
-                        
+
                         <table class="table table-bordered table-hover " id="report-data" >
                           <thead>
                           <tr class="bg-gray">
@@ -258,7 +256,7 @@
                           </tr>
                           </thead>
                           <tbody>
-                              <?php 
+                              <?php
                                 if(isset($q_id)){
                                   $q3 = $this->db->query("select * from db_cobpayments where customer_id=$q_id");
                                   if($q3->num_rows()>0){
@@ -291,8 +289,8 @@
                               ?>
                            </tbody>
                         </table>
-                        
-                        
+
+
                       </div>
                       <!-- /.box-body -->
                     </div>
@@ -305,10 +303,10 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  
+
  <?php include"footer.php"; ?>
 
- 
+
   <!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->
   <div class="control-sidebar-bg"></div>

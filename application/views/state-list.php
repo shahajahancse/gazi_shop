@@ -10,7 +10,7 @@
 <div class="wrapper">
 
   <!-- Left side column. contains the logo and sidebar -->
-  
+
   <?php include"sidebar.php"; ?>
 
   <!-- Content Wrapper. Contains page content -->
@@ -19,7 +19,7 @@
     <section class="content-header">
       <h1>
         <?= $this->lang->line('states_list'); ?>
-        <small>View/Search States</small>
+        <small>Search Division </small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="<?php echo $base_url; ?>dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -56,9 +56,9 @@
                 </tr>
                 </thead>
                 <tbody>
-				
+
                 </tbody>
-               
+
               </table>
             </div>
             <!-- /.box-body -->
@@ -73,7 +73,7 @@
   </div>
   <!-- /.content-wrapper -->
   <?php include"footer.php"; ?>
-  
+
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
@@ -89,7 +89,7 @@
 var table;
 $(document).ready(function() {
     //datatables
-    table = $('#example2').DataTable({ 
+    table = $('#example2').DataTable({
 
         "processing": true, //Feature control the processing indicator.
         "serverSide": true, //Feature control DataTables' server-side processing mode.
@@ -104,7 +104,7 @@ $(document).ready(function() {
 
         //Set column definition initialisation properties.
         "columnDefs": [
-        { 
+        {
             "targets": [ 3 ], //first column / numbering column
             "orderable": false, //set not orderable
         },
@@ -118,6 +118,6 @@ $(document).ready(function () { setTimeout(function() {$( ".alert-dismissable" )
 </script>
 <!-- Make sidebar menu hughlighter/selector -->
 <script>$(".<?php echo basename(__FILE__,'.php');?>-active-li").addClass("active");</script>
-		
+
 </body>
 </html>
