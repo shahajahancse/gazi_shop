@@ -393,6 +393,7 @@ $('.show_payments_modal').click(function (e) {
 		failed.play();
 		return;
     }else{
+		$("#check_multiple_balance").val(1);
 		$(".payment-row").remove();
     	adjust_payments();
     	$("#add_payment_row,#payment_type_1").parent().show();
@@ -410,6 +411,7 @@ $('#show_cash_modal').click(function (e) {
 		failed.play();
 		return;
     }else{
+		$("#check_multiple_balance").val(0);
 		$(".payment-row").remove();
     	adjust_payments();
     	$("#add_payment_row,#payment_type_1").parent().hide();
