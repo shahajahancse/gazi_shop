@@ -41,6 +41,8 @@ class Reports_model extends CI_Model {
 				echo "<td>".show_date($res1->sales_date)."</td>";
 				echo "<td>".$res1->customer_code."</td>";
 				echo "<td>".$res1->customer_name."</td>";
+				$vat = $this->db->where("id",$res1->vat_id)->get('db_tax')->row();
+				echo "<td>". ceil($vat->tax)."% </td>";
 				echo "<td class='text-right'>".number_format($res1->grand_total,2,'.','')."</td>";
 				echo "<td class='text-right'>".number_format($res1->paid_amount,2,'.','')."</td>";
 				// echo "<td class='text-right'>".number_format(($res1->grand_total-$res1->paid_amount),2,'.','')."</td>";
@@ -52,7 +54,7 @@ class Reports_model extends CI_Model {
 			}
 
 			echo "<tr>
-					  <td class='text-right text-bold' colspan='5'><b>Total :</b></td>
+					  <td class='text-right text-bold' colspan='6'><b>Total :</b></td>
 					  <td class='text-right text-bold'>".number_format($tot_grand_total,2,'.','')."</td>
 					  <td class='text-right text-bold'>".number_format($tot_paid_amount,2,'.','')."</td>
 					  </tr>";
@@ -105,6 +107,8 @@ class Reports_model extends CI_Model {
 				
 				echo (!empty($res1->sales_code)) ? "<td><a title='Return Raised Against this Invoice' href='".base_url("sales/invoice/$res1->id")."'>".$res1->sales_code."</a></td>" : '<td>-NA-</td>';
 				echo "<td>".$res1->customer_name."</td>";
+				$vat = $this->db->where("id",$res1->vat_id)->get('db_tax')->row();
+				echo "<td>". ceil($vat->tax)."% </td>";
 				echo "<td class='text-right'>".number_format($res1->grand_total,2,'.','')."</td>";
 				echo "<td class='text-right'>".number_format($res1->paid_amount,2,'.','')."</td>";
 				echo "<td class='text-right'>".number_format(($res1->grand_total-$res1->paid_amount),2,'.','')."</td>";
@@ -116,7 +120,7 @@ class Reports_model extends CI_Model {
 			}
 
 			echo "<tr>
-					  <td class='text-right text-bold' colspan='5'><b>Total :</b></td>
+					  <td class='text-right text-bold' colspan='6'><b>Total :</b></td>
 					  <td class='text-right text-bold'>".number_format($tot_grand_total,2,'.','')."</td>
 					  <td class='text-right text-bold'>".number_format($tot_paid_amount,2,'.','')."</td>
 					  <td class='text-right text-bold'>".number_format($tot_due_amount,2,'.','')."</td>
@@ -165,6 +169,8 @@ class Reports_model extends CI_Model {
 				echo "<td>".show_date($res1->purchase_date)."</td>";
 				echo "<td>".$res1->supplier_code."</td>";
 				echo "<td>".$res1->supplier_name."</td>";
+				$vat = $this->db->where("id",$res1->vat_id)->get('db_tax')->row();
+				echo "<td>". ceil($vat->tax)."% </td>";
 				echo "<td class='text-right'>".number_format($res1->grand_total,2,'.','')."</td>";
 				echo "<td class='text-right'>".number_format($res1->paid_amount,2,'.','')."</td>";
 				echo "<td class='text-right'>".number_format(($res1->grand_total-$res1->paid_amount),2,'.','')."</td>";
@@ -176,7 +182,7 @@ class Reports_model extends CI_Model {
 			}
 
 			echo "<tr>
-					  <td class='text-right text-bold' colspan='5'><b>Total :</b></td>
+					  <td class='text-right text-bold' colspan='6'><b>Total :</b></td>
 					  <td class='text-right text-bold'>".number_format($tot_grand_total,2,'.','')."</td>
 					  <td class='text-right text-bold'>".number_format($tot_paid_amount,2,'.','')."</td>
 					  <td class='text-right text-bold'>".number_format($tot_due_amount,2,'.','')."</td>
@@ -227,6 +233,8 @@ class Reports_model extends CI_Model {
 				echo (!empty($res1->purchase_code)) ? "<td><a title='Return Raised Against this Invoice' href='".base_url("purchase/invoice/$res1->id")."'>".$res1->purchase_code."</a></td>" : '<td>-NA-</td>';
 				
 				echo "<td>".$res1->supplier_name."</td>";
+				$vat = $this->db->where("id",$res1->vat_id)->get('db_tax')->row();
+				echo "<td>". ceil($vat->tax)."% </td>";
 				echo "<td class='text-right'>".number_format($res1->grand_total,2,'.','')."</td>";
 				echo "<td class='text-right'>".number_format($res1->paid_amount,2,'.','')."</td>";
 				echo "<td class='text-right'>".number_format(($res1->grand_total-$res1->paid_amount),2,'.','')."</td>";
@@ -238,7 +246,7 @@ class Reports_model extends CI_Model {
 			}
 
 			echo "<tr>
-					  <td class='text-right text-bold' colspan='5'><b>Total :</b></td>
+					  <td class='text-right text-bold' colspan='6'><b>Total :</b></td>
 					  <td class='text-right text-bold'>".number_format($tot_grand_total,2,'.','')."</td>
 					  <td class='text-right text-bold'>".number_format($tot_paid_amount,2,'.','')."</td>
 					  <td class='text-right text-bold'>".number_format($tot_due_amount,2,'.','')."</td>
@@ -310,7 +318,7 @@ class Reports_model extends CI_Model {
 		extract($_POST);
 
 		
-		$this->db->select("a.*,b.tax_name");
+		$this->db->select("a.*,b.*");
 		$this->db->from("db_items as a,db_tax as b");
 		$this->db->where("b.id=a.tax_id");
 		$this->db->order_by("a.id");
@@ -330,7 +338,7 @@ class Reports_model extends CI_Model {
 				echo "<td>".$res1->item_code."</td>";
 				echo "<td>".$res1->item_name."</td>";
 				echo "<td class='text-right'>".number_format($res1->purchase_price,2,'.','')."</td>";
-				echo "<td>".$res1->tax_name."[".$tax_type."]</td>";
+				echo "<td>".ceil($res1->tax)."% [".$tax_type."]</td>";
 				echo "<td class='text-right'>".number_format($res1->sales_price,2,'.','')."</td>";
 				echo "<td>".$res1->stock."</td>";
 				echo "</tr>";
@@ -368,7 +376,7 @@ class Reports_model extends CI_Model {
 		if($view_all=="no"){
 			$this->db->where("(a.sales_date>='$from_date' and a.sales_date<='$to_date')");
 		}
-//		$this->db->group_by("c.`item_id`");
+		//		$this->db->group_by("c.`item_id`");
 		$this->db->order_by("a.`sales_date`,a.sales_code",'desc');
 		$this->db->from("db_sales as a");
 		$this->db->where("a.`id`= c.`sales_id`");

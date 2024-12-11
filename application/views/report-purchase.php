@@ -151,6 +151,7 @@
                   <th style=""><?= $this->lang->line('purchase_date'); ?></th>
                   <th style=""><?= $this->lang->line('supplier_id'); ?></th>
                   <th style=""><?= $this->lang->line('supplier_name'); ?></th>
+                  <th style=""><?= "Vat(%)" ?></th>
                   <th style="text-align:right"><?= $this->lang->line('invoice_total'); ?>(<?= $CI->currency(); ?>)</th>
                   <th style="text-align:right"><?= $this->lang->line('paid_amount'); ?>(<?= $CI->currency(); ?>)</th>
                   <th style="text-align:right"><?= $this->lang->line('due_amount'); ?>(<?= $CI->currency(); ?>)</th>

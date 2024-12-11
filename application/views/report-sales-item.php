@@ -110,8 +110,6 @@
                 </div>
              </div>
              <!-- /.box-footer -->
-
-             
             </form>
           </div>
           <!-- /.box -->

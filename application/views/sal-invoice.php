@@ -204,15 +204,15 @@
             <tr>
               <th>#</th>
               <th><?= $this->lang->line('item_name'); ?></th>
-              <th><?= $this->lang->line('unit_price'); ?></th>
-              <th><?= $this->lang->line('quantity'); ?></th>
-              <th><?= $this->lang->line('net_cost'); ?></th>
-              <th><?= $this->lang->line('tax'); ?></th>
-              <th><?= $this->lang->line('tax_amount'); ?></th>
-              <th><?= $this->lang->line('discount'); ?></th>
-              <th><?= $this->lang->line('discount_amount'); ?></th>
-              <th><?= $this->lang->line('unit_cost'); ?></th>
-              <th><?= $this->lang->line('total_amount'); ?></th>
+              <th style="text-align:right"><?= $this->lang->line('unit_price'); ?></th>
+              <th style="text-align:right"><?= $this->lang->line('quantity'); ?></th>
+              <th style="text-align:right"><?= $this->lang->line('net_cost'); ?></th>
+              <th style="text-align:right"><?= $this->lang->line('tax'); ?></th>
+              <th style="text-align:right"><?= $this->lang->line('tax_amount'); ?></th>
+              <th style="text-align:right"><?= $this->lang->line('discount'); ?></th>
+              <th style="text-align:right"><?= $this->lang->line('discount_amount'); ?></th>
+              <th style="text-align:right"><?= $this->lang->line('unit_cost'); ?></th>
+              <th style="text-align:right"><?= $this->lang->line('total_amount'); ?></th>
             </tr>
             </thead>
             <tbody>
@@ -241,10 +241,10 @@
                   echo "<td>".++$i."</td>";
                   echo "<td>".$res2->item_name."</td>";
                   echo "<td class='text-right'>".$CI->currency(number_format($res2->price_per_unit,2,'.',''))."</td>";
-                  echo "<td>".$res2->sales_qty."</td>";
+                  echo "<td class='text-right'>".$res2->sales_qty."</td>";
                   echo "<td class='text-right'>".$CI->currency(number_format(($res2->price_per_unit * $res2->sales_qty),2,'.',''))."</td>";
                   
-                  echo "<td>".$res2->tax."%<br>".$res2->tax_name."[".$str."]</td>";
+                  echo "<td class='text-right'>".$res2->tax."% "." [".$str."]</td>";
                   echo "<td class='text-right'>".$CI->currency($res2->tax_amt)."</td>";
                   echo "<td class='text-right'>".$discount."</td>";
                   echo "<td class='text-right'>".$CI->currency($discount_amt)."</td>";
@@ -265,7 +265,7 @@
               <tr>
                 <td colspan="2" class="text-center">Total</td>
                 <td><?= $CI->currency(number_format($tot_sales_price,2,'.',''));?></td>
-                <td class="text-left"><?=$tot_qty;?></td>
+                <td class="text-right"><?=$tot_qty;?></td>
                 <td>-</td>
                 <td>-</td>
                 <td><?= $CI->currency(number_format($tot_tax_amt,2,'.',''));?></td>
