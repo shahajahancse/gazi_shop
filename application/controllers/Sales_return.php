@@ -10,7 +10,7 @@ class Sales_return extends MY_Controller {
 	}
 
 	public function is_sms_enabled(){
-		return is_sms_enabled();
+		return false;
 	}
 
 	public function index()
