@@ -241,7 +241,7 @@
 								echo "<td class='classr class3'></td>";
 								echo "<td class='classr class3'>".number_format(($mrp_cost-$dis_cost),2,'.','')."</td>";
 								echo "</tr>";
-								echo  $res2->tax_amt;
+								// echo  $res2->tax_amt;
 
 								$total_mrp += $mrp_cost;
 								$over_all_discount += $dis_cost;
