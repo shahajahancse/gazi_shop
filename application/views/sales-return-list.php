@@ -141,6 +141,7 @@
                   <th><?= $this->lang->line('sales_status'); ?></th>
                   <th><?= $this->lang->line('reference_no'); ?></th>
                   <th><?= $this->lang->line('customer_name'); ?></th>
+                  <!-- <th>< ?= "Vat" ?></th> -->
                   <!-- <th>Warehouse</th> -->
                   <th><?= $this->lang->line('total'); ?></th>
                   <th><?= $this->lang->line('paid_amount'); ?></th>
