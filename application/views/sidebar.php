@@ -173,7 +173,7 @@
             <?php if($CI->permissions('sales_add')) { ?>
             <li class="pos-active-li"><a href="<?php echo $base_url; ?>pos"><i class="fa fa-calculator "></i> <span>POS</span></a></li>
 
-            <li class="sales-active-li"><a href="<?php echo $base_url; ?>sales/add"><i class="fa fa-plus-square-o "></i> <span><?= $this->lang->line('new_sales'); ?></span></a></li>
+            <!-- <li class="sales-active-li"><a href="<?php echo $base_url; ?>sales/add"><i class="fa fa-plus-square-o "></i> <span><?= $this->lang->line('new_sales'); ?></span></a></li> -->
             <?php } ?>
 
             <?php if($CI->permissions('sales_view')) { ?>
@@ -181,11 +181,9 @@
             <?php } ?>
 
             <?php if($CI->permissions('sales_return_view')) { ?>
-            <li class="sales-return-list-active-li sales-return-active-li"><a href="<?php echo $base_url; ?>sales_return"><i class="fa fa-list "></i> <span><?= $this->lang->line('sales_returns_list'); ?></span>
-            <span class="pull-right-container">
-                      <small class="label pull-right bg-green">New</small>
-                    </span>
-                  </a></li>
+            <!-- <li class="sales-return-list-active-li sales-return-active-li">
+              <a href="<?php echo $base_url; ?>sales_return"><i class="fa fa-list "></i> <span><?= $this->lang->line('sales_returns_list'); ?></span> <span class="pull-right-container"> <small class="label pull-right bg-green">New</small> </span></a>
+            </li> -->
             <?php } ?>
 
               </ul>
@@ -237,11 +235,11 @@
               <li class="purchase-list-active-li"><a href="<?php echo $base_url; ?>purchase"><i class="fa fa-list "></i> <span><?= $this->lang->line('purchase_list'); ?></span></a></li>
               <?php } ?>
               <?php if($CI->permissions('purchase_return_view')) { ?>
-              <li class="purchase-returns-list-active-li"><a href="<?php echo $base_url; ?>purchase_return"><i class="fa fa-list "></i> <span><?= $this->lang->line('purchase_returns_list'); ?></span>
+              <!-- <li class="purchase-returns-list-active-li"><a href="<?php echo $base_url; ?>purchase_return"><i class="fa fa-list "></i> <span><?= $this->lang->line('purchase_returns_list'); ?></span>
               <span class="pull-right-container">
                     <small class="label pull-right bg-green">New</small>
                   </span>
-                </a></li>
+                </a></li> -->
               <?php } ?>
             </ul>
           </li>
@@ -392,21 +390,21 @@
               <li class="report-sales-active-li"><a href="<?php echo $base_url; ?>reports/sales" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('sales_report'); ?></span></a></li>
               <?php } ?>
               <?php if($CI->permissions('sales_return_report')) { ?>
-                <li class="report-sales-return-active-li"><a href="<?php echo $base_url; ?>reports/sales_return" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('sales_return_report'); ?></span>
+                <!-- <li class="report-sales-return-active-li"><a href="<?php echo $base_url; ?>reports/sales_return" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('sales_return_report'); ?></span>
                   <span class="pull-right-container" title="New">
                     <small class="label pull-right bg-green"><i class="fa fa-fw fa-star-o"></i></small>
                   </span>
-                </a></li>
+                </a></li> -->
               <?php } ?>
               <?php if($CI->permissions('purchase_report')) { ?>
               <li class="report-purchase-active-li"><a href="<?php echo $base_url; ?>reports/purchase" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('purchase_report'); ?></span></a></li>
               <?php } ?>
               <?php if($CI->permissions('purchase_return_report')) { ?>
-              <li class="report-purchase-return-active-li"><a href="<?php echo $base_url; ?>reports/purchase_return" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('purchase_return_report'); ?></span>
+              <!-- <li class="report-purchase-return-active-li"><a href="<?php echo $base_url; ?>reports/purchase_return" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('purchase_return_report'); ?></span>
               <span class="pull-right-container" title="New">
                     <small class="label pull-right bg-green"><i class="fa fa-fw fa-star-o"></i></small>
                   </span>
-                </a></li>
+                </a></li> -->
               <?php } ?>
               <?php if($CI->permissions('expense_report')) { ?>
               <li class="report-expense-active-li"><a href="<?php echo $base_url; ?>reports/expense" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('expense_report'); ?></span></a></li>
