@@ -9,7 +9,7 @@ class Reports_model extends CI_Model {
 		$from_date=date("Y-m-d",strtotime($from_date));
 		$to_date=date("Y-m-d",strtotime($to_date));
 		
-		$this->db->select("a.id,a.sales_code,a.sales_date,b.customer_name,b.customer_code,a.grand_total,a.paid_amount");
+		$this->db->select("a.id,a.sales_code,a.sales_date,b.customer_name,b.customer_code,a.grand_total,a.paid_amount, a.other_charges_tax_id as vat_id");
 	    
 		if($customer_id!=''){
 			
@@ -22,11 +22,13 @@ class Reports_model extends CI_Model {
 		$this->db->from("db_sales as a");
 		$this->db->where("a.`sales_status`= 'Final'");
 		$this->db->from("db_customers as b");
+
 		
 		
 		//echo $this->db->get_compiled_select();exit();
 		
 		$q1=$this->db->get();
+		// echo "<pre>";print_r($q1->result());exit;
 		if($q1->num_rows()>0){
 			$i=0;
 			$tot_grand_total=0;
@@ -41,11 +43,11 @@ class Reports_model extends CI_Model {
 				echo "<td>".$res1->customer_name."</td>";
 				echo "<td class='text-right'>".number_format($res1->grand_total,2,'.','')."</td>";
 				echo "<td class='text-right'>".number_format($res1->paid_amount,2,'.','')."</td>";
-				echo "<td class='text-right'>".number_format(($res1->grand_total-$res1->paid_amount),2,'.','')."</td>";
+				// echo "<td class='text-right'>".number_format(($res1->grand_total-$res1->paid_amount),2,'.','')."</td>";
 				echo "</tr>";
 				$tot_grand_total+=$res1->grand_total;
 				$tot_paid_amount+=$res1->paid_amount;
-				$tot_due_amount+=($res1->grand_total-$res1->paid_amount);
+				// $tot_due_amount+=($res1->grand_total-$res1->paid_amount);
 
 			}
 
@@ -53,9 +55,9 @@ class Reports_model extends CI_Model {
 					  <td class='text-right text-bold' colspan='5'><b>Total :</b></td>
 					  <td class='text-right text-bold'>".number_format($tot_grand_total,2,'.','')."</td>
 					  <td class='text-right text-bold'>".number_format($tot_paid_amount,2,'.','')."</td>
-					  <td class='text-right text-bold'>".number_format($tot_due_amount,2,'.','')."</td>
-				  </tr>";
-		}
+					  </tr>";
+					}
+					//   <td class='text-right text-bold'>".number_format($tot_due_amount,2,'.','')."</td>
 		else{
 			echo "<tr>";
 			echo "<td class='text-center text-danger' colspan=13>No Records Found</td>";
@@ -548,7 +550,7 @@ class Reports_model extends CI_Model {
 			$this->db->where("id=$item_id");
 		}
 		if($view_all=="no"){
-			$this->db->where("(expire_date<='$to_date')");
+			$this->db->where("(expire_date<'$to_date')");
 		}
 		$this->db->from("db_items");
 		

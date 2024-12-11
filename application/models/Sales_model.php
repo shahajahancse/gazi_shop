@@ -97,7 +97,7 @@ class Sales_model extends CI_Model {
 	public function verify_save_and_update(){
 		//Filtering XSS and html escape from user inputs
 		extract($this->xss_html_filter(array_merge($this->data,$_POST,$_GET)));
-		//echo "<pre>";print_r($this->xss_html_filter(array_merge($this->data,$_POST,$_GET)));exit();
+		// echo "<pre>";print_r($this->xss_html_filter(array_merge($this->data,$_POST,$_GET)));exit();
 
 		$this->db->trans_begin();
 		$sales_date=date('Y-m-d',strtotime($sales_date));
