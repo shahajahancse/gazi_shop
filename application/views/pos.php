@@ -467,7 +467,7 @@
                         <?= $CI->currency('<span class="tot_disc"></span>');?>
                     </div>
                     <div class="col-md-5 text-right text-bold font-weight-bold" style="font-size: 19px;">
-                       <label>Total tax:</label><br/>
+                       <label>Total vat:</label><br/>
                        <?= $CI->currency('<span class="tot_tax"></span>');?>
                     </div>
                     <div class="col-md-5 text-right text-bold font-weight-bold" style="font-size: 19px;">
@@ -671,7 +671,7 @@
     var discount        =$('#div_'+id).attr('data-item-discount');
     var sales_price_temp=sales_price;
     sales_price         =(parseFloat(sales_price+item_tax_amt)).toFixed(2);
-    
+
 
     var quantity ='<div class="input-group input-group-sm"><span class="input-group-btn"><button onclick="decrement_qty('+item_id+','+rowcount+')" type="button" class="btn btn-default btn-flat"><i class="fa fa-minus text-danger"></i></button></span>';
         quantity +='<input type="text" value="1" class="form-control" onkeyup="item_qty_input('+item_id+','+rowcount+')" id="item_qty_'+item_id+'" name="item_qty_'+item_id+'">';
@@ -899,11 +899,10 @@ function adjust_payments(){
   if($(".items_table tr").length>1){
     for(i=0;i<rowcount;i++){
       if(document.getElementById('tr_item_id_'+i)){
-      total=parseFloat(total)+ + +parseFloat($("#td_"+i+"_4").html()).toFixed(2);
-      item_id=$("#tr_item_id_"+i).val();
-      item_qty=parseFloat(item_qty)+ + +parseFloat($("#item_qty_"+item_id).val()).toFixed(2);
-      total_tax+=(parseFloat($("#item_tax_"+item_id).val()).toFixed(2))*item_qty;
-
+        total=parseFloat(total)+ + +parseFloat($("#td_"+i+"_4").html()).toFixed(2);
+        item_id=$("#tr_item_id_"+i).val();
+        item_qty=parseFloat(item_qty)+ + +parseFloat($("#item_qty_"+item_id).val()).toFixed(2);
+        total_tax+=(parseFloat($("#item_tax_"+item_id).val()).toFixed(2))*item_qty;
       }
     }//for end
   }//items_table

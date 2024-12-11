@@ -393,6 +393,7 @@ $('.show_payments_modal').click(function (e) {
 		failed.play();
 		return;
     }else{
+		$(".payment-row").remove();
     	adjust_payments();
     	$("#add_payment_row,#payment_type_1").parent().show();
     	$("#amount_1").parent().parent().removeClass('col-md-12').addClass('col-md-6');
@@ -409,6 +410,7 @@ $('#show_cash_modal').click(function (e) {
 		failed.play();
 		return;
     }else{
+		$(".payment-row").remove();
     	adjust_payments();
     	$("#add_payment_row,#payment_type_1").parent().hide();
     	$("#amount_1").focus();
@@ -446,21 +448,21 @@ $('#add_payment_row').click(function (e) {
     	/*BUTTON LOAD AND DISABLE END*/
 
     	var payment_row_count = get_id_value("payment_row_count");
-		var temp_id = parseInt(payment_row_count)+1;
-		var get_row = create_sub_pay_row();
+		var temp_id = Number(payment_row_count) + 1;
+		var get_row = create_sub_pay_row(temp_id);
 
-    	$.post(base_url+"pos/add_payment_row",{payment_row_count:payment_row_count},function(result){
-    		$('.payments_div').parent().append(result);
-    		$("#payment_row_count").val(parseInt(payment_row_count)+1);
+    	// $.post(base_url+"pos/add_payment_row",{payment_row_count:payment_row_count},function(result){
+		$(".payments_div").parent().append(get_row);
+		$("#payment_row_count").val(parseInt(payment_row_count)+1);
 
-    		/*BUTTON LOAD AND DISABLE START*/
-    		$("#"+this_id).html(this_val);
-    		$("#"+this_id).attr('disabled',false);
-    		/*BUTTON LOAD AND DISABLE END*/
-    		failed.currentTime = 0;
-			failed.play();
-    		adjust_payments();
-    	});
+		/*BUTTON LOAD AND DISABLE START*/
+		$("#"+this_id).html(this_val);
+		$("#"+this_id).attr('disabled',false);
+		/*BUTTON LOAD AND DISABLE END*/
+		failed.currentTime = 0;
+		failed.play();
+		adjust_payments();
+    	// });
     }
 }); //hold_invoice end
 
