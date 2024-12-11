@@ -103,7 +103,7 @@
                       <th><?= $this->lang->line('price'); ?></th>
                       <th style="width: 110px;"><?= $this->lang->line('tax'); ?></th>
                       <th><?= $this->lang->line('purchase_price'); ?></th>
-                      <th><?= $this->lang->line('profit_margin'); ?></th>
+                      <th>Profit Margin <?=$CURRENCY;?></th>
                       <th>discount Type</th>
                       <th><?= $this->lang->line('discount'); ?></th>
                       <th><?= $this->lang->line('sales_price'); ?></th>
