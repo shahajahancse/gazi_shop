@@ -10,10 +10,10 @@
 <div class="wrapper">
 
   <!-- Left side column. contains the logo and sidebar -->
-  
+
   <?php include"sidebar.php"; ?>
 
-  <?php 
+  <?php
       /*Total Invoices*/
       $total_invoice=$this->db->query("SELECT COUNT(*) as total FROM db_sales")->row()->total;
       /*Total Invoices Total*/
@@ -23,9 +23,9 @@
        //total sales due
       $sales_due_total=$this->db->query("SELECT COALESCE(SUM(sales_due),0) AS sales_due FROM db_customers")->row()->sales_due;
 
-      
+
       //$sales_due_total = $sal_total - $sal_return_total;
-     
+
   ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -148,9 +148,9 @@
                 </tr>
                 </thead>
                 <tbody>
-				
+
                 </tbody>
-               
+
               </table>
             </div>
             <!-- /.box-body -->
@@ -189,7 +189,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
     //datatables
-   var table = $('#example2').DataTable({ 
+   var table = $('#example2').DataTable({
 
       /* FOR EXPORT BUTTONS START*/
   dom:'<"row margin-bottom-12"<"col-sm-12"<"pull-left"l><"pull-right"fr><"text-center margin-left-10 "B>>>tip',
@@ -208,7 +208,7 @@ $(document).ready(function() {
             { extend: 'pdf', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4,5,6,7,8,9]} },
             { extend: 'print', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4,5,6,7,8,9]} },
             { extend: 'csv', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4,5,6,7,8,9]} },
-            { extend: 'colvis', className: 'btn bg-teal color-palette btn-flat',text:'Columns' },  
+            { extend: 'colvis', className: 'btn bg-teal color-palette btn-flat',text:'Columns' },
 
             ]
         },
@@ -225,7 +225,7 @@ $(document).ready(function() {
         "ajax": {
             "url": "<?php echo site_url('sales/ajax_list')?>",
             "type": "POST",
-            
+
             complete: function (data) {
              $('.column_checkbox').iCheck({
                 checkboxClass: 'icheckbox_square-orange',
@@ -241,7 +241,7 @@ $(document).ready(function() {
 
         //Set column definition initialisation properties.
         "columnDefs": [
-        { 
+        {
             "targets": [ 0,10 ], //first column / numbering column
             "orderable": false, //set not orderable
         },
@@ -249,7 +249,7 @@ $(document).ready(function() {
             "targets" :[0],
             "className": "text-center",
         },
-        
+
         ],
     });
     new $.fn.dataTable.FixedHeader( table );
@@ -263,6 +263,6 @@ $(document).ready(function() {
 </script>
 <!-- Make sidebar menu hughlighter/selector -->
 <script>$(".<?php echo basename(__FILE__,'.php');?>-active-li").addClass("active");</script>
-		
+
 </body>
 </html>
