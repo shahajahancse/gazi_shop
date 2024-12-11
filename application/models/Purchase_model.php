@@ -6,8 +6,8 @@ class Purchase_model extends CI_Model {
 	//Datatable start
 	var $table = 'db_purchase as a';
 	var $column_order = array( 'a.id','a.purchase_date','a.purchase_code','a.reference_no','a.grand_total','a.payment_status','a.created_by','b.supplier_name','a.paid_amount','a.purchase_status','a.return_bit'); //set column field database for datatable orderable
-	var $column_search = array('a.id','a.purchase_date','a.purchase_code','a.reference_no','a.grand_total','a.payment_status','a.created_by','b.supplier_name','a.paid_amount','a.purchase_status','a.return_bit'); //set column field database for datatable searchable 
-	var $order = array('a.id' => 'desc'); // default order 
+	var $column_search = array('a.id','a.purchase_date','a.purchase_code','a.reference_no','a.grand_total','a.payment_status','a.created_by','b.supplier_name','a.paid_amount','a.purchase_status','a.return_bit'); //set column field database for datatable searchable
+	var $order = array('a.id' => 'desc'); // default order
 
 	public function __construct()
 	{
@@ -24,13 +24,13 @@ class Purchase_model extends CI_Model {
 		//$this->db->where('c.id=a.warehouse_id');
 
 		$i = 0;
-	
-		foreach ($this->column_search as $item) // loop column 
+
+		foreach ($this->column_search as $item) // loop column
 		{
 			if($_POST['search']['value']) // if datatable send POST for search
 			{
-				
-				
+
+
 
 				if($i===0) // first loop
 				{
@@ -44,7 +44,7 @@ class Purchase_model extends CI_Model {
 					$this->db->or_like($item, $_POST['search']['value']);
 				}
 
-				
+
 
 
 				if(count($this->column_search) - 1 == $i) //last loop
@@ -52,11 +52,11 @@ class Purchase_model extends CI_Model {
 			}
 			$i++;
 		}
-		
+
 		if(isset($_POST['order'])) // here order processing
 		{
 			$this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
-		} 
+		}
 		else if(isset($this->order))
 		{
 			$order = $this->order;
@@ -93,10 +93,10 @@ class Purchase_model extends CI_Model {
 
 	//Save Cutomers
 	public function verify_save_and_update(){
-		//Filtering XSS and html escape from user inputs 
+		//Filtering XSS and html escape from user inputs
 		extract($this->xss_html_filter(array_merge($this->data,$_POST,$_GET)));
 		//echo "<pre>";print_r($this->xss_html_filter(array_merge($this->data,$_POST,$_GET)));exit();
-		
+
 		$this->db->trans_begin();
 		$pur_date=date('Y-m-d',strtotime($pur_date));
 
@@ -118,8 +118,8 @@ class Purchase_model extends CI_Model {
 			$purchase_code=$purchase_init.str_pad($maxid, 4, '0', STR_PAD_LEFT);
 
 		    $purchase_entry = array(
-		    				'purchase_code' 			=> $purchase_code, 
-		    				'reference_no' 				=> $reference_no, 
+		    				'purchase_code' 			=> $purchase_code,
+		    				'reference_no' 				=> $reference_no,
 		    				'purchase_date' 			=> $pur_date,
 		    				'purchase_status' 			=> $purchase_status,
 		    				'supplier_id' 				=> $supplier_id,
@@ -149,9 +149,9 @@ class Purchase_model extends CI_Model {
 			$q1 = $this->db->insert('db_purchase', $purchase_entry);
 			$purchase_id = $this->db->insert_id();
 		}
-		else if($command=='update'){	
+		else if($command=='update'){
 			$purchase_entry = array(
-		    				'reference_no' 				=> $reference_no, 
+		    				'reference_no' 				=> $reference_no,
 		    				'purchase_date' 			=> $pur_date,
 		    				'purchase_status' 			=> $purchase_status,
 		    				'supplier_id' 				=> $supplier_id,
@@ -170,7 +170,7 @@ class Purchase_model extends CI_Model {
 		    				'grand_total' 				=> $tot_total_amt,
 		    				'purchase_note' 			=> $purchase_note,
 		    			);
-					
+
 			$q1 = $this->db->where('id',$purchase_id)->update('db_purchase', $purchase_entry);
 
 			$q11=$this->db->query("delete from db_purchaseitems where purchase_id='$purchase_id'");
@@ -182,7 +182,7 @@ class Purchase_model extends CI_Model {
 
 		//Import post data from form
 		for($i=1;$i<=$rowcount;$i++){
-		
+
 			if(isset($_REQUEST['tr_item_id_'.$i]) && !empty($_REQUEST['tr_item_id_'.$i])){
 
 				$item_id 			=$this->xss_html_filter(trim($_REQUEST['tr_item_id_'.$i]));
@@ -196,7 +196,7 @@ class Purchase_model extends CI_Model {
 				$profit_margin_per	=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_12']));
 				$unit_sales_price	=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_13']));
                 $unit_discount_per  =(empty($unit_discount_per)) ? 0 : $unit_discount_per;
-                
+
 				$discount_amt 		=(($purchase_qty * ($price_per_unit+$tax_amt))*$unit_discount_per)/100;
 
 				if($tax_id=='' || $tax_id==0){$tax_id=null;}
@@ -206,12 +206,12 @@ class Purchase_model extends CI_Model {
 				if($total_cost=='' || $total_cost==0){$total_cost=null;}
 				if($profit_margin_per=='' || $profit_margin_per==0){$profit_margin_per=null;}
 				if($unit_sales_price=='' || $unit_sales_price==0){$unit_sales_price=null;}
-				
+
 				if(!empty($discount_to_all_input) && $discount_to_all_input!=0){
 					$unit_discount_per =null;
 					$discount_amt =null;
 				}
-				
+
 				$purchaseitems_entry = array(
 		    				'purchase_id' 		=> $purchase_id,
 		    				'purchase_status'	=> $purchase_status,
@@ -230,9 +230,9 @@ class Purchase_model extends CI_Model {
 		    			);
 
 				$q2 = $this->db->insert('db_purchaseitems', $purchaseitems_entry);
-				
+
 				//UPDATE itemS QUANTITY IN itemS TABLE
-				$this->load->model('pos_model');				
+				$this->load->model('pos_model');
 				$q6=$this->pos_model->update_items_quantity($item_id);
 				if(!$q6){
 					return "failed";
@@ -240,21 +240,21 @@ class Purchase_model extends CI_Model {
 
 				/*Update the item profit margin & item sales price*/
 				$this->db->where('id',$item_id)->update('db_items',array(
-																'profit_margin' => $profit_margin_per, 
+																'profit_margin' => $profit_margin_per,
 																'sales_price'=>$unit_sales_price,
 																'price'=>$price_per_unit,
 																'purchase_price'=>$unit_total_cost,
 																'tax_id'=>$tax_id,
 															));
-				
+
 			}
-		
+
 		}//for end
 
 		if($amount=='' || $amount==0){$amount=null;}
 		if($amount>0 && !empty($payment_type)){
 			$purchasepayments_entry = array(
-					'purchase_id' 		=> $purchase_id, 
+					'purchase_id' 		=> $purchase_id,
 					'payment_date'		=> $pur_date,//Current Payment with Purchase entry
 					'payment_type' 		=> $payment_type,
 					'payment' 			=> $amount,
@@ -268,9 +268,9 @@ class Purchase_model extends CI_Model {
 				);
 
 			$q3 = $this->db->insert('db_purchasepayments', $purchasepayments_entry);
-			
+
 		}
-		
+
 		$q10=$this->update_purchase_payment_status($purchase_id);
 		if($q10!=1){
 			return "failed";
@@ -279,7 +279,7 @@ class Purchase_model extends CI_Model {
 		$this->db->trans_commit();
 		$this->session->set_flashdata('success', 'Success!! Record Saved Successfully!');
 		return "success<<<###>>>$purchase_id";
-		
+
 	}//verify_save_and_update() function end
 
 	public function delete_payment($payment_id){
@@ -302,11 +302,11 @@ class Purchase_model extends CI_Model {
 	public function update_purchase_payment_status_by_purchase_id($purchase_id){
 		$q8=$this->db->query("select COALESCE(SUM(payment),0) as payment from db_purchasepayments where purchase_id='$purchase_id'");
 		$sum_of_payments=$q8->row()->payment;
-		
+
 
 		$q9=$this->db->query("select coalesce(grand_total,0) as total from db_purchase where id='$purchase_id'");
 		$payble_total=$q9->row()->total;
-		
+
 		//$pending_amt=$payble_total-$sum_of_payments;
 
 		$payment_status='';
@@ -321,14 +321,14 @@ class Purchase_model extends CI_Model {
 		}
 
 
-		$q7=$this->db->query("update db_purchase set 
+		$q7=$this->db->query("update db_purchase set
 							payment_status='$payment_status',
-							paid_amount=$sum_of_payments 
+							paid_amount=$sum_of_payments
 							where id='$purchase_id'");
 		$supplier_id =$this->db->query("select supplier_id from db_purchase where id=$purchase_id")->row()->supplier_id;
 
 		$purchase_due =$this->db->query("select COALESCE(SUM(grand_total),0)-COALESCE(SUM(paid_amount),0) as purchase_due from db_purchase where supplier_id=$supplier_id and purchase_status='Received'")->row()->purchase_due;
-		
+
 		$q12 = $this->db->query("update db_suppliers set purchase_due=$purchase_due where id=$supplier_id");
 		if(!$q7 || !$q12)
 		{
@@ -372,8 +372,8 @@ class Purchase_model extends CI_Model {
 	}
 
 	function fun_temp_update_suppliers_purchase_due(){
-		
-		
+
+
 		$q11=$this->db->query("select id from db_suppliers");
 		if($q11->num_rows()>0){
 			foreach ($q11->result() as $res) {
@@ -412,7 +412,7 @@ class Purchase_model extends CI_Model {
 			echo "<br>To Delete Purchase! You need to Delete Purchase Return Invoices!";
 			exit();
 		}
-		
+
 
 		$q3=$this->db->query("delete from db_purchase where id in($ids)");
 		$q5=$this->db->query("delete from db_purchasepayments where purchase_id in($ids)");
@@ -420,7 +420,7 @@ class Purchase_model extends CI_Model {
 
 		$q6=$this->db->query("select id from db_items");
 		if($q6->num_rows()>0){
-			$this->load->model('pos_model');				
+			$this->load->model('pos_model');
 			foreach ($q6->result() as $res6) {
 				$q6=$this->pos_model->update_items_quantity($res6->id);
 				if(!$q6){
@@ -453,7 +453,7 @@ class Purchase_model extends CI_Model {
         }
         return json_encode($json_array);
 	}
-	
+
 	public function find_item_details($id){
 		$json_array=array();
         $query1="select id,item_name,tax_id,sales_price,price,stock,tax_type,profit_margin from db_items where id=$id";
@@ -461,7 +461,7 @@ class Purchase_model extends CI_Model {
         $q1=$this->db->query($query1);
         if($q1->num_rows()>0){
             foreach ($q1->result() as $value) {
-            	$json_array=['id'=>$value->id, 
+            	$json_array=['id'=>$value->id,
         			 'item_name'=>$value->item_name,
         			 'purchase_price'=>$value->price,
         			 'sales_price'=>$value->sales_price,
@@ -475,9 +475,9 @@ class Purchase_model extends CI_Model {
         return json_encode($json_array);
 	}
 
-	
 
-	
+
+
 	public function inclusive($price='',$tax_per){
 		return $price/(($tax_per/100)+1)/10;
 	}
@@ -507,7 +507,7 @@ class Purchase_model extends CI_Model {
 		foreach ($q1->result() as $res1) {
 			$q2=$this->db->query("select item_name,stock,tax_type,price from db_items where id=".$res1->item_id);
 			$tax=$this->db->query("select tax from db_tax where id=".$res1->tax_id)->row()->tax;
-			
+
 			$info['item_id'] = $res1->item_id;
 			$info['item_name'] = $q2->row()->item_name;
 			$info['item_available_qty'] = $q2->row()->stock;
@@ -538,10 +538,10 @@ class Purchase_model extends CI_Model {
 		}
 		else{//Inclusive //Working Great
 			$item_tax_amt=number_format($this->inclusive($item_price,$item_tax),2,'.','');
-			//$item_purchase_price=$item_price-$item_tax_amt;	
+			//$item_purchase_price=$item_price-$item_tax_amt;
 
-			
-			$item_purchase_price=$item_price;	
+
+			$item_purchase_price=$item_price;
 		}
 		?>
             <tr id="row_<?=$rowcount;?>" data-row='<?=$rowcount;?>'>
@@ -570,7 +570,7 @@ class Purchase_model extends CI_Model {
                         $q1=$this->db->query($q1);
                          if($q1->num_rows()>0)
                          {
-                          echo '<option value="">None</option>'; 
+                          echo '<option value="">None</option>';
                            foreach($q1->result() as $res1)
                            {
                            	 $selected=($res1->id==$item_tax_id) ? 'selected' : '';
@@ -602,10 +602,11 @@ class Purchase_model extends CI_Model {
 
                <!-- Profit Margin -->
                <td id="td_<?=$rowcount;?>_12"><input type="text" name="td_data_<?=$rowcount;?>_12" id="td_data_<?=$rowcount;?>_12" class="form-control no-padding text-center" value="<?=$item_profit_margin;?>" onkeyup="calculate_sales_price(<?=$rowcount;?>)" ></td>
+			   <input type="hidden" id="tr_profit_<?=$rowcount;?>_100" value="<?=$item_profit_margin;?>">
 
                <!-- sales price -->
                <td id="td_<?=$rowcount;?>_13"><input type="text" name="td_data_<?=$rowcount;?>_13" id="td_data_<?=$rowcount;?>_13" class="form-control text-right no-padding only_currency text-center" onkeyup="calculate_profit_margin(<?=$rowcount;?>)" value="<?=$item_sales_price;?>" ></td>
-               
+
                <!-- ADD button -->
                <td id="td_<?=$rowcount;?>_16" style="text-align: center;">
                   <a class=" fa fa-fw fa-minus-square text-red" style="cursor: pointer;font-size: 34px;" onclick="removerow(<?=$rowcount;?>)" title="Delete ?" name="td_data_<?=$rowcount;?>_16" id="td_data_<?=$rowcount;?>_16"></a>
@@ -659,7 +660,7 @@ class Purchase_model extends CI_Model {
 		        <h4 class="modal-title text-center">Payments</h4>
 		      </div>
 		      <div class="modal-body">
-		        
+
 		    <div class="row">
 		      <div class="col-md-12">
 		      	<div class="row invoice-info">
@@ -687,7 +688,7 @@ class Purchase_model extends CI_Model {
 			        <div class="col-sm-4 invoice-col">
 			          <b>Paid Amount : <span><?php echo number_format($paid_amount,2,'.',''); ?></span></b><br>
 			          <b>Due Amount : <span id='due_amount_temp'><?php echo number_format($due_amount,2,'.',''); ?></span></b><br>
-			         
+
 			        </div>
 			        <!-- /.col -->
 			      </div>
@@ -739,7 +740,7 @@ class Purchase_model extends CI_Model {
 		                  </div>
 		                </div>
 		            <div class="clearfix"></div>
-		        </div>  
+		        </div>
 		        <div class="row">
 		               <div class="col-md-12">
 		                  <div class="">
@@ -748,9 +749,9 @@ class Purchase_model extends CI_Model {
 		                    <span id="payment_note_msg" style="display:none" class="text-danger"></span>
 		                  </div>
 		               </div>
-		                
+
 		            <div class="clearfix"></div>
-		        </div>   
+		        </div>
 		        </div>
 		        </div>
 		      </div><!-- col-md-12 -->
@@ -777,7 +778,7 @@ class Purchase_model extends CI_Model {
     	if($amount=='' || $amount==0){$amount=null;}
 		if($amount>0 && !empty($payment_type)){
 			$purchasepayments_entry = array(
-					'purchase_id' 		=> $purchase_id, 
+					'purchase_id' 		=> $purchase_id,
 					'payment_date'		=> date("Y-m-d",strtotime($payment_date)),//Current Payment with Purchase entry
 					'payment_type' 		=> $payment_type,
 					'payment' 			=> $amount,
@@ -791,12 +792,12 @@ class Purchase_model extends CI_Model {
 				);
 
 			$q3 = $this->db->insert('db_purchasepayments', $purchasepayments_entry);
-			
+
 		}
 		else{
 			return "Please Enter Valid Amount!";
 		}
-		
+
 		$q10=$this->update_purchase_payment_status($purchase_id);
 		if($q10!=1){
 			return "failed";
@@ -804,7 +805,7 @@ class Purchase_model extends CI_Model {
 		return "success";
 
 	}
-	
+
 	public function view_payments_modal($purchase_id){
 		$q1=$this->db->query("select * from db_purchase where id=$purchase_id");
 		$res1=$q1->row();
@@ -833,7 +834,7 @@ class Purchase_model extends CI_Model {
 
 	    $supplier_country = $this->db->query("select country from db_country where id=".$res2->country_id)->row()->country;
 	    $supplier_state=(!empty($supplier_state)) ? $this->db->query("select state from db_states where id=".$res2->state_id)->row()->state : '';
-	    
+
 
 		?>
 		<div class="modal fade" id="view_payments_modal">
@@ -845,7 +846,7 @@ class Purchase_model extends CI_Model {
 		        <h4 class="modal-title text-center">Payments</h4>
 		      </div>
 		      <div class="modal-body">
-		        
+
 		    <div class="row">
 		      <div class="col-md-12">
 		      	<div class="row invoice-info">
@@ -873,18 +874,18 @@ class Purchase_model extends CI_Model {
 			        <div class="col-sm-4 invoice-col">
 			          <b>Paid Amount :<span><?php echo number_format($paid_amount,2,'.',''); ?></span></b><br>
 			          <b>Due Amount :<span id='due_amount_temp'><?php echo number_format($due_amount,2,'.',''); ?></span></b><br>
-			         
+
 			        </div>
 			        <!-- /.col -->
 			      </div>
 			      <!-- /.row -->
 		      </div>
 		      <div class="col-md-12">
-		       
-		     
+
+
 		              <div class="row">
 		         		<div class="col-md-12">
-		                  
+
 		                      <table class="table table-bordered">
                                   <thead>
                                   <tr class="bg-primary">
@@ -911,8 +912,8 @@ class Purchase_model extends CI_Model {
 											echo "<td>".$res1->payment_type."</td>";
 											echo "<td>".$res1->payment_note."</td>";
 											echo "<td>".ucfirst($res1->created_by)."</td>";
-										
-											echo "<td><a onclick='delete_purchase_payment(".$res1->id.")' class='pointer btn  btn-danger' ><i class='fa fa-trash'></i></</td>";	
+
+											echo "<td><a onclick='delete_purchase_payment(".$res1->id.")' class='pointer btn  btn-danger' ><i class='fa fa-trash'></i></</td>";
 											echo "</tr>";
 										}
 									}
@@ -922,20 +923,20 @@ class Purchase_model extends CI_Model {
 									?>
                                 </tbody>
                             </table>
-		               
+
 		               </div>
 		            <div class="clearfix"></div>
-		        </div>    
-		       
-		     
-		   
+		        </div>
+
+
+
 		      </div><!-- col-md-9 -->
 		      <!-- RIGHT HAND -->
 		    </div>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Close</button>
-		        
+
 		      </div>
 		    </div>
 		    <!-- /.modal-content -->
