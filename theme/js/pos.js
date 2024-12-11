@@ -18,6 +18,13 @@ function validateEmail(sEmail) {
     }
 }
 $('.make_sale').click(function (e) {
+	var pa_amt = parseFloat($(".sales_div_tot_payble").text());
+	var p_amt = parseFloat($(".sales_div_tot_paid").text());
+	var check_pt = parseInt($("#check_multiple_balance").val());
+	if (check_pt == 1 && p_amt != pa_amt) {
+    	toastr["warning"]("Payable Amount and Paid Amount should be same!!");
+		return false;
+  	}
 
 	var base_url=$("#base_url").val().trim();
 
@@ -128,6 +135,13 @@ $('.make_sale').click(function (e) {
 });
 
 $('#save,#update').click(function (e) {
+	var pa_amt = parseFloat($(".sales_div_tot_payble").text());
+	var p_amt = parseFloat($(".sales_div_tot_paid").text());
+	var check_pt = parseInt($("#check_multiple_balance").val());
+	if (check_pt == 1 && p_amt != pa_amt) {
+    	toastr["warning"]("Payable Amount and Paid Amount should be same!!");
+		return false;
+  	}
 
 	var base_url=$("#base_url").val().trim();
     if($(".items_table tr").length==1){
@@ -393,6 +407,7 @@ $('.show_payments_modal').click(function (e) {
 		failed.play();
 		return;
     }else{
+		$("#check_multiple_balance").val(1);
 		$(".payment-row").remove();
     	adjust_payments();
     	$("#add_payment_row,#payment_type_1").parent().show();
@@ -410,6 +425,7 @@ $('#show_cash_modal').click(function (e) {
 		failed.play();
 		return;
     }else{
+		$("#check_multiple_balance").val(0);
 		$(".payment-row").remove();
     	adjust_payments();
     	$("#add_payment_row,#payment_type_1").parent().hide();

@@ -247,6 +247,7 @@
       <div class="row">
         <!-- left column -->
         <form class="form-horizontal" id="pos-form" >
+        <input type="hidden" value='0' id="check_multiple_balance">
         <div class="col-md-8">
 
           <!-- general form elements -->
