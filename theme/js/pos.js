@@ -75,56 +75,51 @@ $('.make_sale').click(function (e) {
 			processData: false,
 			success: function(result){
 				//alert(result);//return;
-
 				result=result.trim().split("<<<###>>>");
 
-					if(result[0]=="success")
-					{
-						//window.location=base_url+"pos/print_invoice_pos/"+result[1]+"?redirect=pos", "_blank";
-						if(window.open(base_url+"pos/print_invoice_pos/"+result[1], "_blank", "scrollbars=1,resizable=1,height=300,width=450")){
-							if(command=='update'){
-								window.location=base_url+"sales";
+				if(result[0]=="success")
+				{
+					//window.location=base_url+"pos/print_invoice_pos/"+result[1]+"?redirect=pos", "_blank";
+					if(window.open(base_url+"pos/print_invoice_pos/"+result[1], "_blank", "scrollbars=1,resizable=1,height=300,width=450")){
+						if(command=='update'){
+							window.location=base_url+"sales";
+						}else{
+							success.currentTime = 0;
+							success.play();
+							toastr['success']("Invoice Saved Successfully!");
+
+							//window.location=base_url+"pos";
+							$(".items_table > tbody").empty();
+							$(".discount_input").val(0);
+							$("#customer_id").val(1);
+							$('#multiple-payments-modal').modal('hide');
+							var rc=$("#payment_row_count").val();
+							while(rc>1){
+								remove_row(rc);
+								rc--;
 							}
-							else{
-								success.currentTime = 0;
-								success.play();
-								toastr['success']("Invoice Saved Successfully!");
+							$("#pos-form")[0].reset();
 
-								//window.location=base_url+"pos";
-								$(".items_table > tbody").empty();
-								$(".discount_input").val(0);
-								$("#customer_id").val(1);
-								$('#multiple-payments-modal').modal('hide');
-								var rc=$("#payment_row_count").val();
-								while(rc>1){
-									remove_row(rc);
-									rc--;
-								}
-								$("#pos-form")[0].reset();
-
-								final_total();
-								get_details();
-								//hold_invoice_list();
-								//window.location=base_url+"pos";
-
-							}
-
+							final_total();
+							get_details();
+							//hold_invoice_list();
+							//window.location=base_url+"pos";
 						}
-						window.location.reload();
-
 					}
-					else if(result[0]=="failed")
-					{
-					   toastr['error']("Sorry! Failed to save Record.Try again");
-					}
-					else
-					{
-						alert(result);
-					}
+				}
+				else if(result[0]=="failed")
+				{
+					toastr['error']("Sorry! Failed to save Record.Try again");
+				}
+				else
+				{
+					alert(result);
+				}
 
 				$("#"+this_btn).attr('disabled',false);  //Enable Save or Update button
 				$(".overlay").remove();
-		   }
+				window.location.reload();
+			}
 	   });
 	//} //confirmation sure
 	//	}); //confirmation end
@@ -207,6 +202,7 @@ $('#save,#update').click(function (e) {
 
 					$("#"+this_btn).attr('disabled',false);  //Enable Save or Update button
 					$(".overlay").remove();
+					window.location.reload();
 				}
 			});
 		} //confirmation sure
