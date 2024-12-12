@@ -1,8 +1,8 @@
 <footer class="main-footer">
     <div class="pull-right hidden-xs">
-      <b> <a target="_blank" href="https://www.mysoftheaven.com"><?php  echo $SITE_TITLE;?></a> -v1.0</b> 
+      <b> <a target="_blank" href="https://mysoftheaven.com/">Salesman</a> -v2.3</b>
     </div>
-    <strong>Copyright &copy; <?=date('Y')?> All rights reserved.</strong>
+    <strong>Copyright Mysoftheaven (BD) Ltd &copy; <?=date('Y')?> All rights reserved.</strong>
   </footer>
 
   <!-- Control Sidebar -->
@@ -15,7 +15,7 @@
     <!-- Tab panes -->
     <div class="tab-content">
       <div class="tab-pane" id="control-sidebar-home-tab">
-        
+
       </div>
       <!-- /.tab-pane -->
     </div>

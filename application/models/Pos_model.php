@@ -8,7 +8,7 @@ class Pos_model extends CI_Model {
 	}
 
 	public function get_details(){
-		$data=$this->data;
+		$data = $this->data;
 		extract($data);
 		extract($_POST);
 		  $i=0;
@@ -39,7 +39,7 @@ class Pos_model extends CI_Model {
 				//end
 
 				if ($res2->discount_type == 1) {
-					$discount = round(($res2->purchase_price * $res2->discount) / 100, 2);
+					$discount = round(($res2->mr_price * $res2->discount) / 100, 2);
 				} else {
 					$discount = $res2->discount;
 				}
@@ -227,10 +227,10 @@ class Pos_model extends CI_Model {
 				// }
 				//dd($price_per_unit);
 
-				
+
 				$single_unit_total_cost =$price_per_unit;
 
-				
+
 				if($tax_amt=='' || $tax_amt==0){
 					$tax_amt=null;
 				}

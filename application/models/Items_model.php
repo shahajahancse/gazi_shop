@@ -104,7 +104,7 @@ class Items_model extends CI_Model {
 			$new_name = time();
 			$config['file_name'] = $new_name;
 			$config['upload_path']          = './uploads/items/';
-			$config['allowed_types']        = 'jpg|png|jpeg';
+	        $config['allowed_types']        = 'gif|jpg|png|jpeg';
 			$config['max_size']             = 2048;
 			$config['max_width']            = 1000;
 			$config['max_height']           = 1000;
@@ -280,8 +280,8 @@ class Items_model extends CI_Model {
 				$new_name = time();
 				$config['file_name'] = $new_name;
 				$config['upload_path']          = './uploads/items/';
-		        $config['allowed_types']        = 'jpg|png';
-		        $config['max_size']             = 1024;
+				$config['allowed_types']        = 'gif|jpg|png|jpeg';
+		        $config['max_size']             = 2048;
 		        $config['max_width']            = 1000;
 		        $config['max_height']           = 1000;
 
@@ -302,8 +302,8 @@ class Items_model extends CI_Model {
 					$config['source_image'] = 'uploads/items/'.$file_name;
 					$config['create_thumb'] = TRUE;
 					$config['maintain_ratio'] = TRUE;
-					$config['width']         = 75;
-					$config['height']       = 50;
+					// $config['width']         = 75;
+					// $config['height']       = 50;
 					$this->load->library('image_lib', $config);
 					$this->image_lib->resize();
 					//end

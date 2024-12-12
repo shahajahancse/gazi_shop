@@ -31,22 +31,22 @@ class Company_model extends CI_Model {
 			$data['pan']=$query->pan_no;
 			$data['bank_details']=$query->bank_details;
 			$data['company_logo']=$query->company_logo;
-			
+
 
 			return $data;
 		}
 	}
 	public function update_company(){
-		
-		//Filtering XSS and html escape from user inputs 
+
+		//Filtering XSS and html escape from user inputs
 		extract($this->security->xss_clean(html_escape(array_merge($this->data,$_POST))));
-		
+
 		/*Log uploader*/
 		$company_logo='';
 		if(!empty($_FILES['company_logo']['name'])){
 			$config['upload_path']          = './uploads/company/';
-	        $config['allowed_types']        = 'gif|jpg|png';
-	        $config['max_size']             = 1024;
+	        $config['allowed_types']        = 'gif|jpg|png|jpeg';
+	        $config['max_size']             = 2048;
 	        $config['max_width']            = 1000;
 	        $config['max_height']           = 1000;
 
@@ -67,7 +67,7 @@ class Company_model extends CI_Model {
 		/*End*/
 
 		$query1="update db_company set company_name='$company_name',mobile='$mobile',phone='$phone',email='$email',country='$country',state='$state',city='$city',postcode='$postcode',address='$address',gst_no='$gstin',vat_no='$vat',website='$website', pan_no='$pan',bank_details='$bank_details' $company_logo where id=$q_id";
-		
+
 		if ($this->db->simple_query($query1)){
 		        return "success";
 		}
@@ -75,6 +75,6 @@ class Company_model extends CI_Model {
 		        return "failed";
 		}
 	}
-	
+
 
 }

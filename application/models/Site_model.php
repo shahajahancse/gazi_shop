@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
@@ -18,18 +18,18 @@ class Site_model extends CI_Model {
 			$data['q_id']=$query->id;
             $data['site_name']=$query->site_name;
             $data['logo']=$query->logo;
-            $data['currency_id']=$query->currency_id;			
-            $data['currency_placement']=$query->currency_placement;			
-            $data['language_id']=$query->language_id;			
-            $data['timezone']=$query->timezone;			
-            $data['date_format']=$query->date_format;			
-            $data['time_format']=$query->time_format;			
+            $data['currency_id']=$query->currency_id;
+            $data['currency_placement']=$query->currency_placement;
+            $data['language_id']=$query->language_id;
+            $data['timezone']=$query->timezone;
+            $data['date_format']=$query->date_format;
+            $data['time_format']=$query->time_format;
             $data['sales_discount']=$query->sales_discount;/* Default sales discount */
             $data['change_return']=$query->change_return;
             $data['sales_invoice_format_id']=$query->sales_invoice_format_id;
             $data['sales_invoice_footer_text']=$query->sales_invoice_footer_text;
             $data['round_off']=$query->round_off;
-            
+
             /* QUERY 2*/
 			$query1=$query1->row();
             $data['category_init']=$query1->category_init;
@@ -46,18 +46,18 @@ class Site_model extends CI_Model {
 		}
 	}
 	public function update_site(){
-		//Filtering XSS and html escape from user inputs 
+		//Filtering XSS and html escape from user inputs
 		extract($this->security->xss_clean(html_escape(array_merge($this->data,$_POST))));
 		//echo "<pre>";print_r($this->security->xss_clean(html_escape(array_merge($this->data,$_POST))));exit();
-				
-		
+
+
 		$logo='';
 		if(!empty($_FILES['logo']['name'])){
 			$config['upload_path']          = './uploads/';
-	        $config['allowed_types']        = 'gif|jpg|png';
-	        $config['max_size']             = 300;
-	        $config['max_width']            = 300;
-	        $config['max_height']           = 300;
+	        $config['allowed_types']        = 'gif|jpg|png|jpeg';
+	        $config['max_size']             = 2048;
+	        $config['max_width']            = 1000;
+	        $config['max_height']           = 1000;
 
 	        $this->load->library('upload', $config);
 
@@ -73,7 +73,7 @@ class Site_model extends CI_Model {
 	        		$logo=" ,logo='$logo_name' ";
 	        }
 		}
-        
+
 		$change_return = (isset($change_return)) ? 1 : 0;
 		$round_off = (isset($round_off)) ? 1 : 0;
         $query1="update db_sitesettings set site_name='$site_name',currency_placement='$currency_placement',
@@ -81,7 +81,7 @@ class Site_model extends CI_Model {
         sales_discount='$sales_discount',change_return=$change_return,round_off=$round_off,sales_invoice_format_id=$sales_invoice_format_id ,sales_invoice_footer_text='$sales_invoice_footer_text'
          $logo where id=$q_id";
         $query1= $this->db->simple_query($query1);
-      
+
         $query2="update db_company set category_init='$category_init',item_init='$item_init',
         supplier_init='$supplier_init',
         purchase_init='$purchase_init',
