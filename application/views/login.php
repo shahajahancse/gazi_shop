@@ -19,25 +19,26 @@
   <link rel="stylesheet" href="<?php echo $theme_link; ?>plugins/iCheck/square/blue.css">
 
 </head>
-<body class="hold-transition login-page" style="height:0;background-repeat: no-repeat;background: url('<?= base_url('uploads/bg/pos-background.jpeg') ?>') no-repeat center center fixed">
-  <?php 
+
+<body class="hold-transition login-page" style="height: 100vh; background: url('<?php echo base_url('uploads/bg/pos-background.jpeg') ?>') center center / cover no-repeat; width: 100vw; max-height: 74vh;">
+  <?php
   //Find Logo Path
     $logo=$this->db->query("select logo from db_sitesettings")->row()->logo;
   ?>
 <div class="login-box">
-  
+
   <!-- /.login-logo -->
   <div class="login-box-body">
-    <div class="login-logo" style="border-bottom: 1px solid blue;padding-bottom: 25px;"> 
+    <div class="login-logo" style="border-bottom: 1px solid blue;padding-bottom: 25px;">
       <a href="#"><b>
         <img src="<?php echo $base_url; ?>uploads/<?= $logo;?>" width="60%" height="70px">
       </b></a>
-    </div>    
+    </div>
     <p class="login-box-msg">Sign in to start your session</p>
      <div class="text-danger tex-center"><?php echo $this->session->flashdata('failed'); ?></div>
 	   <div class="text-success tex-center"><?php echo $this->session->flashdata('success'); ?></div>
-         
-    
+
+
     <form action="<?php echo $base_url; ?>login/verify" method="post">
       <input type="hidden" name="<?php echo $this->security->get_csrf_token_name();?>" value="<?php echo $this->security->get_csrf_hash();?>">
       <div class="form-group has-feedback">
@@ -61,17 +62,17 @@
         </div>
         <!-- /.col -->
       </div>
-       
-	  
+
+
     </form>
     <a href="login/forgot_password">I forgot my password</a><br>
     <div class="row">
-      
+
     </div>
   </div>
   <!-- /.login-box-body -->
- 
-  
+
+
 </div>
 
 <!-- /.login-box -->

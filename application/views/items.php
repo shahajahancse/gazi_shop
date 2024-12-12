@@ -47,13 +47,22 @@
                         <input type="hidden" id="base_url" value="<?php echo $base_url;; ?>">
                         <div class="box-body">
                            <!-- Item common details -->
+                           <?php if($item_name!=""){
+                              $btn_name="Update";
+                              $btn_id="update";
+                           ?>
+                           <input type="hidden" name="q_id" id="q_id" value="<?php echo $q_id;?>"/>
+                           <?php } else {
+                              $btn_name="Save";
+                              $btn_id="save";
+                           } ?>
                            <div class="row">
-                              <div class="form-group col-md-4">
+                              <div class="form-group col-md-3">
                                  <label for="item_name"><?= $this->lang->line('item_name'); ?><span class="text-danger">*</span></label>
                                  <input type="text" class="form-control" id="item_name" name="item_name" placeholder="" value="<?php print $item_name; ?>" >
                                  <span id="item_name_msg" style="display:none" class="text-danger"></span>
                               </div>
-                              <div class="form-group col-md-4">
+                              <div class="form-group col-md-3">
                                  <label for="category_id">Category <span class="text-danger">*</span></label>
                                  <select class="form-control select2" id="category_id" name="category_id"  style="width: 100%;"  value="<?php print $category_id; ?>">
                                     <?php
@@ -77,8 +86,23 @@
                                  </select>
                                  <span id="category_id_msg" style="display:none" class="text-danger"></span>
                               </div>
+                              <div class="form-group col-md-3">
+                                 <label>Barcode Type <span class="text-danger">*</span></label>
+                                 <select <?= $btn_name == 'Update' ? 'disabled' : '' ?> name="barcode_type" id="barcode_type" class="form-control" onchange="toggleItemCodeReadonly(this.value)">
+                                    <option value="">-Select-</option>
+                                    <option value="1">Item Barcode</option>
+                                    <option value="2">Generate Barcode</option>
+                                 </select>
 
-                              <div class="form-group col-md-4">
+                                 <span id="barcode_type_msg" style="display:none" class="text-danger"></span>
+                              </div>
+
+                              <div class="form-group col-md-3">
+                                 <label for="item_code">Barcode <span class="text-danger">*</span></label>
+                                 <input type="text" class="form-control" id="item_code" name="item_code" value="<?php print $item_code; ?>" readonly >
+                                 <span id="item_code_msg" style="display:none" class="text-danger"></span>
+                              </div>
+                              <div class="form-group col-md-3">
                                  <label for="company_id">Company</label>
                                  <select class="form-control select2" id="company_id" name="company_id"  style="width: 100%;"  value="<?php print $company_id; ?>">
                                     <?php
@@ -158,12 +182,12 @@
                                  <span id="alert_qty_msg" style="display:none" class="text-danger"></span>
                               </div>
 
-                              <div class="form-group col-md-4">
+                              <div class="form-group col-md-3">
                                  <label for="lot_number" ><?= $this->lang->line('lot_number'); ?></label>
                                  <input type="text" class="form-control no_special_char" id="lot_number" name="lot_number" placeholder=""  value="<?php print $lot_number; ?>" >
                                  <span id="lot_number_msg" style="display:none" class="text-danger"></span>
                               </div>
-                              <div class="form-group col-md-4">
+                              <div class="form-group col-md-3">
                                  <label for="expire_date" ><?= $this->lang->line('expire_date'); ?></label>
                                  <div class="input-group date">
                                   <div class="input-group-addon">
@@ -173,7 +197,7 @@
                                 </div>
                                  <span id="expire_date_msg" style="display:none" class="text-danger"></span>
                               </div>
-                              <div class="form-group col-md-4">
+                              <div class="form-group col-md-3">
                                  <label for="item_image"><?= $this->lang->line('select_image'); ?></label>
                                  <input type="file" name="item_image" id="item_image">
                                  <span id="item_image_msg" style="display:block;" class="text-danger">Max Width/Height: 1000px * 1000px & Size: 1MB </span>
@@ -192,7 +216,6 @@
                               <div class="form-group col-md-2">
                                  <label for="tax_id" >Purchase Vat (%)</label>
                                  <select class="form-control select2" id="tax_id" name="tax_id"  style="width: 100%;" >
-                                    <option value="0.00">-Select-</option>
                                     <?php
                                        $query1="select * from db_tax where status=1";
                                        $q1=$this->db->query($query1);
@@ -262,7 +285,6 @@
                                  <select class="form-control select2" id="vat_id" name="vat_id"  style="width: 100%;" >
                                     <?php
                                        if($q1->num_rows($q1)>0){
-                                          echo '<option data-vat_id="0" value="">-Select-</option>';
                                           foreach($q1->result() as $res1)
                                           {
                                             $selected = ($vat_id == $res1->id)? 'selected' : '';
@@ -305,20 +327,6 @@
                            <div class="box-footer">
                               <div class="col-sm-8 col-sm-offset-2 text-center">
                                  <!-- <div class="col-sm-4"></div> -->
-                                 <?php
-                                    if($item_name!=""){
-                                         $btn_name="Update";
-                                         $btn_id="update";
-                                         ?>
-                                 <input type="hidden" name="q_id" id="q_id" value="<?php echo $q_id;?>"/>
-                                 <?php
-                                    }
-                                              else{
-                                                  $btn_name="Save";
-                                                  $btn_id="save";
-                                              }
-
-                                              ?>
                                  <div class="col-md-3 col-md-offset-3">
                                     <button type="button" id="<?php echo $btn_id;?>" class=" btn btn-block btn-success" title="Save Data"><?php echo $btn_name;?></button>
                                  </div>
@@ -403,10 +411,33 @@
       <script src="<?php echo $theme_link; ?>js/items.js"></script>
 
       <script>
-         
+
       </script>
 
       <!-- Make sidebar menu hughlighter/selector -->
       <script>$(".<?php echo basename(__FILE__,'.php');?>-active-li").addClass("active");</script>
+
+      <?php
+         //Create items unique barcode
+         $q1 = $this->db->order_by("id", "desc")->get("db_items")->row();
+         $item_init= 'IT';
+         $maxid = isset($q1->id)? $q1->id+1 : 1;
+         $new_barcode = $item_init.str_pad($maxid, 10, '0', STR_PAD_LEFT);
+      ?>
+      <script>
+         function toggleItemCodeReadonly(value) {
+            var barcode = "<?= $new_barcode; ?>"
+            var itemCodeElement = document.getElementById('item_code');
+            if (value == 1) {
+               itemCodeElement.removeAttribute('readonly');
+               itemCodeElement.readOnly = false;
+               itemCodeElement.value = "";
+            } else {
+               itemCodeElement.setAttribute('readonly', 'true');
+               itemCodeElement.readOnly = true;
+               itemCodeElement.value = barcode;
+            }
+         }
+      </script>
    </body>
 </html>

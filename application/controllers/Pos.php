@@ -47,6 +47,7 @@ class Pos extends MY_Controller {
 
 	public function get_details(){
 		echo $this->pos_model->get_details();
+		exit;
 	}
 	public function receive_order(){
 	    echo $this->pos_model->receive_order();
@@ -88,7 +89,7 @@ class Pos extends MY_Controller {
 	public function add_payment_row(){
 		return $this->load->view('modals_pos_payment/modal_payments_multi_sub');
 	}
-	
+
 	//Print sales POS invoice
 	public function print_invoice_pos($sales_id){
 		if(!$this->permissions('sales_add') && !$this->permissions('sales_edit')){

@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="<?php echo $theme_link; ?>plugins/pace/pace.min.css">
   <!-- iCheck -->
   <link rel="stylesheet" href="<?php echo $theme_link; ?>plugins/iCheck/square/orange.css">
-  <?php 
+  <?php
       $lang = trim(strtoupper($this->session->userdata('language')));
       if($lang==strtoupper('arabic') || $lang==strtoupper('urdu')) {?>
   <!-- RTL For arabic styles -->
@@ -39,8 +39,8 @@
   <?php } ?>
   <!-- Theme color finder -->
   <script type="text/javascript">
-  var theme_skin = (typeof (Storage) !== "undefined") ? localStorage.getItem('skin').trim() : 'skin-blue';
-  var sidebar_collapse = (typeof (Storage) !== "undefined") ? localStorage.getItem('collapse').trim() : 'skin-blue';
+  var theme_skin = (typeof (Storage) !== "undefined") ? localStorage.getItem('skin') : 'skin-blue';
+  var sidebar_collapse = (typeof (Storage) !== "undefined") ? localStorage.getItem('collapse') : 'skin-blue';
   </script>
   <!-- jQuery 2.2.3 -->
   <script src="<?php echo $theme_link; ?>plugins/jQuery/jquery-2.2.3.min.js"></script>

@@ -182,7 +182,7 @@
 				</table>
 			</td>
 		</tr>
-		<?php 
+		<?php
 		?>
 		<!-- invoice header end -->
 		<!-- invoice items details and summation table -->
@@ -212,7 +212,7 @@
 
 
 
-							
+
 							$q2=$this->db->query("select b.item_name,a.mr_price,a.sales_qty,a.unit_total_cost,a.price_per_unit,a.tax_amt,c.tax,a.discount_amt,a.additional_dis,a.total_cost from db_salesitems a,db_items b,db_tax c where c.id=a.tax_id and b.id=a.item_id and a.sales_id='$sales_id'");
 			            	foreach ($q2->result() as $res2) {
 								//dd($res2);
@@ -247,9 +247,9 @@
 								$over_all_discount += $dis_cost;
 								$total_price += ($mrp_cost-$dis_cost);
 								$total_tax_amt += $res2->tax_amt;
-								
+
 							}
-								
+
 						?>
 				   </tbody>
 					<!-- invoice items end -->
@@ -262,17 +262,17 @@
 							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format(($total_mrp),2,'.','');?></td>
 						</tr>
 						<tr >
-							<td style=" padding-left: 2px; padding-right: 2px;" colspan="4" align="right">Over All Discount</td>
+							<td style=" padding-left: 2px; padding-right: 2px;" colspan="4" align="right">Discount</td>
 							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format(($over_all_discount),2,'.','');?></td>
 						</tr>
 						<tr >
-							<td style=" padding-left: 2px; padding-right: 2px;" colspan="4" align="right">Discount</td>
+							<td style=" padding-left: 2px; padding-right: 2px;" colspan="4" align="right">Over All Discount</td>
 							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format(($tot_discount_to_all_amt),2,'.','');?></td>
 						</tr>
 						<tr style="border-top-style: dashed;border-width: 0.1px;">
 							<td style=" padding-left: 2px; padding-right: 2px;" colspan="4" align="right">Total Amount</td>
 							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?=  number_format(($total_mrp-($over_all_discount+$tot_discount_to_all_amt)),2,'.','');?></td>
-							<?php 
+							<?php
 							$total_amout=number_format(($total_mrp-($over_all_discount+$tot_discount_to_all_amt)),2,'.','');
 							?>
 						</tr>
@@ -288,11 +288,11 @@
                             </td>
                         </tr>
 
-						
+
 
 
 						<!-- <tr><td style="border-bottom-style: dashed;border-width: 0.1px;" colspan="5"></td></tr>   -->
-						
+
 
 						<!-- change_return_status -->
 						<?php if(change_return_status()) {

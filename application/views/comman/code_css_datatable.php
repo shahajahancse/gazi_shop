@@ -15,8 +15,8 @@
   <link rel="stylesheet" href="<?php echo $theme_link; ?>plugins/DataTables-1.10.18/extensions/FixedHeader-3.1.4/css/fixedHeader.dataTables.min.css">
   <link rel="stylesheet" href="<?php echo $theme_link; ?>plugins/DataTables-1.10.18/extensions/FixedHeader-3.1.4/css/fixedHeader.bootstrap.min.css">
   <link rel="stylesheet" href="<?php echo $theme_link; ?>plugins/DataTables-1.10.18/extensions/Responsive-2.2.2/css/responsive.dataTables.min.css">
-  <link rel="stylesheet" href="<?php echo $theme_link; ?>plugins/DataTables-1.10.18/extensions/Responsive-2.2.2/css/responsive.bootstrap.min.css">  
-  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.bootstrap.min.css">  
+  <link rel="stylesheet" href="<?php echo $theme_link; ?>plugins/DataTables-1.10.18/extensions/Responsive-2.2.2/css/responsive.bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.bootstrap.min.css">
   <!-- end -->
   <!-- Theme style -->
   <link rel="stylesheet" href="<?php echo $theme_link; ?>dist/css/AdminLTE.min.css">
@@ -33,7 +33,7 @@
   <link rel="stylesheet" href="<?php echo $theme_link; ?>dist/css/custom.css">
   <!-- Pace Loader -->
   <link rel="stylesheet" href="<?php echo $theme_link; ?>plugins/pace/pace.min.css">
-  <?php 
+  <?php
       $lang = trim(strtoupper($this->session->userdata('language')));
       if($lang==strtoupper('arabic') || $lang==strtoupper('urdu')) {?>
   <!-- RTL For arabic styles -->
@@ -42,9 +42,8 @@
   <?php } ?>
   <!-- Theme color finder -->
   <script type="text/javascript">
-    var theme_skin = (typeof (Storage) !== "undefined") ? localStorage.getItem('skin').trim() : 'skin-blue';
-    var sidebar_collapse = (typeof (Storage) !== "undefined") ? localStorage.getItem('collapse').trim() : false;
+    var theme_skin = (typeof (Storage) !== "undefined") ? localStorage.getItem('skin') : 'skin-blue';
+    var sidebar_collapse = (typeof (Storage) !== "undefined") ? localStorage.getItem('collapse') : false;
   </script>
   <!-- jQuery 2.2.3 -->
   <script src="<?php echo $theme_link; ?>plugins/jQuery/jquery-2.2.3.min.js"></script>
-  

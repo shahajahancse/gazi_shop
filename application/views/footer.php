@@ -2,7 +2,7 @@
     <div class="pull-right hidden-xs">
       <b> <a target="_blank" href="https://mysoftheaven.com/">Salesman</a> -v2.3</b>
     </div>
-    <strong>Copyright Mysoftheaven (BD) Ltd &copy; <?=date('Y')?> All rights reserved.</strong>
+    <strong>Copyright Mysoftheaven (BD) Ltd &copy; <?=date('Y')?> All Rights Reserved.</strong>
   </footer>
 
   <!-- Control Sidebar -->

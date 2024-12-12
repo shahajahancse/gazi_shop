@@ -140,12 +140,12 @@ class Items_model extends CI_Model {
 		$q5=$this->db->query($qs5);
 		$item_init=$q5->row()->item_init;
 
-		//Create items unique Number
-		$this->db->query("ALTER TABLE db_items AUTO_INCREMENT = 1");
+		//Create items unique Number  // 12-12-2024 commend on
+		/* $this->db->query("ALTER TABLE db_items AUTO_INCREMENT = 1");
 		$qs4="select coalesce(max(id),0)+1 as maxid from db_items";
 		$q1=$this->db->query($qs4);
 		$maxid=$q1->row()->maxid;
-		$item_code=$item_init.str_pad($maxid, 6, '0', STR_PAD_LEFT);
+		$item_code=$item_init.str_pad($maxid, 6, '0', STR_PAD_LEFT); */
 		//end
 
 		$new_opening_stock = (empty($new_opening_stock)) ? 0 :$new_opening_stock;

@@ -20,11 +20,12 @@ function validateEmail(sEmail) {
 $('.make_sale').click(function (e) {
 	var pa_amt = parseFloat($(".sales_div_tot_payble").text());
 	var p_amt = parseFloat($(".sales_div_tot_paid").text());
-	var check_pt = parseInt($("#check_multiple_balance").val());
-	if (check_pt == 1 && p_amt != pa_amt) {
-    	toastr["warning"]("Payable Amount and Paid Amount should be same!!");
+	var check_pt = $("#check_multiple_balance").val();
+	if ((check_pt == "mul") && (p_amt != pa_amt)) {
+		toastr["warning"]("Payable Amount and Paid Amount should be same!!");
 		return false;
-  	}
+	}
+	// console.log(check_pt + " = " + p_amt + " = " + pa_amt);
 
 	var base_url=$("#base_url").val().trim();
 
@@ -42,10 +43,10 @@ $('.make_sale').click(function (e) {
     var paid_amt=$(".sales_div_tot_paid").text();
     var balance=parseFloat($(".sales_div_tot_balance").text());
 
-    if($("#customer_id").val().trim()==1 && balance!=0){
+    /* if($("#customer_id").val().trim()==1 && balance!=0){
     	toastr["warning"]("Walk-in Customer Should Pay Complete Amount!!");
 		return;
-    }
+    } */
     if(document.getElementById("sales_id")){
     	var command = 'update';
     }
@@ -81,6 +82,9 @@ $('.make_sale').click(function (e) {
 				{
 					//window.location=base_url+"pos/print_invoice_pos/"+result[1]+"?redirect=pos", "_blank";
 					if(window.open(base_url+"pos/print_invoice_pos/"+result[1], "_blank", "scrollbars=1,resizable=1,height=300,width=450")){
+						window.location.reload();
+						return true;
+
 						if(command=='update'){
 							window.location=base_url+"sales";
 						}else{
@@ -120,7 +124,7 @@ $('.make_sale').click(function (e) {
 				$(".overlay").remove();
 				window.location.reload();
 			}
-	   });
+	   	});
 	//} //confirmation sure
 	//	}); //confirmation end
 
@@ -132,11 +136,12 @@ $('.make_sale').click(function (e) {
 $('#save,#update').click(function (e) {
 	var pa_amt = parseFloat($(".sales_div_tot_payble").text());
 	var p_amt = parseFloat($(".sales_div_tot_paid").text());
-	var check_pt = parseInt($("#check_multiple_balance").val());
-	if (check_pt == 1 && p_amt != pa_amt) {
-    	toastr["warning"]("Payable Amount and Paid Amount should be same!!");
+	var check_pt = $("#check_multiple_balance").val();
+	if ((check_pt == "mul") && (p_amt != pa_amt)) {
+		toastr["warning"]("Payable Amount and Paid Amount should be same!!");
 		return false;
-  	}
+	}
+	// console.log(check_pt + " = " + p_amt + " = " + pa_amt);
 
 	var base_url=$("#base_url").val().trim();
     if($(".items_table tr").length==1){
@@ -182,6 +187,8 @@ $('#save,#update').click(function (e) {
 						//window.location=base_url+"sales/print_invoice/"+result[1];
 						//window.open(base_url+"pos/print_invoice_pos/"+result[1], "_blank");
 						if(window.open(base_url+"pos/print_invoice_pos/"+result[1], "_blank", "scrollbars=1,resizable=1,height=300,width=450")){
+							window.location.reload();
+							return true;
 							if(command=='update'){
 								window.location=base_url+"sales";
 							}
@@ -403,13 +410,15 @@ $('.show_payments_modal').click(function (e) {
 		failed.play();
 		return;
     }else{
-		$("#check_multiple_balance").val(1);
+		$("#check_multiple_balance").val('mul');
 		$(".payment-row").remove();
     	adjust_payments();
     	$("#add_payment_row,#payment_type_1").parent().show();
     	$("#amount_1").parent().parent().removeClass('col-md-12').addClass('col-md-6');
     	$('#multiple-payments-modal').modal('toggle');
     }
+	$("#amount_1").val(0);
+	$("#amount_1").trigger("onkeyup");
 });
 //hold_invoice end
 
@@ -421,7 +430,7 @@ $('#show_cash_modal').click(function (e) {
 		failed.play();
 		return;
     }else{
-		$("#check_multiple_balance").val(0);
+		$("#check_multiple_balance").val('sin');
 		$(".payment-row").remove();
     	adjust_payments();
     	$("#add_payment_row,#payment_type_1").parent().hide();

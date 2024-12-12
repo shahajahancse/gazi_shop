@@ -28,6 +28,7 @@ class Items extends MY_Controller {
 		$this->form_validation->set_rules('category_id', 'Category Name', 'trim|required');
 		$this->form_validation->set_rules('unit_id', 'Unit', 'trim|required');
 		$this->form_validation->set_rules('price', 'Item Price', 'trim|required');
+		$this->form_validation->set_rules('item_code', 'Barcode is Unique', 'trim|required|callback_check_unique_barcode');
 		// $this->form_validation->set_rules('tax_id', 'Tax', 'trim|required');
 		$this->form_validation->set_rules('purchase_price', 'Purchase Price', 'trim|required');
 		//$this->form_validation->set_rules('profit_margin', 'Profit Margin', 'trim|required');
@@ -41,6 +42,18 @@ class Items extends MY_Controller {
 			echo "Please Fill Compulsory(* marked) Fields.";
 		}
 	}
+	
+	public function check_unique_barcode()
+	{
+		$item_code = $this->input->post('item_code'); // Get the barcode value
+		$this->db->where('item_code', $item_code);  // Exclude the barcode record
+		$query = $this->db->get('db_items');
+		if ($query->num_rows() > 0) {
+			return FALSE; // barcode already exists
+		}
+		return TRUE; // barcode is unique
+	}
+
 	public function update($id){
 		$this->permission_check('items_edit');
 		$data=$this->data;
@@ -57,7 +70,6 @@ class Items extends MY_Controller {
 		$this->form_validation->set_rules('category_id', 'Category Name', 'trim|required');
 		$this->form_validation->set_rules('unit_id', 'Unit', 'trim|required');
 		$this->form_validation->set_rules('price', 'Item Price', 'trim|required');
-		// $this->form_validation->set_rules('tax_id', 'Tax', 'trim|required');
 		$this->form_validation->set_rules('purchase_price', 'Purchase Price', 'trim|required');
 		//$this->form_validation->set_rules('profit_margin', 'Profit Margin', 'trim|required');
 		$this->form_validation->set_rules('sales_price', 'Sales Price', 'trim|required');
