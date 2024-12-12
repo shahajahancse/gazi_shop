@@ -28,12 +28,15 @@ class Items extends MY_Controller {
 		$this->form_validation->set_rules('category_id', 'Category Name', 'trim|required');
 		$this->form_validation->set_rules('unit_id', 'Unit', 'trim|required');
 		$this->form_validation->set_rules('price', 'Item Price', 'trim|required');
-		$this->form_validation->set_rules('item_code', 'Barcode is Unique', 'trim|required|callback_check_unique_barcode');
+		$this->form_validation->set_rules('item_code', 'Barcode is Unique', 'trim|required');
 		// $this->form_validation->set_rules('tax_id', 'Tax', 'trim|required');
 		$this->form_validation->set_rules('purchase_price', 'Purchase Price', 'trim|required');
 		//$this->form_validation->set_rules('profit_margin', 'Profit Margin', 'trim|required');
 		$this->form_validation->set_rules('sales_price', 'Sales Price', 'trim|required');
-
+		if ($this->check_unique_barcode() == FALSE) {
+			echo "Item Barcode Field is Unique Required";
+			exit();
+		}
 
 		if ($this->form_validation->run() == TRUE) {
 			$result=$this->items->verify_and_save();
@@ -42,7 +45,7 @@ class Items extends MY_Controller {
 			echo "Please Fill Compulsory(* marked) Fields.";
 		}
 	}
-	
+
 	public function check_unique_barcode()
 	{
 		$item_code = $this->input->post('item_code'); // Get the barcode value

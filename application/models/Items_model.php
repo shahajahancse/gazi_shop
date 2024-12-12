@@ -140,6 +140,14 @@ class Items_model extends CI_Model {
 		$q5=$this->db->query($qs5);
 		$item_init=$q5->row()->item_init;
 
+		$this->db->where('item_code', $item_code);  // Exclude the barcode record
+		$query = $this->db->get('db_items');
+		if ($query->num_rows() > 0) {
+			$qcccb = $this->db->order_by("id", "desc")->get("db_items")->row();
+			$maxid = isset($qcccb->id)? $qcccb->id+1 : 1;
+			$item_code = $item_init.str_pad($maxid, 10, '0', STR_PAD_LEFT);
+		}
+
 		//Create items unique Number  // 12-12-2024 commend on
 		/* $this->db->query("ALTER TABLE db_items AUTO_INCREMENT = 1");
 		$qs4="select coalesce(max(id),0)+1 as maxid from db_items";

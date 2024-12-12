@@ -432,6 +432,7 @@
                itemCodeElement.removeAttribute('readonly');
                itemCodeElement.readOnly = false;
                itemCodeElement.value = "";
+               itemCodeElement.focus();
             } else {
                itemCodeElement.setAttribute('readonly', 'true');
                itemCodeElement.readOnly = true;
