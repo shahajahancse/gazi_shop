@@ -472,8 +472,6 @@ class Items_model extends CI_Model {
 		$company_name = $this->db->query("SELECT company_name FROM db_company")->row()->company_name;
 		$rowcount = $this->input->post('hidden_rowcount');
 		?>
-		<div style="width:1.5in !important; height:1in !important; line-height: 12px !important;">
-			<div style="text-align: center;">
 	
 				<?php
 				// Process form data
@@ -492,7 +490,7 @@ class Items_model extends CI_Model {
 	
 						for ($j = 1; $j <= $item_count; $j++) {
 							?>
-							<div style="width:1.5in !important; height:1in !important; border:1px solid #000; margin-bottom:5px; text-align:center; display: inline-block; page-break-inside: avoid;">
+							<div style="width:40mm !important; height:30mm !important; border:1px solid #000; margin-bottom:5px; text-align:center; display: inline-block; page-break-inside: avoid;">
 								<div style="padding: 2px;">
 									<b style="font-size: 10px; display: block;"><?= strtoupper($company_name); ?></b>
 									<span style="font-size: 9px; display: block;"><?= $item_name; ?></span>
