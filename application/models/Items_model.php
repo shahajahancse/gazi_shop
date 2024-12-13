@@ -490,9 +490,9 @@ class Items_model extends CI_Model {
 	
 						for ($j = 1; $j <= $item_count; $j++) {
 							?>
-							<div style="width:38mm !important; height:27mm !important; border:1px solid #000; margin-bottom:5px; text-align:center; display: inline-block; page-break-inside: avoid;">
+							<div style="width:38mm !important; height:25mm !important; border:1px solid #000; margin-bottom:5px; text-align:center; display: inline-block; page-break-inside: avoid;">
 								<div style="padding: 2px;">
-									<b style="font-size: 9px; display: block;"><?= strtoupper($company_name); ?></b>
+									<b style="font-size: 8px; display: block;"><?= strtoupper($company_name); ?></b>
 									<span style="font-size: 8px; display: block;"><?= $item_name; ?></span>
 									<b style="font-size: 8px;">Price:</b>
 									<span style="font-size: 8px;"><?= $CI->currency($item_price); ?></span>
