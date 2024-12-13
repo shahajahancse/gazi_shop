@@ -490,13 +490,13 @@ class Items_model extends CI_Model {
 	
 						for ($j = 1; $j <= $item_count; $j++) {
 							?>
-							<div style="width:38mm !important; height:26mm !important; border:1px solid #000; margin-bottom:5px; text-align:center; display: inline-block; page-break-inside: avoid;">
+							<div style="width:36mm !important; height:25mm !important; border:1px solid #000; margin-bottom:5px; text-align:center; display: inline-block; page-break-inside: avoid;">
 								<div style="padding: 2px;">
-									<b style="font-size: 10px; display: block;"><?= strtoupper($company_name); ?></b>
-									<span style="font-size: 9px; display: block;"><?= $item_name; ?></span>
-									<b style="font-size: 9px;">Price:</b>
-									<span style="font-size: 9px;"><?= $CI->currency($item_price); ?></span>
-									<div style="margin-top: 5px;">
+									<b style="font-size: 9px; display: block;"><?= strtoupper($company_name); ?></b>
+									<span style="font-size: 8px; display: block;"><?= $item_name; ?></span>
+									<b style="font-size: 8px;">Price:</b>
+									<span style="font-size: 8px;"><?= $CI->currency($item_price); ?></span>
+									<div style="margin-top: 2px;">
 										<img src="<?= base_url(); ?>barcode/<?= $item_code; ?>" alt="Barcode" style="max-width: 1.4in; max-height: 0.5in;">
 									</div>
 								</div>
