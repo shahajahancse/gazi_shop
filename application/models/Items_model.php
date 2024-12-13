@@ -458,60 +458,55 @@ class Items_model extends CI_Model {
 		return $this->security->xss_clean(html_escape($input));
 	}
 
-	public function preview_labels(){
-		//print_r($_POST);exit();
+	public function preview_labels() {
 		$CI =& get_instance();
-		//Filtering XSS and html escape from user inputs
-		$company_name=$this->db->query("select company_name from db_company")->row()->company_name;
+		// Get company name
+		$company_name = $this->db->query("SELECT company_name FROM db_company")->row()->company_name;
 		$rowcount = $this->input->post('hidden_rowcount');
 		?>
-		<div style=" height:40mm !important;  width:80mm !important; line-height: 16px !important;">
-			<div class="inner-div-2" style=" height:11in !important;  width:8.5in !important; line-height: 16px !important;">
-				<div style="">
-
-					<?php
-					//Import post data from form
-					for($i=1;$i<=$rowcount;$i++){
-
-						if(isset($_POST['tr_item_id_'.$i]) && !empty($_POST['tr_item_id_'.$i])){
-
-
-							$item_id 			=$this->xss_html_filter(trim($_POST['tr_item_id_'.$i]));
-							$item_count 			=$this->xss_html_filter(trim($_POST['td_data_'.$i."_3"]));
-							$res1=$this->db->query("select item_name,item_code,sales_price from db_items where id=$item_id")->row();
-
-							$item_name =$res1->item_name;
-							$item_code =$res1->item_code;
-							$item_price =$res1->sales_price;
-
-							for($j=1;$j<=$item_count;$j++){
+		<div style="width:80mm !important; height:40mm !important; line-height: 16px !important;">
+			<div style="text-align: center;">
+	
+				<?php
+				// Process form data
+				for ($i = 1; $i <= $rowcount; $i++) {
+	
+					if (isset($_POST['tr_item_id_' . $i]) && !empty($_POST['tr_item_id_' . $i])) {
+	
+						$item_id = $this->xss_html_filter(trim($_POST['tr_item_id_' . $i]));
+						$item_count = $this->xss_html_filter(trim($_POST['td_data_' . $i . "_3"]));
+	
+						$res1 = $this->db->query("SELECT item_name, item_code, sales_price FROM db_items WHERE id=$item_id")->row();
+	
+						$item_name = $res1->item_name;
+						$item_code = $res1->item_code;
+						$item_price = $res1->sales_price;
+	
+						for ($j = 1; $j <= $item_count; $j++) {
 							?>
-							<div style="height:1in !important; line-height: 1in; width:3.6375in !important; display: inline-block;  " class="label_border text-center">
-							<div style="display:inline-block;vertical-align:middle;line-height:16px !important;">
-								<b style="display: block !important" class="text-uppercase"><?=$company_name;?></b>
-									<span style="display: block !important">
-									<?= $item_name;?>
-									</span>
-								<b>Price:</b>
-								<span><?= $CI->currency($item_price);?></span>
-								<img class="center-block" style="max-height: 0.35in !important; width: 100%; opacity: 1.0" src="<?php echo base_url();?>barcode/<?php echo $item_code;?>">
-
-							</div>
+							<div style="width:80mm !important; height:40mm !important; border:1px solid #000; margin-bottom:5px; text-align:center; display: inline-block; page-break-inside: avoid;">
+								<div style="padding: 5px;">
+									<b style="font-size: 14px; display: block;"><?= strtoupper($company_name); ?></b>
+									<span style="font-size: 12px; display: block;"><?= $item_name; ?></span>
+									<b style="font-size: 12px;">Price:</b>
+									<span style="font-size: 12px;"><?= $CI->currency($item_price); ?></span>
+									<div style="margin-top: 5px;">
+										<img src="<?= base_url(); ?>barcode/<?= $item_code; ?>" alt="Barcode" style="max-width: 70mm; max-height: 20mm;">
+									</div>
+								</div>
 							</div>
 							<?php
-							}
 						}
-
-					}//for end
-					?>
-
-
-				</div>
+					}
+	
+				} // end for
+				?>
+	
 			</div>
 		</div>
 		<?php
-
 	}
+	
 
 
 	public function delete_stock_entry($entry_id){
