@@ -465,7 +465,7 @@ class Items_model extends CI_Model {
 		$company_name=$this->db->query("select company_name from db_company")->row()->company_name;
 		$rowcount = $this->input->post('hidden_rowcount');
 		?>
-		<div style=" height:11in !important;  width:8.5in !important; line-height: 16px !important;">
+		<div style=" height:40mm !important;  width:80mm !important; line-height: 16px !important;">
 			<div class="inner-div-2" style=" height:11in !important;  width:8.5in !important; line-height: 16px !important;">
 				<div style="">
 
