@@ -464,6 +464,7 @@ class Items_model extends CI_Model {
 		$company_name = $this->db->query("SELECT company_name FROM db_company")->row()->company_name;
 		$rowcount = $this->input->post('hidden_rowcount');
 		?>
+		<div style="width:1.5in !important; height:1in !important; line-height: 12px !important;">
 			<div style="text-align: center;">
 	
 				<?php
@@ -483,14 +484,14 @@ class Items_model extends CI_Model {
 	
 						for ($j = 1; $j <= $item_count; $j++) {
 							?>
-							<div style="width:68mm !important; height:32mm !important; border:1px solid #000; margin-bottom:5px; text-align:center; display: inline-block; page-break-inside: avoid;">
-								<div style="padding: 5px;">
-									<b style="font-size: 11px; display: block;"><?= strtoupper($company_name); ?></b>
-									<span style="font-size: 10px; display: block;"><?= $item_name; ?></span>
-									<b style="font-size: 11px;">Price:</b>
-									<span style="font-size: 11px;"><?= $CI->currency($item_price); ?></span>
+							<div style="width:1.5in !important; height:1in !important; border:1px solid #000; margin-bottom:5px; text-align:center; display: inline-block; page-break-inside: avoid;">
+								<div style="padding: 2px;">
+									<b style="font-size: 10px; display: block;"><?= strtoupper($company_name); ?></b>
+									<span style="font-size: 9px; display: block;"><?= $item_name; ?></span>
+									<b style="font-size: 9px;">Price:</b>
+									<span style="font-size: 9px;"><?= $CI->currency($item_price); ?></span>
 									<div style="margin-top: 5px;">
-										<img src="<?= base_url(); ?>barcode/<?= $item_code; ?>" alt="Barcode" style="max-width: 70mm; max-height: 20mm;">
+										<img src="<?= base_url(); ?>barcode/<?= $item_code; ?>" alt="Barcode" style="max-width: 1.4in; max-height: 0.5in;">
 									</div>
 								</div>
 							</div>
@@ -502,8 +503,10 @@ class Items_model extends CI_Model {
 				?>
 	
 			</div>
+		</div>
 		<?php
 	}
+	
 	
 
 
