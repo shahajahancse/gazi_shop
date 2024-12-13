@@ -483,7 +483,7 @@ class Items_model extends CI_Model {
 						for ($j = 1; $j <= $item_count; $j++) {
 							?>
 							<div style="width:38mm !important; height:25mm !important; margin-bottom:5px; text-align:center; display: inline-block; page-break-inside: avoid;">
-								<div style="padding: 1px;">
+								<div style="padding: 2px 1px 1px 1px;">
 									<b style="font-size: 8px; display: block;"><?= strtoupper($company_name); ?></b>
 									<span style="font-size: 8px; display: block;"><?= $item_name; ?></span>
 									<b style="font-size: 8px;">Price:</b>
