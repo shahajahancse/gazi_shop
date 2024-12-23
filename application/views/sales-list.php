@@ -120,10 +120,10 @@
             <div class="box-header with-border">
               <h3 class="box-title"><?=$page_title;?></h3>
               <?php if($CI->permissions('sales_add')) { ?>
-              <div class="box-tools">
+              <!-- <div class="box-tools">
                 <a class="btn btn-block btn-info" href="<?php echo $base_url; ?>sales/add">
                 <i class="fa fa-plus"></i> <?= $this->lang->line('new_sales'); ?></a>
-              </div>
+              </div> -->
               <?php } ?>
             </div>
             <!-- /.box-header -->

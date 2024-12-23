@@ -330,7 +330,7 @@
                             <div class="box-body">
                               <div class="form-group">
                                 <label for="discount_input">Discount</label>
-                                <input type="text" class="form-control" id="discount_input" name="discount_input" placeholder="" value="0">
+                                <input class="form-control" id="discount_input" name="discount_input" value="0" onkeyup="check_max_dis(this.value)">
                               </div>
                             </div>
                           </div>
@@ -338,7 +338,7 @@
                             <div class="box-body">
                               <div class="form-group">
                                 <label for="discount_type">Discount Type</label>
-                                <select class="form-control" id='discount_type' name="discount_type">
+                                <select onchange="check_max_dis()" class="form-control" id='discount_type' name="discount_type">
                                   <option value='in_percentage'>Per%</option>
                                   <option value='in_fixed'>Fixed</option>
                                 </select>
@@ -475,6 +475,8 @@
                        <label><?= $this->lang->line('grand_total'); ?>:</label><br/>
                        <?= $CI->currency('<span class="tot_grand"></span>');?>
                     </div>
+                    <input type="hidden" name="tot_profit" id="tot_profit" value="0">
+                    <input type="hidden" name="item_tot_dis" id="item_tot_dis" value="0">
 
                   </div>
 
@@ -614,6 +616,32 @@
 <script src="<?php echo $theme_link; ?>dist/js/bootstrap3-typeahead.min.js"></script>
 <!-- DROP DOWN END-->
 
+<script>
+  function check_max_dis(val = 0) {
+    if (val == 0) {
+      var val = parseFloat($("#discount_input").val()).toFixed(2);
+    }
+    console.log(val);
+    var get_profit = parseFloat($("#tot_profit").val()).toFixed(2);
+    var get_dis = parseFloat($("#item_tot_dis").val()).toFixed(2);
+	  var total = parseFloat($(".tot_amt").text());
+    var get_tot_dis = 0;
+
+    var discount_type=$("#discount_type").val();
+    if(discount_type == 'in_percentage'){
+      get_tot_dis = (1 + parseFloat((total*val)/100)).toFixed(2);
+    }else{
+      get_tot_dis = (1 + parseFloat(val) + parseFloat(get_dis)).toFixed(2);
+    }
+
+    if (!isNaN(get_tot_dis) && get_tot_dis > get_profit) {
+      var max = (get_profit - 1).toFixed(2);
+      $('#discount_input').val("");
+      toastr['error']("Sorry! Maximum Discount amount is " + max);
+      return false;
+    }
+  }
+</script>
 
 <script>
   //RIGHT SIT DIV:-> FILTER ITEM INTO THE ITEMS LIST
@@ -668,8 +696,9 @@
     //var gst_amt         =$('#div_'+id).attr('data-item-gst-amt');
     var item_cost       =$('#div_'+id).attr('data-item-cost');
     var sales_price     =$('#div_'+id).attr('data-item-sales-price');
-    var item_tax_amt     =$('#div_'+id).attr('data_item_tax_amt');
+    var item_tax_amt    =$('#div_'+id).attr('data_item_tax_amt');
     var discount        =$('#div_'+id).attr('data-item-discount');
+    var profit_margin   =$('#div_'+id).attr('data_item_profit_margin');
     var sales_price_temp=sales_price;
     sales_price         =(parseFloat(sales_price+item_tax_amt)).toFixed(2);
 
@@ -680,6 +709,9 @@
 
         quantity +='<input type="hidden" name="dis_hide_'+item_id+'" id="dis_hide_'+item_id+'" value="'+discount+'">';
         quantity +='<input type="hidden" name="mrp_hide_'+item_id+'" id="mrp_hide_'+item_id+'" value="'+mrp+'">';
+        quantity +='<input type="hidden" name="profit_hide_'+item_id+'" id="profit_hide_'+item_id+'" value="'+profit_margin+'">';
+        quantity +='<input type="hidden" name="profit_row_'+item_id+'" id="profit_row_'+item_id+'" value="'+profit_margin+'">';
+        quantity +='<input type="hidden" name="dis_row_'+item_id+'" id="dis_row_'+item_id+'" value="'+discount+'">';
 
         quantity +='<span class="input-group-btn"><button onclick="increment_qty('+item_id+','+rowcount+')" type="button" class="btn btn-default btn-flat"><i class="fa fa-plus text-success"></i></button></span></div>';
 
@@ -824,10 +856,15 @@ function make_subtotal(item_id,rowcount){
   var mrp_price       = parseFloat($("#td_"+rowcount+"_8").html()).toFixed(2);
   var tot_mrp_price   = parseFloat(item_qty)*parseFloat(mrp_price);
   var dis_hide        = $("#dis_hide_"+item_id).val();
+  var profit_hide     = $("#profit_hide_"+item_id).val();
   var dis_ahide       = (isNaN(parseFloat($("#item_adis_"+item_id).val().trim()))) ? 0 :parseFloat($("#item_adis_"+item_id).val().trim());
 
   var total_discount  = parseFloat(item_qty * dis_hide);
   $("#td_"+rowcount+"_6").html(parseFloat(total_discount).toFixed(2));
+  $("#dis_row_"+item_id).val(total_discount);
+
+  var total_profit    = parseFloat(item_qty * profit_hide);
+  $("#profit_row_"+item_id).val(total_profit);
   // shahajahan 03-12-2024
 
 
@@ -862,15 +899,19 @@ function final_total(){
   var rowcount=$("#hidden_rowcount").val();
   var discount_input=$("#discount_input").val();
   var discount_type=$("#discount_type").val();
+  var tot_profit = 0;
+  var dis_row = 0;
 
-  if($(".items_table tr").length>1){
+  if($(".items_table tr").length > 1){
     for(i=0;i<rowcount;i++){
       if(document.getElementById('tr_item_id_'+i)){
         total = parseFloat(total)+ + +parseFloat($("#td_"+i+"_4").html()).toFixed(2);
         item_id = $("#tr_item_id_"+i).val();
         item_qty = parseFloat(item_qty)+ + +parseFloat($("#item_qty_"+item_id).val()).toFixed(2);
-        item_tem_qty = parseFloat($("#item_qty_"+item_id).val()).toFixed(2)
+        item_tem_qty = parseFloat($("#item_qty_"+item_id).val()).toFixed(2);
         total_tax += (parseFloat($("#item_tax_"+item_id).val()).toFixed(2))*item_tem_qty;
+        tot_profit += (parseFloat($("#profit_row_"+item_id).val()));
+        dis_row += (parseFloat($("#dis_row_"+item_id).val()));
       }
     }//for end
   }//items_table
@@ -878,15 +919,17 @@ function final_total(){
   total = parseFloat(total).toFixed(2);
   var discount_amt = calulate_discount(discount_input, discount_type, total);//return value
   // console.log(discount_amt + " " + discount_input + " " + discount_type + " " + total);
-  set_total(item_qty, total, discount_amt, total-discount_amt, total_tax);
+  set_total(item_qty, total, discount_amt, total-discount_amt, total_tax, tot_profit, dis_row);
 }
 
-function set_total(tot_qty=0, tot_amt=0, tot_disc=0, tot_grand=0, tot_tax = 0){
+function set_total(tot_qty=0, tot_amt=0, tot_disc=0, tot_grand=0, tot_tax = 0, tot_profit = 0, dis_row = 0){
   $(".tot_qty   ").html(tot_qty);
   $(".tot_amt   ").html((Math.round(tot_amt).toFixed(2)));
   $(".tot_disc  ").html((Math.round(tot_disc).toFixed(2)));
   $(".tot_tax  ").html((Math.round(tot_tax).toFixed(2)));
   $(".tot_grand ").html((Math.round(parseFloat(tot_grand)+parseFloat(tot_tax))).toFixed(2));
+  $("#tot_profit  ").val((Math.round(tot_profit).toFixed(2)));
+  $("#item_tot_dis  ").val((Math.round(dis_row).toFixed(2)));
 }
 
 //LEFT SIDE: FINAL TOTAL
@@ -897,6 +940,8 @@ function adjust_payments(){
   var rowcount=$("#hidden_rowcount").val();
   var discount_input=$("#discount_input").val();
   var discount_type=$("#discount_type").val();
+  var tot_profit = 0;
+  var dis_row = 0;
   //var discount_amt = parseFloat($(".tot_disc").html());
 
   if($(".items_table tr").length>1){
@@ -907,6 +952,8 @@ function adjust_payments(){
         item_qty=parseFloat(item_qty)+ + +parseFloat($("#item_qty_"+item_id).val()).toFixed(2);
         item_tem_qty = parseFloat($("#item_qty_"+item_id).val()).toFixed(2)
         total_tax+=(parseFloat($("#item_tax_"+item_id).val()).toFixed(2))*item_tem_qty;
+        tot_profit += (parseFloat($("#profit_row_"+item_id).val()));
+        dis_row += (parseFloat($("#dis_row_"+item_id).val()));
       }
     }//for end
   }//items_table

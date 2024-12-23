@@ -181,9 +181,9 @@
             <?php } ?>
 
             <?php if($CI->permissions('sales_return_view')) { ?>
-            <!-- <li class="sales-return-list-active-li sales-return-active-li">
+            <li class="sales-return-list-active-li sales-return-active-li">
               <a href="<?php echo $base_url; ?>sales_return"><i class="fa fa-list "></i> <span><?= $this->lang->line('sales_returns_list'); ?></span> <span class="pull-right-container"> <small class="label pull-right bg-green">New</small> </span></a>
-            </li> -->
+            </li>
             <?php } ?>
 
               </ul>
@@ -235,11 +235,11 @@
               <li class="purchase-list-active-li"><a href="<?php echo $base_url; ?>purchase"><i class="fa fa-list "></i> <span><?= $this->lang->line('purchase_list'); ?></span></a></li>
               <?php } ?>
               <?php if($CI->permissions('purchase_return_view')) { ?>
-              <!-- <li class="purchase-returns-list-active-li"><a href="<?php echo $base_url; ?>purchase_return"><i class="fa fa-list "></i> <span><?= $this->lang->line('purchase_returns_list'); ?></span>
+              <li class="purchase-returns-list-active-li"><a href="<?php echo $base_url; ?>purchase_return"><i class="fa fa-list "></i> <span><?= $this->lang->line('purchase_returns_list'); ?></span>
               <span class="pull-right-container">
                     <small class="label pull-right bg-green">New</small>
                   </span>
-                </a></li> -->
+                </a></li>
               <?php } ?>
             </ul>
           </li>

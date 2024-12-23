@@ -23,6 +23,7 @@ class Pos_model extends CI_Model {
 	        	$item_sales_price = $res2->sales_price;
 	        	$item_cost = $res2->purchase_price;
 	        	$item_tax = $res2->tax;
+	        	$profit_margin = $res2->profit_margin;
 	        	$item_sales_qty = 1;
 
 	        	//Check Exculsive or Inclusive
@@ -68,6 +69,7 @@ class Pos_model extends CI_Model {
 	          				data-item-discount='<?php echo $discount;?>'
 	          				data-item-cost='<?php echo $item_cost;?>'
 	          				data_item_tax_amt='<?php echo $item_tax_amt;?>'
+	          				data_item_profit_margin='<?php echo $profit_margin;?>'
 	           				style="max-height: 150px;min-height: 150px;cursor: pointer;<?php echo $bg_color; ?>">
 	           	<span class="label label-danger push-right" style="font-weight: bold;font-family: sans-serif;" title="<?php echo $res2->stock; ?> Quantity's in Stock"><?php echo $res2->stock; ?></span>
 	            <div class="box-body box-profile">

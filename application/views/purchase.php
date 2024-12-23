@@ -285,7 +285,11 @@
                                        </div>
                                     </div>
                                  </div>
-                                 <div class="row">
+
+                                 <input type="hidden" id="discount_to_all_input" name="discount_to_all_input" value="0">
+                                 <input type="hidden" id="discount_to_all_type" name="discount_to_all_type" value="in_fixed">
+
+                                 <!-- <div class="row">
                                     <div class="col-md-12">
                                        <div class="form-group">
                                           <label for="discount_to_all_input" class="col-sm-4 control-label"><?= $this->lang->line('discount_on_all'); ?></label>
@@ -298,16 +302,15 @@
                                                 <option value='in_fixed'>Fixed</option>
                                              </select>
                                           </div>
-                                          <!-- Dynamicaly select Supplier name -->
                                           <script type="text/javascript">
                                              <?php if($discount_type!=''){ ?>
                                                  document.getElementById('discount_to_all_type').value='<?php echo  $discount_type; ?>';
                                              <?php }?>
                                           </script>
-                                          <!-- Dynamicaly select Supplier name end-->
                                        </div>
                                     </div>
-                                 </div>
+                                 </div> -->
+
                                 <div class="row">
                                     <div class="col-md-12">
                                        <div class="form-group">
@@ -346,13 +349,16 @@
                                                   </h4>
                                                 </th>
                                              </tr>
-                                             <tr>
+
+                                             <input type="hidden" id="discount_to_all_amt" name="discount_to_all_amt" value="0">
+
+                                             <!-- <tr>
                                                 <th class="text-right" style="font-size: 17px;"><?= $this->lang->line('discount_on_all'); ?></th>
                                                 <th class="text-right" style="padding-left:10%;font-size: 17px;">
-                                                   <h4>
-                                                    <?= $CI->currency('<b id="discount_to_all_amt" name="discount_to_all_amt">0.00</b>'); ?></h4>
+                                                   <h4> <?= $CI->currency('<b id="discount_to_all_amt" name="discount_to_all_amt">0.00</b>'); ?></h4>
                                                 </th>
-                                             </tr>
+                                             </tr> -->
+
                                              <tr style="<?= (!is_enabled_round_off()) ? 'display: none;' : '';?>">
                                                 <th class="text-right" style="font-size: 17px;"><?= $this->lang->line('round_off'); ?>
 
@@ -701,7 +707,7 @@
                  }
                    discount=parseFloat(discount).toFixed(2);
 
-                    $("#discount_to_all_amt").html(discount);
+                    $("#discount_to_all_amt").val(discount);
                     $("#hidden_discount_to_all_amt").val(discount);
              //}
              //subtotal_round=Math.round(taxable);
