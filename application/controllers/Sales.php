@@ -102,12 +102,12 @@ class Sales extends MY_Controller {
 												</a>
 											</li>';
 
-											if($this->permissions('sales_edit'))
+											/* if($this->permissions('sales_edit'))
 											$str2.='<li>
 												<a title="Update Record ?" href="'.$str1.$sales->id.'">
 													<i class="fa fa-fw fa-edit text-blue"></i>Edit
 												</a>
-											</li>';
+											</li>'; */
 
 											if($this->permissions('sales_payment_view'))
 											$str2.='<li>
