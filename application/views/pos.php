@@ -621,7 +621,7 @@
     if (val == 0) {
       var val = parseFloat($("#discount_input").val()).toFixed(2);
     }
-    console.log(val);
+
     var get_profit = parseFloat($("#tot_profit").val()).toFixed(2);
     var get_dis = parseFloat($("#item_tot_dis").val()).toFixed(2);
 	  var total = parseFloat($(".tot_amt").text());
@@ -633,8 +633,10 @@
     }else{
       get_tot_dis = (1 + parseFloat(val) + parseFloat(get_dis)).toFixed(2);
     }
+    console.log(get_tot_dis + " = " + get_profit);
 
-    if (!isNaN(get_tot_dis) && get_tot_dis > get_profit) {
+
+    if (!isNaN(parseFloat(get_tot_dis)) && parseFloat(get_tot_dis) > parseFloat(get_profit)) {
       var max = (get_profit - 1).toFixed(2);
       $('#discount_input').val("");
       toastr['error']("Sorry! Maximum Discount amount is " + max);
