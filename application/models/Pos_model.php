@@ -112,8 +112,8 @@ class Pos_model extends CI_Model {
 		$sales_date 		=date("Y-m-d",strtotime($CUR_DATE));
 		$points 			= (empty($points_use)) ? 'NULL' : $points_use;
 		$discount_input 	= (empty($discount_input)) ? 'NULL' : $discount_input;
-		$tot_disc 		= (empty($tot_disc) || $tot_disc==0) ? 'NULL' : $tot_disc;
-		$tot_grand 		= (empty($tot_grand)) ? 'NULL' : $tot_grand;
+		$tot_disc 		= (empty($tot_disc) || $tot_disc==0) ? '0' : $tot_disc;
+		$tot_grand 		= (empty($tot_grand)) ? '0' : $tot_grand;
 		//$tot_grand		=round($tot_amt);
 		$round_off = number_format($tot_grand-$tot_amt,2,'.','');
 
@@ -185,6 +185,8 @@ class Pos_model extends CI_Model {
 			$sales_id = $this->db->insert_id();
 		}
 		//Import post data from form
+		// cal additional discount of each item
+		$add_dis_one = $tot_disc / $tot_amt;
 		for($i=0;$i<$rowcount;$i++){
 
 			if(isset($_REQUEST['tr_item_id_'.$i]) && trim($_REQUEST['tr_item_id_'.$i])!=''){
@@ -207,15 +209,15 @@ class Pos_model extends CI_Model {
 				$total_cost = $price_per_unit * $sales_qty;
 				//end
 				// shahajahan
-				$mr_price   =$this->xss_html_filter(trim($_REQUEST['mrp_hide_'.$item_id]));
-				$item_adis  =$this->xss_html_filter(trim($_REQUEST['item_adis_'.$item_id]));
+				$mr_price   = $this->xss_html_filter(trim($_REQUEST['mrp_hide_'.$item_id]));
+				// $item_adis  =$this->xss_html_filter(trim($_REQUEST['item_adis_'.$item_id]));
 				// shahajahan
 
 				$tax_d =$this->db->select('*')->from('db_items')->where('id',$item_id)->get()->row();
-				$tax_type =$tax_d->tax_type;
+				$tax_type = $tax_d->tax_type;
 
-				$unit_tax=0;
-				$tax_amt =$tax_d->vat_amt*$sales_qty;
+				$unit_tax = 0;
+				$tax_amt = $tax_d->vat_amt*$sales_qty;
 				// if(!empty($tax_id) && $tax_id!=0){
 				// 	//each unit tax amt
 				// 	$unit_tax =$this->db->select('tax')->from('db_tax')->where('id',$tax_id)->get()->row()->tax;
@@ -230,17 +232,10 @@ class Pos_model extends CI_Model {
 				//dd($price_per_unit);
 
 
-				$single_unit_total_cost =$price_per_unit;
-
-
 				if($tax_amt=='' || $tax_amt==0){
-					$tax_amt=null;
+					$tax_amt = 0;
 				}
-				if($total_cost=='' || $total_cost==0){$total_cost=null;}
-
-				if(!empty($discount_to_all_input) && $discount_to_all_input!=0){
-					$discount_amt =null;
-				}
+				if($total_cost=='' || $total_cost==0){$total_cost=0;}
 				/* ******************************** */
 
 				$salesitems_entry = array(
@@ -251,11 +246,12 @@ class Pos_model extends CI_Model {
 		    				'mr_price' 			=> ($mr_price) ? $mr_price : 0,
 		    				'price_per_unit' 	=> $price_per_unit,
 		    				'tax_id' 			=> $tax_id,
+		    				'vat_unit' 			=> $tax_d->vat_amt,
 		    				'tax_amt' 			=> $tax_amt,
 		    				'unit_discount_per' => $dis_per_qty,
 		    				'discount_amt' 		=> $dis_too,
-		    				'additional_dis'    => $item_adis,        // Additional Discount
-		    				'unit_total_cost' 	=> $single_unit_total_cost,
+		    				'additional_dis'    => $add_dis_one * $price_per_unit,        // Additional Discount
+		    				'unit_total_cost' 	=> $price_per_unit,
 		    				'total_cost' 		=> $total_cost,
 		    				'status'	 		=> 1,
 		    			);

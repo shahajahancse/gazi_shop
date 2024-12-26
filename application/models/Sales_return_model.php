@@ -6,8 +6,8 @@ class Sales_return_model extends CI_Model {
 	//Datatable start
 	var $table = 'db_salesreturn as a';
 	var $column_order = array( 'a.id','a.return_date','c.sales_code','a.return_code','a.reference_no','a.grand_total','a.payment_status','a.created_by','b.customer_name','a.paid_amount','a.return_status','a.pos'); //set column field database for datatable orderable
-	var $column_search = array('a.id','a.return_date','c.sales_code','a.return_code','a.reference_no','a.grand_total','a.payment_status','a.created_by','b.customer_name','a.paid_amount','a.return_status','a.pos'); //set column field database for datatable searchable 
-	var $order = array('a.id' => 'desc'); // default order  
+	var $column_search = array('a.id','a.return_date','c.sales_code','a.return_code','a.reference_no','a.grand_total','a.payment_status','a.created_by','b.customer_name','a.paid_amount','a.return_status','a.pos'); //set column field database for datatable searchable
+	var $order = array('a.id' => 'desc'); // default order
 
 	public function __construct()
 	{
@@ -17,7 +17,7 @@ class Sales_return_model extends CI_Model {
 
 	private function _get_datatables_query()
 	{
-		
+
 		$this->db->select($this->column_order);
 		$this->db->from($this->table);
 		$this->db->from('db_customers as b');
@@ -25,16 +25,16 @@ class Sales_return_model extends CI_Model {
 		$this->db->where('b.id=a.customer_id');
 		//$this->db->where('c.id=a.warehouse_id');
 		$this->db->join('db_sales as c','c.id=a.sales_id','left');
-		
+
 
 		$i = 0;
-	
-		foreach ($this->column_search as $item) // loop column 
+
+		foreach ($this->column_search as $item) // loop column
 		{
 			if($_POST['search']['value']) // if datatable send POST for search
 			{
-				
-				
+
+
 
 				if($i===0) // first loop
 				{
@@ -48,7 +48,7 @@ class Sales_return_model extends CI_Model {
 					$this->db->or_like($item, $_POST['search']['value']);
 				}
 
-				
+
 
 
 				if(count($this->column_search) - 1 == $i) //last loop
@@ -56,11 +56,11 @@ class Sales_return_model extends CI_Model {
 			}
 			$i++;
 		}
-		
+
 		if(isset($_POST['order'])) // here order processing
 		{
 			$this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
-		} 
+		}
 		else if(isset($this->order))
 		{
 			$order = $this->order;
@@ -97,10 +97,10 @@ class Sales_return_model extends CI_Model {
 
 	//Save Sales
 	public function verify_save_and_update(){
-		//Filtering XSS and html escape from user inputs 
+		//Filtering XSS and html escape from user inputs
 		extract($this->xss_html_filter(array_merge($this->data,$_POST,$_GET)));
-		//echo "<pre>";print_r($this->xss_html_filter(array_merge($this->data,$_POST,$_GET)));exit();
-		
+		// echo "<pre>";print_r($this->xss_html_filter(array_merge($this->data,$_POST,$_GET)));exit();
+
 		$this->db->trans_begin();
 		$return_date=date('Y-m-d',strtotime($return_date));
 
@@ -130,9 +130,9 @@ class Sales_return_model extends CI_Model {
 			$return_code=$sales_return_init.str_pad($maxid, 4, '0', STR_PAD_LEFT);
 
 		    $sales_entry = array(
-		    				'sales_id' 		=> $sales_id,
-		    				'return_code' 				=> $return_code, 
-		    				'reference_no' 				=> $reference_no, 
+		    				'sales_id' 					=> $sales_id,
+		    				'return_code' 				=> $return_code,
+		    				'reference_no' 				=> $reference_no,
 		    				'return_date' 				=> $return_date,
 		    				'return_status' 			=> $return_status,
 		    				'customer_id' 				=> $customer_id,
@@ -162,12 +162,11 @@ class Sales_return_model extends CI_Model {
 			$q1 = $this->db->insert('db_salesreturn', $sales_entry);
 
 			$return_id = $this->db->insert_id();
-		}
-		else if($command=='update'){	
+		}else if($command=='update'){
 			$sales_entry = array(
-							'sales_id' 		=> $sales_id,
-		    				'reference_no' 				=> $reference_no, 
-		    				'return_date' 			=> $return_date,
+							'sales_id' 					=> $sales_id,
+		    				'reference_no' 				=> $reference_no,
+		    				'return_date' 				=> $return_date,
 		    				'return_status' 			=> $return_status,
 		    				'customer_id' 				=> $customer_id,
 		    				/*'warehouse_id' 				=> $warehouse_id,*/
@@ -183,9 +182,9 @@ class Sales_return_model extends CI_Model {
 		    				'subtotal' 					=> $tot_subtotal_amt,
 		    				'round_off' 				=> $tot_round_off_amt,
 		    				'grand_total' 				=> $tot_total_amt,
-		    				'return_note' 			=> $return_note,
+		    				'return_note' 				=> $return_note,
 		    			);
-			
+
 			$q1 = $this->db->where('id',$return_id)->update('db_salesreturn', $sales_entry);
 
 			$q11=$this->db->query("delete from db_salesitemsreturn where return_id='$return_id'");
@@ -195,107 +194,58 @@ class Sales_return_model extends CI_Model {
 		}
 		//end
 
-		/*if(isset($return_id) && isset($previous_return)){
-			foreach ($previous_return->result() as $row){
-					if(!empty($sales_id)){
-			         $this->adjust_sales_item($sales_id,$row->item_id,$row->return_qty,'add_qty_in_update_mode');
-					}
-			}
-		}*/
-
 		//Import post data from form
 		for($i=1;$i<=$rowcount;$i++){
-		
-			if(isset($_REQUEST['tr_item_id_'.$i]) && !empty($_REQUEST['tr_item_id_'.$i])){
 
-				$item_id 			=$this->xss_html_filter(trim($_REQUEST['tr_item_id_'.$i]));
+			if(isset($_REQUEST['item_id_'.$i]) && !empty($_REQUEST['item_id_'.$i])){
+				$item_id 			=$this->xss_html_filter(trim($_REQUEST['item_id_'.$i]));
 				$return_qty			=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_3']));
-				$price_per_unit 	=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_4']));
-				$tax_id 			=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_15']));
-				//$tax_amt 			=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_5']));
-				$unit_total_cost	=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_10']));
-				$unit_discount_per	=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_8']));
+				$price_per_unit 	=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_10']));
 				$total_cost			=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_9']));
-                $unit_discount_per  =(empty($unit_discount_per)) ? 0 : $unit_discount_per;
-				$discount_amt 		=($return_qty * $unit_total_cost)*$unit_discount_per/100;
-				
-				$tax_type =$this->db->select('tax_type')->from('db_items')->where('id',$item_id)->get()->row()->tax_type;
+				//$tax_amt 			=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_5']));
+				// $dis_unit		=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_8']));
 
-				$unit_tax=0;
-				$tax_amt =0;
-				if(!empty($tax_id) && $tax_id!=0){
-					//each unit tax amt
-					if($tax_type=='Exclusive'){
-						$unit_tax =$this->db->select('tax')->from('db_tax')->where('id',$tax_id)->get()->row()->tax;
-						$tax_amt = (($unit_tax * $price_per_unit)/100)*$return_qty;
-					}
-					else{//Inclusive
-						$unit_tax =$this->db->select('tax')->from('db_tax')->where('id',$tax_id)->get()->row()->tax;
-						$tax_amt = $this->inclusive($price_per_unit,$unit_tax);
-					}
-				}
-				
-				//$tax_amt = $tax_amt * $return_qty;
-				if($tax_type=='Exclusive'){
-					$single_unit_total_cost = $price_per_unit + ($unit_tax * $price_per_unit / 100);
-					$single_unit_discount = ($single_unit_total_cost * $unit_discount_per)/100;
-					$single_unit_total_cost -=$single_unit_discount;
-				}
-				else{//Inclusive
-					$single_unit_discount = ($price_per_unit * $unit_discount_per)/100;
-					$single_unit_total_cost =$price_per_unit-$single_unit_discount;
-				}
-				
+				$vat_unit 			=$this->xss_html_filter(trim($_REQUEST['vat_unit_'.$i]));
+				$addi_dis 			=$this->xss_html_filter(trim($_REQUEST['addi_dis_'.$i]));
 
-				if($tax_id=='' || $tax_id==0){$tax_id=null;}
-				if($tax_amt=='' || $tax_amt==0){$tax_amt=null;}
-				if($unit_discount_per=='' || $unit_discount_per==0){$unit_discount_per=null;}
-				//if($unit_total_cost=='' || $unit_total_cost==0){$unit_total_cost=null;}
-				if($total_cost=='' || $total_cost==0){$total_cost=null;}
-				
-				if(!empty($discount_to_all_input) && $discount_to_all_input!=0){
-					$unit_discount_per =null;
-					$discount_amt =null;
-				}
-				
 				$salesitems_entry = array(
-							'sales_id' 		=> $sales_id,
-		    				'return_id' 			=> $return_id, 
-		    				'return_status'		=> $return_status, 
-		    				'item_id' 			=> $item_id, 
+							'sales_id' 			=> $sales_id,
+		    				'return_id' 		=> $return_id,
+		    				'return_status'		=> $return_status,
+		    				'item_id' 			=> $item_id,
 		    				'return_qty' 		=> $return_qty,
 		    				'price_per_unit' 	=> $price_per_unit,
-		    				'tax_id' 			=> $tax_id,
-		    				'tax_amt' 			=> $tax_amt,
-		    				'unit_discount_per' => $unit_discount_per,
-		    				'discount_amt' 		=> $discount_amt,
-		    				'unit_total_cost' 	=> $single_unit_total_cost,
+		    				'tax_id' 			=> 0,
+		    				'tax_amt' 			=> $vat_unit * $return_qty,
+		    				'unit_discount_per' => $addi_dis,
+		    				'discount_amt' 		=> $addi_dis * $return_qty,
+		    				'unit_total_cost' 	=> $price_per_unit,
 		    				'total_cost' 		=> $total_cost,
 		    				'status'	 		=> 1,
 
 		    			);
 
 				$q2 = $this->db->insert('db_salesitemsreturn', $salesitems_entry);
-				
+
 				/*Find the Item Exist in sales entry or not*/
 				//$this->adjust_sales_item($sales_id,$item_id,$return_qty,$command);
 
 				//UPDATE itemS QUANTITY IN itemS TABLE
-				$this->load->model('pos_model');				
+				$this->load->model('pos_model');
 				$q6=$this->pos_model->update_items_quantity($item_id);
 				if(!$q6){
 					return "failed";
 				}
-				
+
 			}
-		
+
 		}//for end
 
 		if($amount=='' || $amount==0){$amount=null;}
 		if($amount>0 && !empty($payment_type)){
 			$salespayments_entry = array(
 					'sales_id' 			=> $sales_id,
-					'return_id' 		=> $return_id, 
+					'return_id' 		=> $return_id,
 					'payment_date'		=> $return_date,//Current Payment with sales entry
 					'payment_type' 		=> $payment_type,
 					'payment' 			=> $amount,
@@ -309,9 +259,9 @@ class Sales_return_model extends CI_Model {
 				);
 
 			$q3 = $this->db->insert('db_salespaymentsreturn', $salespayments_entry);
-			
+
 		}
-		
+
 
 		if(isset($sales_id) && !empty($sales_id)){
 			$this->db->set('return_bit',1)->where('id',$sales_id)->update('db_sales');
@@ -333,7 +283,7 @@ class Sales_return_model extends CI_Model {
 		$this->db->trans_commit();
 		$this->session->set_flashdata('success', 'Success!! Record Saved Successfully! '.$sms_info);
 		return "success<<<###>>>$return_id";
-		
+
 	}//verify_save_and_update() function end
 
 
@@ -354,12 +304,12 @@ class Sales_return_model extends CI_Model {
 						else{
 							$remaining_qty=($q13->row()->sales_qty)-$return_qty;
 						}
-						
+
 						//echo "\n(".$q13->row()->sales_qty."+".$q15->row()->return_qty.")-".$return_qty;
 						//echo "\nremaining_qty=".$remaining_qty;
 						$q14=$this->db->query('update db_salesitems set sales_qty='.$remaining_qty.' where sales_id='.$sales_id.' and item_id='.$item_id);
 
-						
+
 
 					}
 				}
@@ -367,13 +317,13 @@ class Sales_return_model extends CI_Model {
 
 	function update_sales_payment_status_by_sales_id($return_id){
 	//UPDATE PRODUCTS QUANTITY IN PRODUCTS TABLE
-		
+
 		$q8=$this->db->query("select COALESCE(SUM(payment),0) as payment from db_salespaymentsreturn where return_id='$return_id'");
 		$sum_of_payments=$q8->row()->payment;
 
 		$q9=$this->db->query("select coalesce(sum(grand_total),0) as total from db_salesreturn where id='$return_id'");
 		$payble_total=$q9->row()->total;
-		
+
 		$pending_amt=$payble_total-$sum_of_payments;
 
 		$payment_status='';
@@ -389,17 +339,17 @@ class Sales_return_model extends CI_Model {
 
 
 		$customer_id =$this->db->query("select customer_id from db_salesreturn where id=".$return_id)->row()->customer_id;
-		/*echo "update db_salesreturn set 
+		/*echo "update db_salesreturn set
 							payment_status='$payment_status',
-							paid_amount=$sum_of_payments 
+							paid_amount=$sum_of_payments
 							where id='$return_id'";exit();*/
-		$q7=$this->db->query("update db_salesreturn set 
+		$q7=$this->db->query("update db_salesreturn set
 							payment_status='$payment_status',
-							paid_amount=$sum_of_payments 
+							paid_amount=$sum_of_payments
 							where id='$return_id'");
 
-		
-		
+
+
 		$q12 = $this->db->query("update db_customers set sales_return_due=(select COALESCE(SUM(grand_total),0)-COALESCE(SUM(paid_amount),0) from db_salesreturn where customer_id='$customer_id') where id=$customer_id");
 		if(!$q7)
 		{
@@ -465,7 +415,7 @@ class Sales_return_model extends CI_Model {
 			$data['sales_price']=$query->sales_price;
 			$data['sales_price']=$query->sales_price;
 			$data['gst_percentage']=$query->gst_percentage;
-			
+
 			return $data;
 		}
 	}
@@ -481,7 +431,7 @@ class Sales_return_model extends CI_Model {
 			///Find category_id
 			$query2="select id from db_category where category_name='$category_name'";
 			$category_id=$this->db->query($query2)->row()->id;
-			$query1="update db_sales set 
+			$query1="update db_sales set
 						sales_price='$sales_price',
 						sales_price='$sales_price',
 						item_name='$item_name',
@@ -491,7 +441,7 @@ class Sales_return_model extends CI_Model {
 						alert_qty='$alert_qty',
 						unit_name='$unit_name',
 						gst_percentage='$gst_percentage' where id=$q_id";
-						
+
 			if ($this->db->simple_query($query1)){
 				   $this->db->trans_commit();
 			        return "success";
@@ -503,7 +453,7 @@ class Sales_return_model extends CI_Model {
 		}
 	}
 	public function update_status($id,$status){
-		
+
         $query1="update db_salesreturn set status='$status' where id=$id";
         if ($this->db->simple_query($query1)){
             echo "success";
@@ -524,15 +474,15 @@ class Sales_return_model extends CI_Model {
 			}
 		}
 	}
-	
+
 	public function delete_return($ids){
       	$this->db->trans_begin();
-      	
+
       	//If you are editing the return products.
 		/*$q1=$this->db->query("select item_id,return_qty,sales_id from db_salesitemsreturn where return_id in($ids)");
 		if($q1->num_rows()>0){
 			foreach ($q1->result() as $row){
-					
+
 					if(!empty($row->sales_id)){
 			         $this->adjust_sales_item($row->sales_id,$row->item_id,$row->return_qty,'add_qty_in_update_mode');
 					}
@@ -545,7 +495,7 @@ class Sales_return_model extends CI_Model {
 
 		$q6=$this->db->query("select id from db_items");
 		if($q6->num_rows()>0){
-			$this->load->model('pos_model');				
+			$this->load->model('pos_model');
 			foreach ($q6->result() as $res6) {
 				$q6=$this->pos_model->update_items_quantity($res6->id);
 				if(!$q6){
@@ -553,7 +503,7 @@ class Sales_return_model extends CI_Model {
 				}
 			}
 		}
-		
+
 		$this->update_return_bit();
 
 		if(!$this->update_sales_payment_status()){
@@ -575,7 +525,7 @@ class Sales_return_model extends CI_Model {
         }
         return json_encode($json_array);
 	}
-	
+
 	public function find_item_details($id){
 		$json_array=array();
         $query1="select id,hsn,alert_qty,unit_name,sales_price,sales_price,gst_percentage,available_qty from db_items where id=$id";
@@ -583,7 +533,7 @@ class Sales_return_model extends CI_Model {
         $q1=$this->db->query($query1);
         if($q1->num_rows()>0){
             foreach ($q1->result() as $value) {
-            	$json_array=['id'=>$value->id, 
+            	$json_array=['id'=>$value->id,
         			 'hsn'=>$value->hsn,
         			 'alert_qty'=>$value->alert_qty,
         			 'unit_name'=>$value->unit_name,
@@ -597,11 +547,11 @@ class Sales_return_model extends CI_Model {
         return json_encode($json_array);
 	}
 
-	
 
 
 
-	
+
+
 	/*v1.1*/
 	public function inclusive($price='',$tax_per){
 		return ($tax_per!=0) ? $price/(($tax_per/100)+1)/10 : $tax_per;
@@ -629,20 +579,22 @@ class Sales_return_model extends CI_Model {
 		$rowcount =1;
 		foreach ($q1->result() as $res1) {
 			$q2=$this->db->query("select item_name,stock,tax_type,price from db_items where id=".$res1->item_id);
-			$tax=$this->db->query("select tax from db_tax where id=".$res1->tax_id)->row()->tax;
-			
-			$info['item_id'] = $res1->item_id;
+			// $tax=$this->db->query("select tax from db_tax where id=".$res1->tax_id)->row()->tax;
+
+			$info['sales_details_id'] = $res1->id;
+			$info['sales_id'] = $res1->sales_id;
 			$info['item_name'] = $q2->row()->item_name;
-			$info['item_available_qty'] = $q2->row()->stock;
-			$info['item_price'] = $q2->row()->price;
-			$info['item_sales_price'] = $res1->price_per_unit;
-			$info['item_tax_id'] = $res1->tax_id;
-			//$info['item_profit_margin'] = $res1->profit_margin_per;
-			//$info['item_sales_price'] = $res1->unit_sales_price;
-			$info['item_sales_qty'] = 1;//$res1->sales_qty;
-			$info['item_tax'] = $tax;
 			$info['item_tax_type'] = $q2->row()->tax_type;
-			$info['item_discount'] = $res1->unit_discount_per;
+			$info['item_id'] = $res1->item_id;
+			$info['sales_qty'] = $res1->sales_qty;
+			$info['mr_price'] = $res1->mr_price;
+			$info['price_per_unit'] = $res1->price_per_unit;
+			$info['vat_unit'] = $res1->vat_unit;
+			$info['tax_amt'] = $res1->tax_amt;
+			$info['discount_amt'] = $res1->discount_amt;
+			$info['additional_dis'] = $res1->additional_dis;
+			$info['unit_total_cost'] = $res1->unit_total_cost;
+			$info['total_cost'] = $res1->total_cost;
 
 			$result = $this->return_row_with_data($rowcount++,$info);
 		}
@@ -655,40 +607,42 @@ class Sales_return_model extends CI_Model {
 		$rowcount =1;
 		foreach ($q1->result() as $res1) {
 			$q2=$this->db->query("select item_name,stock,tax_type,price,sales_price from db_items where id=".$res1->item_id);
-			$tax=$this->db->query("select tax from db_tax where id=".$res1->tax_id)->row()->tax;
-			
+			// $tax=$this->db->query("select tax from db_tax where id=".$res1->tax_id)->row()->tax;
+
 			$info['item_id'] = $res1->item_id;
 			$info['item_name'] = $q2->row()->item_name;
 
 			/*Find the sales qty and Item Stock Qty*/
 			$item_sales_qty=0;
-			 if(!empty($res1->sales_id)) { 
+			 if(!empty($res1->sales_id)) {
 		 	$item_sales_qty = $this->db->query("select coalesce(sales_qty,0) as sales_qty from db_salesitems where sales_id=".$res1->sales_id.' and item_id='.$res1->item_id)->row()->sales_qty ;
-		 	} 
+		 	}
 			$item_stock_qty = $this->db->query("select coalesce(stock,0) as stock from db_items where id=".$res1->item_id)->row()->stock;
 			/*end*/
-			
+
 			$info['item_available_qty'] = ($item_stock_qty<$item_sales_qty) ? $item_stock_qty+$res1->return_qty : $item_sales_qty+$res1->return_qty;
 			$info['item_price'] = $q2->row()->price;
 			$info['item_sales_price'] = $res1->price_per_unit;
 			$info['item_tax_id'] = $res1->tax_id;
 			//$info['item_sales_price'] = $res1->sales_price;
 			$info['item_sales_qty'] = $res1->return_qty;
-			$info['item_tax'] = $tax;
+			$info['item_tax'] = 0;
+			$info['sales_qty'] = $item_sales_qty;
 			$info['item_tax_type'] = $q2->row()->tax_type;
 			$info['item_discount'] = $res1->unit_discount_per;
-
+			$info['unit_total_cost'] = $res1->unit_total_cost;
+			$info['total_cost'] = $res1->total_cost;
 			$result = $this->return_row_with_data($rowcount++,$info);
 		}
 		return $result;
 	}
-	/*public function return_sales_list($sales_id){
+	/*public function return_sales_list($sales_id){dis_unit
 		$q1=$this->db->select('*')->from('db_salesitems')->where("sales_id=$sales_id")->get();
 		$rowcount =1;
 		foreach ($q1->result() as $res1) {
 			$q2=$this->db->query("select item_name,stock,price,sales_price,tax_type from db_items where id=".$res1->item_id);
 			$tax=$this->db->query("select tax from db_tax where id=".$res1->tax_id)->row()->tax;
-			
+
 			$info['item_id'] = $res1->item_id;
 			$info['item_name'] = $q2->row()->item_name;
 			$info['item_available_qty'] = $q2->row()->stock;
@@ -705,60 +659,58 @@ class Sales_return_model extends CI_Model {
 		return $result;
 	}*/
 
-	public function return_row_with_data($rowcount,$info){
-		extract($info);
-		if($item_tax_type=='Exclusive'){
-			$single_unit_price = $item_sales_price;
-			$item_sales_price=$item_sales_price+ (($item_sales_price*$item_tax)/100);
-			$item_tax_amt = (($single_unit_price * $item_sales_qty)*$item_tax)/100;
-		}
-		else{//Inclusive	
-			$item_tax_amt=number_format($this->inclusive($item_sales_price,$item_tax),2,'.','');
-			$single_unit_price = $item_sales_price;
-		}
-		$item_amount = ($item_sales_price * $item_sales_qty) + $item_tax_amt;
-		$item_sales_price=number_format($item_sales_price,2,'.','');
-		?>
-            <tr id="row_<?=$rowcount;?>" data-row='<?=$rowcount;?>'>
-               <td id="td_<?=$rowcount;?>_1">
-                  <!-- item name  -->
-                  <input type="text" style="font-weight: bold;" id="td_data_<?=$rowcount;?>_1" class="form-control no-padding" value='<?=$item_name;?>' readonly >
-               </td>
-               <!-- Qty -->
-               <td id="td_<?=$rowcount;?>_3">
-                  <div class="input-group ">
-                     <span class="input-group-btn">
-                     <button onclick="decrement_qty(<?=$rowcount;?>)" type="button" class="btn btn-default btn-flat"><i class="fa fa-minus text-danger"></i></button></span>
-                     <input typ="text" value="<?=$item_sales_qty;?>" class="form-control no-padding text-center" onkeyup="calculate_tax(<?=$rowcount;?>)" id="td_data_<?=$rowcount;?>_3" name="td_data_<?=$rowcount;?>_3">
-                     <span class="input-group-btn">
-                     <button onclick="increment_qty(<?=$rowcount;?>)" type="button" class="btn btn-default btn-flat"><i class="fa fa-plus text-success"></i></button></span>
-                  </div>
-               </td>
-               
-               <!-- Unit Cost -->
-               <td id="td_<?=$rowcount;?>_10"><input type="text" name="td_data_<?=$rowcount;?>_10" id="td_data_<?=$rowcount;?>_10" class="form-control text-right no-padding only_currency text-center" readonly value="<?=$item_sales_price;?>"></td>
+	public function return_row_with_data($rowcount,$info){ extract($info); ?>
+		<tr id="row_<?=$rowcount;?>" data-row='<?=$rowcount;?>'>
+			<!-- item name  -->
+			<td id="td_<?=$rowcount;?>_1">
+				<input type="text" style="font-weight: bold;" id="td_data_<?=$rowcount;?>_1" class="form-control no-padding" value='<?=$item_name;?>' readonly >
+			</td>
+			<!-- item name  -->
+			<!-- Qty -->
+			<td id="td_<?=$rowcount;?>_3">
+				<div class="input-group ">
+					<span class="input-group-btn">
+					<button onclick="decrement_qty(<?=$rowcount;?>)" type="button" class="btn btn-default btn-flat"><i class="fa fa-minus text-danger"></i></button></span>
+					<input typ="text" value="<?=$sales_qty;?>" class="form-control no-padding text-center" onkeyup="calculate_tax(<?=$rowcount;?>)" id="td_data_<?=$rowcount;?>_3" name="td_data_<?=$rowcount;?>_3">
+					<span class="input-group-btn">
+					<button onclick="increment_qty(<?=$rowcount;?>)" type="button" class="btn btn-default btn-flat"><i class="fa fa-plus text-success"></i></button></span>
+					<input type="hidden" id="item_sales_qty_<?=$rowcount;?>" value="<?=$sales_qty;?>">
+				</div>
+			</td>
+			<!-- Qty -->
+			<!-- Unit Cost -->
+			<td id="td_<?=$rowcount;?>_10"><input type="text" name="td_data_<?=$rowcount;?>_10" id="td_data_<?=$rowcount;?>_10" class="form-control text-right no-padding only_currency text-center" readonly value="<?=$unit_total_cost;?>"></td>
+			<!-- Unit Cost -->
+			<!-- Vat -->
+			<td id="td_<?=$rowcount;?>_8">
+				<input name="td_data_<?=$rowcount;?>_8" id="td_data_<?=$rowcount;?>_8" class="form-control text-right no-padding only_currency text-center vat_unit" value="<?=$tax_amt;?>" readonly>
+			</td>
+			<!-- Vat -->
+			<!-- Discount -->
+			<td id="td_<?=$rowcount;?>_7">
+				<input name="td_data_<?=$rowcount;?>_7" id="td_data_<?=$rowcount;?>_7" class="form-control text-right no-padding only_currency text-center vat_unit" value="<?=$tax_amt;?>" readonly>
+			</td>
+			<!-- discount -->
+			<!-- Amount -->
+			<td id="td_<?=$rowcount;?>_9"><input name="td_data_<?=$rowcount;?>_9" id="td_data_<?=$rowcount;?>_9" class="form-control text-right no-padding only_currency text-center" style="border-color: #f39c12;" readonly value="<?=($total_cost);?>"></td>
+			<!-- Amount -->
 
-               <!-- Discount -->
-               <td id="td_<?=$rowcount;?>_8">
-                  <input type="text" name="td_data_<?=$rowcount;?>_8" id="td_data_<?=$rowcount;?>_8" class="form-control text-right no-padding only_currency text-center item_discount" value="<?=$item_discount;?>" onkeyup="calculate_tax(<?=$rowcount;?>)">
-               </td>
+			<!-- ADD button -->
+			<td id="td_<?=$rowcount;?>_16" style="text-align: center;">
+				<a class=" fa fa-fw fa-minus-square text-red" style="cursor: pointer;font-size: 34px;" onclick="removerow(<?=$rowcount;?>)" title="Delete ?" name="td_data_<?=$rowcount;?>_16" id="td_data_<?=$rowcount;?>_16"></a>
+			</td>
+			<input type="hidden" id="td_data_<?=$rowcount;?>_4" name="td_data_<?=$rowcount;?>_4" value="<?=$tax_amt;?>">
+			<input type="hidden" id="td_data_<?=$rowcount;?>_15" name="td_data_<?=$rowcount;?>_15" value="1">
+			<input type="hidden" id="sales_qty_<?=$rowcount;?>_13" name="sales_qty_<?=$rowcount;?>_13" value="<?=$sales_qty;?>">
+			<input type="hidden" id="item_id_<?=$rowcount;?>" name="item_id_<?=$rowcount;?>" value="<?=$item_id;?>">
+			<input type="hidden" id="dis_unit_<?=$rowcount;?>" name="dis_unit_<?=$rowcount;?>" value="<?=$dis_unit;?>">
+			<input type="hidden" id="addi_dis_<?=$rowcount;?>" name="addi_dis_<?=$rowcount;?>" value="<?=$additional_dis;?>">
+			<input type="hidden" id="vat_unit_<?=$rowcount;?>" name="vat_unit_<?=$rowcount;?>" value="<?=$vat_unit;?>">
+		</tr>
 
-               <!-- Amount -->
-               <td id="td_<?=$rowcount;?>_9"><input type="text" name="td_data_<?=$rowcount;?>_9" id="td_data_<?=$rowcount;?>_9" class="form-control text-right no-padding only_currency text-center" style="border-color: #f39c12;" readonly value="<?=$item_amount;?>"></td>
-               
-               <!-- ADD button -->
-               <td id="td_<?=$rowcount;?>_16" style="text-align: center;">
-                  <a class=" fa fa-fw fa-minus-square text-red" style="cursor: pointer;font-size: 34px;" onclick="removerow(<?=$rowcount;?>)" title="Delete ?" name="td_data_<?=$rowcount;?>_16" id="td_data_<?=$rowcount;?>_16"></a>
-               </td>
-               <input type="hidden" id="td_data_<?=$rowcount;?>_4" name="td_data_<?=$rowcount;?>_4" value="<?=$single_unit_price;?>">
-               <input type="hidden" id="td_data_<?=$rowcount;?>_15" name="td_data_<?=$rowcount;?>_15" value="<?=$item_tax_id;?>">
-               <input type="hidden" id="td_data_<?=$rowcount;?>_5" name="td_data_<?=$rowcount;?>_5" value="<?=$item_tax_amt;?>">
-               <input type="hidden" id="tr_available_qty_<?=$rowcount;?>_13" value="<?=$item_available_qty;?>">
-               <input type="hidden" id="tr_item_id_<?=$rowcount;?>" name="tr_item_id_<?=$rowcount;?>" value="<?=$item_id;?>">
-            </tr>
 		<?php
-
 	}
+
 	public function delete_payment($payment_id){
         $this->db->trans_begin();
 		$return_id = $this->db->query("select return_id from db_salespaymentsreturn where id=$payment_id")->row()->return_id;
@@ -804,10 +756,10 @@ class Sales_return_model extends CI_Model {
 	    $due_amount =$grand_total - $paid_amount;
 
 	    if(!empty($customer_country)){
-	      $customer_country = $this->db->query("select country from db_country where id='$customer_country'")->row()->country;  
+	      $customer_country = $this->db->query("select country from db_country where id='$customer_country'")->row()->country;
 	    }
 	    if(!empty($customer_state)){
-	      $customer_state = $this->db->query("select state from db_states where id='$customer_state'")->row()->state;  
+	      $customer_state = $this->db->query("select state from db_states where id='$customer_state'")->row()->state;
 	    }
 
 		?>
@@ -820,7 +772,7 @@ class Sales_return_model extends CI_Model {
 		        <h4 class="modal-title text-center">Payments</h4>
 		      </div>
 		      <div class="modal-body">
-		        
+
 		    <div class="row">
 		      <div class="col-md-12">
 		      	<div class="row invoice-info">
@@ -848,7 +800,7 @@ class Sales_return_model extends CI_Model {
 			        <div class="col-sm-4 invoice-col">
 			          <b>Paid Amount :<span><?php echo number_format($paid_amount,2,'.',''); ?></span></b><br>
 			          <b>Due Amount :<span id='due_amount_temp'><?php echo number_format($due_amount,2,'.',''); ?></span></b><br>
-			         
+
 			        </div>
 			        <!-- /.col -->
 			      </div>
@@ -900,7 +852,7 @@ class Sales_return_model extends CI_Model {
 		                  </div>
 		                </div>
 		            <div class="clearfix"></div>
-		        </div>  
+		        </div>
 		        <div class="row">
 		               <div class="col-md-12">
 		                  <div class="">
@@ -909,9 +861,9 @@ class Sales_return_model extends CI_Model {
 		                    <span id="payment_note_msg" style="display:none" class="text-danger"></span>
 		                  </div>
 		               </div>
-		                
+
 		            <div class="clearfix"></div>
-		        </div>   
+		        </div>
 		        </div>
 		        </div>
 		      </div><!-- col-md-12 -->
@@ -938,7 +890,7 @@ class Sales_return_model extends CI_Model {
     	if($amount=='' || $amount==0){$amount=null;}
 		if($amount>0 && !empty($payment_type)){
 			$salespayments_entry = array(
-					'return_id' 		=> $return_id, 
+					'return_id' 		=> $return_id,
 					'payment_date'		=> date("Y-m-d",strtotime($payment_date)),//Current Payment with sales entry
 					'payment_type' 		=> $payment_type,
 					'payment' 			=> $amount,
@@ -952,12 +904,12 @@ class Sales_return_model extends CI_Model {
 				);
 
 			$q3 = $this->db->insert('db_salespaymentsreturn', $salespayments_entry);
-			
+
 		}
 		else{
 			return "Please Enter Valid Amount!";
 		}
-		
+
 		$q10=$this->update_sales_payment_status($return_id);
 		if($q10!=1){
 			return "failed";
@@ -965,7 +917,7 @@ class Sales_return_model extends CI_Model {
 		return "success";
 
 	}
-	
+
 	public function view_payments_modal($return_id){
 		$q1=$this->db->query("select * from db_salesreturn where id=$return_id");
 		$res1=$q1->row();
@@ -994,10 +946,10 @@ class Sales_return_model extends CI_Model {
 	    $due_amount =$grand_total - $paid_amount;
 
 	    if(!empty($customer_country)){
-	      $customer_country = $this->db->query("select country from db_country where id='$customer_country'")->row()->country;  
+	      $customer_country = $this->db->query("select country from db_country where id='$customer_country'")->row()->country;
 	    }
 	    if(!empty($customer_state)){
-	      $customer_state = $this->db->query("select state from db_states where id='$customer_state'")->row()->state;  
+	      $customer_state = $this->db->query("select state from db_states where id='$customer_state'")->row()->state;
 	    }
 
 		?>
@@ -1010,7 +962,7 @@ class Sales_return_model extends CI_Model {
 		        <h4 class="modal-title text-center">Payments</h4>
 		      </div>
 		      <div class="modal-body">
-		        
+
 		    <div class="row">
 		      <div class="col-md-12">
 		      	<div class="row invoice-info">
@@ -1038,18 +990,18 @@ class Sales_return_model extends CI_Model {
 			        <div class="col-sm-4 invoice-col">
 			          <b>Paid Amount :<span><?php echo number_format($paid_amount,2,'.',''); ?></span></b><br>
 			          <b>Due Amount :<span id='due_amount_temp'><?php echo number_format($due_amount,2,'.',''); ?></span></b><br>
-			         
+
 			        </div>
 			        <!-- /.col -->
 			      </div>
 			      <!-- /.row -->
 		      </div>
 		      <div class="col-md-12">
-		       
-		     
+
+
 		              <div class="row">
 		         		<div class="col-md-12">
-		                  
+
 		                      <table class="table table-bordered">
                                   <thead>
                                   <tr class="bg-primary">
@@ -1076,8 +1028,8 @@ class Sales_return_model extends CI_Model {
 											echo "<td>".$res1->payment_type."</td>";
 											echo "<td>".$res1->payment_note."</td>";
 											echo "<td>".ucfirst($res1->created_by)."</td>";
-										
-											echo "<td><a onclick='delete_sales_payment(".$res1->id.")' class='pointer btn  btn-danger' ><i class='fa fa-trash'></i></</td>";	
+
+											echo "<td><a onclick='delete_sales_payment(".$res1->id.")' class='pointer btn  btn-danger' ><i class='fa fa-trash'></i></</td>";
 											echo "</tr>";
 										}
 									}
@@ -1087,20 +1039,20 @@ class Sales_return_model extends CI_Model {
 									?>
                                 </tbody>
                             </table>
-		               
+
 		               </div>
 		            <div class="clearfix"></div>
-		        </div>    
-		       
-		     
-		   
+		        </div>
+
+
+
 		      </div><!-- col-md-9 -->
 		      <!-- RIGHT HAND -->
 		    </div>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Close</button>
-		        
+
 		      </div>
 		    </div>
 		    <!-- /.modal-content -->

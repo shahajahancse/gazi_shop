@@ -30,7 +30,7 @@ class Sales_return extends MY_Controller {
 		$this->load->view('sales-return', $data);
 	}
 
-  public function add($id){
+  	public function add($id){
   		$this->permission_check('sales_return_edit');
   		$q2=$this->db->query("select sales_status from db_sales where id=".$id);
 		if($q2->row()->sales_status=='Quotation'){
@@ -42,7 +42,8 @@ class Sales_return extends MY_Controller {
   	    $q1=$this->db->query("select id from db_salesreturn where sales_id=".$id);
 		if($q1->num_rows()>0){
 			$this->session->set_flashdata('success','Sales Return Invoice Already Generated!');
-			redirect(base_url('sales_return/edit/'.$q1->row()->id),'refresh');exit();
+			redirect(base_url('sales_return/edit/'.$q1->row()->id),'refresh');
+			exit();
 		}
 
 	    $data=$this->data;
@@ -51,7 +52,7 @@ class Sales_return extends MY_Controller {
 	    $data['oper']='return_against_sales';
 	    $data['subtitle']=$this->lang->line('return_against_sales');;
 	    $this->load->view('sales-return', $data);
-	  }
+	}
 
 	/*
 	public function add()
@@ -136,12 +137,12 @@ class Sales_return extends MY_Controller {
 												</a>
 											</li>';
 
-											if($this->permissions('sales_return_edit'))
+											/* if($this->permissions('sales_return_edit'))
 											$str2.='<li>
 												<a title="Update Record ?" href="'.$str1.$sales->id.'">
 													<i class="fa fa-fw fa-edit text-blue"></i>Edit
 												</a>
-											</li>';
+											</li>'; */
 
 											if($this->permissions('sales_return_payment_view'))
 											$str2.='<li>
@@ -255,7 +256,6 @@ class Sales_return extends MY_Controller {
 		$data=array_merge($data,array('return_id'=>$return_id));
 		$data['page_title']=$this->lang->line('sales_invoice');
 		$this->load->view('print-sales-return-invoice',$data);
-
 	}
 
 	//Print sales POS invoice
@@ -267,8 +267,9 @@ class Sales_return extends MY_Controller {
 		$data=$this->data;
 		$data=array_merge($data,array('return_id'=>$return_id));
 		$data['page_title']=$this->lang->line('sales_return_invoice');
-		$this->load->view('sal-invoice-pos',$data);
+		$this->load->view('ret-invoice-pos',$data);
 	}
+
 	public function pdf($return_id){
 		if(!$this->permissions('sales_return_add') && !$this->permissions('sales_return_edit')){
 			$this->show_access_denied_page();

@@ -10,9 +10,9 @@
 <div class="wrapper">
 
   <!-- Left side column. contains the logo and sidebar -->
-  
+
   <?php include"sidebar.php"; ?>
-  <?php 
+  <?php
       /*Total Invoices*/
       $total_invoice=$this->db->query("SELECT COUNT(*) as total FROM db_salesreturn")->row()->total;
       /*Total Invoices Total*/
@@ -23,9 +23,9 @@
       $paid_amount=$this->db->query("SELECT COALESCE(SUM(paid_amount),0) AS paid_amount FROM db_salesreturn")->row()->paid_amount;
        //total sales due
       //$sales_due_total=$this->db->query("SELECT COALESCE(SUM(sales_due),0) AS sales_due FROM db_customers")->row()->sales_due;
-      
+
       $sales_due_total = $sal_total - $paid_amount;
-     
+
   ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -151,9 +151,9 @@
                 </tr>
                 </thead>
                 <tbody>
-				
+
                 </tbody>
-               
+
               </table>
             </div>
             <!-- /.box-body -->
@@ -192,7 +192,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
     //datatables
-   var table = $('#example2').DataTable({ 
+   var table = $('#example2').DataTable({
 
       /* FOR EXPORT BUTTONS START*/
   dom:'<"row margin-bottom-12"<"col-sm-12"<"pull-left"l><"pull-right"fr><"text-center margin-left-10 "B>>>tip',
@@ -211,7 +211,7 @@ $(document).ready(function() {
             { extend: 'pdf', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4,5,6,7,8,9,10]} },
             { extend: 'print', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4,5,6,7,8,9,10]} },
             { extend: 'csv', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4,5,6,7,8,9,10]} },
-            { extend: 'colvis', className: 'btn bg-teal color-palette btn-flat',text:'Columns' },  
+            { extend: 'colvis', className: 'btn bg-teal color-palette btn-flat',text:'Columns' },
 
             ]
         },
@@ -228,7 +228,7 @@ $(document).ready(function() {
         "ajax": {
             "url": "<?php echo site_url('sales_return/ajax_list')?>",
             "type": "POST",
-            
+
             complete: function (data) {
              $('.column_checkbox').iCheck({
                 checkboxClass: 'icheckbox_square-orange',
@@ -244,7 +244,7 @@ $(document).ready(function() {
 
         //Set column definition initialisation properties.
         "columnDefs": [
-        { 
+        {
             "targets": [ 0,11 ], //first column / numbering column
             "orderable": false, //set not orderable
         },
@@ -252,7 +252,7 @@ $(document).ready(function() {
             "targets" :[0],
             "className": "text-center",
         },
-        
+
         ],
     });
     new $.fn.dataTable.FixedHeader( table );
@@ -261,11 +261,11 @@ $(document).ready(function() {
 <script src="<?php echo $theme_link; ?>js/sales-return.js"></script>
 <script type="text/javascript">
   function print_invoice(id){
-  window.open("<?= base_url();?>pos/print_invoice_pos/"+id, "_blank", "scrollbars=1,resizable=1,height=500,width=500");
+  window.open("<?= base_url();?>sales_return/print_invoice_pos/"+id, "_blank", "scrollbars=1,resizable=1,height=500,width=500");
 }
 </script>
 <!-- Make sidebar menu hughlighter/selector -->
 <script>$(".<?php echo basename(__FILE__,'.php');?>-active-li").addClass("active");</script>
-		
+
 </body>
 </html>

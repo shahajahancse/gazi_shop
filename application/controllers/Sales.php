@@ -141,13 +141,14 @@ class Sales extends MY_Controller {
 												</a>
 											</li>';
 
-											if($this->permissions('sales_return'))
-											$str2.='<li>
-												<a title="Sales Return" href="sales_return/add/'.$sales->id.'">
-													<i class="fa fa-fw fa-undo text-blue"></i>Sales Return
-												</a>
-											</li>';
-
+											if ($sales->return_bit != 1) {
+												if($this->permissions('sales_return'))
+												$str2.='<li>
+													<a title="Sales Return" href="sales_return/add/'.$sales->id.'">
+														<i class="fa fa-fw fa-undo text-blue"></i>Sales Return
+													</a>
+												</li>';
+											}
 											if($this->permissions('sales_delete'))
 											$str2.='<li>
 												<a style="cursor:pointer" title="Delete Record ?" onclick="delete_sales(\''.$sales->id.'\')">

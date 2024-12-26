@@ -3,7 +3,7 @@
 <head>
 <!-- TABLES CSS CODE -->
 <?php include"comman/code_css_form.php"; ?>
-<!-- </copy> -->  
+<!-- </copy> -->
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -24,7 +24,7 @@
         <li class="active"><?= $this->lang->line('invoice'); ?></li>
       </ol>
     </section>
-    
+
     <?php
     $CI =& get_instance();
     $q1=$this->db->query("select * from db_company where id=1 and status=1");
@@ -41,7 +41,7 @@
     $company_vat_no=$res1->vat_no;
     $company_pan_no=$res1->pan_no;
 
-    
+
     $q3=$this->db->query("SELECT b.sales_id,a.customer_name,a.mobile,a.phone,a.gstin,a.tax_number,a.email,
                            a.opening_balance,a.country_id,a.state_id,a.city,
                            a.postcode,a.address,b.return_date,b.created_time,b.reference_no,
@@ -59,13 +59,13 @@
                            b.payment_status,b.pos
 
                            FROM db_customers a,
-                           db_salesreturn b 
-                           WHERE 
-                           a.`id`=b.`customer_id` AND 
-                           b.`id`='$return_id' 
+                           db_salesreturn b
+                           WHERE
+                           a.`id`=b.`customer_id` AND
+                           b.`id`='$return_id'
                            ");
-                        
-    
+
+
     $res3=$q3->row();
     $sales_id=$res3->sales_id;
     $customer_name=$res3->customer_name;
@@ -87,7 +87,7 @@
     $return_status=$res3->return_status;
     $return_note=$res3->return_note;
 
-    
+
     $subtotal=$res3->subtotal;
     $grand_total=$res3->grand_total;
     $other_charges_input=$res3->other_charges_input;
@@ -101,14 +101,14 @@
     $round_off=$res3->round_off;
     $payment_status=$res3->payment_status;
     $pos=$res3->pos;
-    
+
     if(!empty($customer_country)){
-      $customer_country = $this->db->query("select country from db_country where id='$customer_country'")->row()->country;  
+      $customer_country = $this->db->query("select country from db_country where id='$customer_country'")->row()->country;
     }
     if(!empty($customer_state)){
-      $customer_state = $this->db->query("select state from db_states where id='$customer_state'")->row()->state;  
+      $customer_state = $this->db->query("select state from db_states where id='$customer_state'")->row()->state;
     }
-    
+
     $sales_code = (!empty($sales_id))?$this->db->query("select sales_code from db_sales where id=".$sales_id)->row()->sales_code:'';
     ?>
 
@@ -118,26 +118,26 @@
     <div class="row">
       <div class="col-md-12">
       <!-- ********** ALERT MESSAGE START******* -->
-                 
+
             <?php if($this->session->flashdata('error')!=''){ ?>
                 <div class="alert alert-danger text-left">
                  <a href="javascript:void()" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 <strong><?= $this->session->flashdata('error') ?></strong>
-              </div> 
+              </div>
                <?php
               }
               else{ ?>
                 <div class="alert alert-success text-left">
                  <a href="javascript:void()" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 <strong>
-                  <?php 
-                   if(!empty($this->session->flashdata('success'))){ 
+                  <?php
+                   if(!empty($this->session->flashdata('success'))){
                     echo $this->session->flashdata('success')."<br>";
                    }
-                   if(!empty($sales_id)){ 
+                   if(!empty($sales_id)){
                     echo "<i class='fa fa-fw fa-hand-o-right'></i>Return Against Sales Entry [Sales Code is ".$this->db->select('sales_code')->where('id',$sales_id)->get('db_sales')->row()->sales_code.'].';
                     //echo "<br>";
-                   } 
+                   }
                    else{
                     echo '<i class="fa fa-fw fa-hand-o-right"></i>Direct Return Invoice.';
                    }
@@ -176,7 +176,7 @@
             <?php echo (!empty(trim($company_gst_no))) ? $this->lang->line('gst_number').": ".$company_gst_no."<br>" : '';?>
             <?php echo (!empty(trim($company_vat_no))) ? $this->lang->line('vat_number').": ".$company_vat_no."<br>" : '';?>
             <?php echo (!empty(trim($company_pan_no))) ? $this->lang->line('vat_number').": ".$company_pan_no."<br>" : '';?>
-           
+
           </address>
         </div>
         <!-- /.col -->
@@ -184,7 +184,7 @@
           <i><?= $this->lang->line('customer_details'); ?><br></i>
           <address>
             <strong><?php echo  $customer_name; ?></strong><br>
-            <?php 
+            <?php
               if(!empty($customer_address)){
                 echo $customer_address;
               }
@@ -226,79 +226,59 @@
       <div class="row">
         <div class="col-xs-12 table-responsive">
           <table class="table table-striped records_table table-bordered">
-            <thead class="bg-gray-active">
-            <tr>
-              <th>#</th>
-              <th><?= $this->lang->line('item_name'); ?></th>
-              <th><?= $this->lang->line('unit_price'); ?></th>
-              <th><?= $this->lang->line('quantity'); ?></th>
-              <th><?= $this->lang->line('net_cost'); ?></th>
-              <th><?= $this->lang->line('tax'); ?></th>
-              <th><?= $this->lang->line('tax_amount'); ?></th>
-              <th><?= $this->lang->line('discount'); ?></th>
-              <th><?= $this->lang->line('discount_amount'); ?></th>
-              <th><?= $this->lang->line('unit_cost'); ?></th>
-              <th><?= $this->lang->line('total_amount'); ?></th>
-            </tr>
+            <thead class="bg-gray-active text-right">
+              <tr class="text-right">
+                <th>#</th>
+                <th class="text-left"><?= $this->lang->line('item_name'); ?></th>
+                <th class="text-right"><?= $this->lang->line('quantity'); ?></th>
+                <th class="text-right"><?= $this->lang->line('unit_price'); ?></th>
+                <th class="text-right">Item Cost</th>
+                <th class="text-right">Vat</th>
+                <th class="text-right">Discount</th>
+                <th class="text-right"><?= $this->lang->line('total_amount'); ?></th>
+              </tr>
             </thead>
-            <tbody>
-
+            <tbody class="text-right">
               <?php
-              $i=0;
-              $tot_qty=0;
-              $tot_sales_price=0;
-              $tot_tax_amt=0;
-              $tot_discount_amt=0;
-              $tot_total_cost=0;
+                $tot_qty = 0;
+                $unit_cost = 0;
+                $tax_amt = 0;
+                $dis_amt = 0;
+                $total_cost = 0;
 
-              $q2=$this->db->query("SELECT c.item_name, a.return_qty,c.tax_type,
-                                  a.price_per_unit, b.tax,b.tax_name,a.tax_amt,
-                                  a.unit_discount_per,a.discount_amt, a.unit_total_cost,
-                                  a.total_cost 
-                                  FROM 
-                                  db_salesitemsreturn AS a,db_tax AS b,db_items AS c 
-                                  WHERE 
-                                  c.id=a.item_id AND b.id=a.tax_id AND a.return_id='$return_id'");
-              foreach ($q2->result() as $res2) {
-                  $str = ($res2->tax_type=='Inclusive')? 'Inc.' : 'Exc.';
-                  $discount = (empty($res2->unit_discount_per)||$res2->unit_discount_per==0)? '-':$res2->unit_discount_per."%";
-                  $discount_amt = (empty($res2->discount_amt)||$res2->unit_discount_per==0)? '-':$res2->discount_amt."";
-                  echo "<tr>";  
-                  echo "<td>".++$i."</td>";
-                  echo "<td>".$res2->item_name."</td>";
-                  echo "<td class='text-right'>".$CI->currency(number_format($res2->price_per_unit,2,'.',''))."</td>";
-                  echo "<td>".$res2->return_qty."</td>";
-                  echo "<td class='text-right'>".$CI->currency(number_format(($res2->price_per_unit * $res2->return_qty),2,'.',''))."</td>";
-                  
-                  echo "<td>".$res2->tax."%<br>".$res2->tax_name."[".$str."]</td>";
-                  echo "<td class='text-right'>".$CI->currency($res2->tax_amt)."</td>";
-                  echo "<td class='text-right'>".$discount."</td>";
-                  echo "<td class='text-right'>".$CI->currency($discount_amt)."</td>";
-                  echo "<td class='text-right'>".$CI->currency(number_format($res2->unit_total_cost,2,'.',''))."</td>";
-                  echo "<td class='text-right'>".$CI->currency(number_format($res2->total_cost,2,'.',''))."</td>";
-                  echo "</tr>";  
-                  $tot_qty +=$res2->return_qty;
-                  $tot_sales_price +=$res2->price_per_unit;
-                  $tot_tax_amt +=$res2->tax_amt;
-                  $tot_discount_amt +=$res2->discount_amt;
-                  $tot_total_cost +=$res2->total_cost;
-              }
-              ?>
-         
-      
+                $q2=$this->db->query("SELECT a.*, c.item_name,c.tax_type
+                                  FROM db_salesitemsreturn AS a, db_items AS c
+                                  WHERE c.id=a.item_id AND a.return_id='$return_id'");
+
+                foreach ($q2->result() as $key => $res2) { ?>
+                  <tr>
+                    <td class="text-left"><?= $key+1 ?></td>
+                    <td class="text-left"><?= $res2->item_name ?></td>
+                    <td><?= $res2->return_qty ?></td>
+                    <td><?= $res2->price_per_unit ?></td>
+                    <td><?= $res2->total_cost ?></td>
+                    <td><?= $res2->tax_amt ?></td>
+                    <td><?= $res2->discount_amt ?></td>
+                    <td><?= $res2->total_cost + $res2->tax_amt - $res2->discount_amt ?></td>
+                  </tr>
+                <?php
+                  $tot_qty    += $res2->return_qty;
+                  $unit_cost  += $res2->total_cost;
+                  $tax_amt    += $res2->tax_amt;
+                  $dis_amt    += $res2->discount_amt;
+                  $total_cost += $res2->total_cost + $res2->tax_amt - $res2->discount_amt;
+                ?>
+              <?php } ?>
             </tbody>
             <tfoot class="text-right text-bold bg-gray">
               <tr>
-                <td colspan="2" class="text-center">Total</td>
-                <td><?= $CI->currency(number_format($tot_sales_price,2,'.',''));?></td>
-                <td class="text-left"><?=$tot_qty;?></td>
+                <td colspan="2" class="">Total</td>
+                <td><?=$tot_qty;?></td>
                 <td>-</td>
-                <td>-</td>
-                <td><?= $CI->currency(number_format($tot_tax_amt,2,'.',''));?></td>
-                <td>-</td>
-                <td><?= $CI->currency(number_format($tot_discount_amt,2,'.','')) ;?></td>
-                <td>-</td>
-                <td><?= $CI->currency(number_format($tot_total_cost,2,'.','')) ;?></td>
+                <td><?= $CI->currency(number_format($unit_cost,2,'.','')) ;?></td>
+                <td><?= $CI->currency(number_format($tax_amt,2,'.','')) ;?></td>
+                <td><?= $CI->currency(number_format($dis_amt,2,'.','')) ;?></td>
+                <td><?= $CI->currency(number_format($total_cost,2,'.','')) ;?></td>
               </tr>
             </tfoot>
           </table>
@@ -306,29 +286,9 @@
         <!-- /.col -->
       </div>
       <!-- /.row -->
-    
+
       <div class="row">
        <div class="col-md-6">
-           <div class="row">
-              <div class="col-md-12">
-                 <div class="form-group">
-                    <label for="discount_to_all_input" class="col-sm-4 control-label" style="font-size: 17px;"><?= $this->lang->line('discount_on_all'); ?></label>    
-                    <div class="col-sm-8">
-                       <label class="control-label  " style="font-size: 17px;">: <?=$discount_to_all_input; ?> (<?= $discount_to_all_type ?>)</label>
-                    </div>
-                 </div>
-              </div>
-           </div>
-          <div class="row">
-              <div class="col-md-12">
-                 <div class="form-group">
-                    <label for="return_note" class="col-sm-4 control-label" style="font-size: 17px;"><?= $this->lang->line('note'); ?></label>    
-                    <div class="col-sm-8">
-                       <label class="control-label  " style="font-size: 17px;">: <?=$return_note;?></label>
-                    </div>
-                 </div>
-              </div>
-           </div> 
            <div class="row">
               <div class="col-md-12">
                  <div class="form-group">
@@ -343,7 +303,7 @@
                           </tr>
                        </thead>
                        <tbody>
-                          <?php 
+                          <?php
                             if(isset($return_id)){
                               $q3 = $this->db->query("select * from db_salespaymentsreturn where return_id=$return_id");
                               if($q3->num_rows()>0){
@@ -365,8 +325,7 @@
                                 echo "<tr><td colspan='5' class='text-center text-bold'>No Previous Payments Found!!</td></tr>";
                               }
 
-                            }
-                            else{
+                            }else{
                               echo "<tr><td colspan='5' class='text-center text-bold'>Payments Pending!!</td></tr>";
                             }
                           ?>
@@ -374,43 +333,37 @@
                     </table>
                  </div>
               </div>
-           </div>           
+           </div>
         </div>
 
         <div class="col-md-6">
            <div class="row">
               <div class="col-md-12">
                  <div class="form-group">
-                     
+
                     <table  class="col-md-11">
                        <tr>
                           <th class="text-right" style="font-size: 17px;"><?= $this->lang->line('subtotal'); ?></th>
                           <th class="text-right" style="padding-left:10%;font-size: 17px;">
-                             <h4><b id="subtotal_amt" name="subtotal_amt"><?=$subtotal;?></b></h4>
-                          </th>
-                       </tr>
-                       <tr>
-                          <th class="text-right" style="font-size: 17px;"><?= $this->lang->line('other_charges'); ?></th>
-                          <th class="text-right" style="padding-left:10%;font-size: 17px;">
-                             <h4><b id="other_charges_amt" name="other_charges_amt"><?=$other_charges_amt;?></b></h4>
+                             <h4><b id="subtotal_amt" name="subtotal_amt"><?=$unit_cost;?></b></h4>
                           </th>
                        </tr>
                        <tr>
                           <th class="text-right" style="font-size: 17px;"><?= $this->lang->line('discount_on_all'); ?></th>
                           <th class="text-right" style="padding-left:10%;font-size: 17px;">
-                             <h4><b id="discount_to_all_amt" name="discount_to_all_amt"><?=$tot_discount_to_all_amt;?></b></h4>
+                             <h4><b id="discount_to_all_amt" name="discount_to_all_amt"><?=$dis_amt;?></b></h4>
                           </th>
                        </tr>
                        <tr>
-                          <th class="text-right" style="font-size: 17px;"><?= $this->lang->line('round_off'); ?></th>
+                          <th class="text-right" style="font-size: 17px;">Vat</th>
                           <th class="text-right" style="padding-left:10%;font-size: 17px;">
-                             <h4><b id="round_off_amt" name="tot_round_off_amt"><?=$round_off;?></b></h4>
+                             <h4><b id="round_off_amt" name="tot_round_off_amt"><?=$tax_amt;?></b></h4>
                           </th>
                        </tr>
                        <tr>
                           <th class="text-right" style="font-size: 17px;"><?= $this->lang->line('grand_total'); ?></th>
                           <th class="text-right" style="padding-left:10%;font-size: 17px;">
-                             <h4><b id="total_amt" name="total_amt"><?=$grand_total;?></b></h4>
+                             <h4><b id="total_amt" name="total_amt"><?=$total_cost;?></b></h4>
                           </th>
                        </tr>
                     </table>
@@ -426,30 +379,30 @@
       <!-- this row will not appear when printing -->
       <div class="row no-print">
         <div class="col-xs-12">
-          <?php if($CI->permissions('sales_edit')) { ?>
-          <?php $str2= ($pos==1)? 'pos/edit/':'sales_return/edit/'; ?>
-          <a href="<?php echo $base_url; ?><?=$str2;?><?php echo  $return_id ?>" class="btn btn-success">
-            <i class="fa  fa-edit"></i> Edit
-          </a>
-        <?php } ?>
+          <!-- <?php if($CI->permissions('sales_edit')) { ?>
+            <?php $str2= ($pos==1)? 'pos/edit/':'sales_return/edit/'; ?>
+            <a href="<?php echo $base_url; ?><?=$str2;?><?php echo  $return_id ?>" class="btn btn-success">
+              <i class="fa  fa-edit"></i> Edit
+            </a>
+          <?php } ?> -->
 
 
           <a href="<?php echo $base_url; ?>sales_return/print_invoice/<?php echo  $return_id ?>" target="_blank" class="btn btn-warning">
-            <i class="fa fa-print"></i> 
+            <i class="fa fa-print"></i>
           Print
         </a>
 
-        
+
 
 
         <a href="<?php echo $base_url; ?>sales_return/pdf/<?php echo  $return_id ?>" target="_blank" class="btn btn-primary">
-            <i class="fa fa-file-pdf-o"></i> 
+            <i class="fa fa-file-pdf-o"></i>
           PDF
         </a>
-        
-       
-          
-          
+
+
+
+
         </div>
       </div>
 
@@ -460,7 +413,7 @@
   <!-- /.content-wrapper -->
   <?php include"footer.php"; ?>
 
- 
+
   <!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->
   <div class="control-sidebar-bg"></div>
