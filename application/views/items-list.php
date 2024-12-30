@@ -81,10 +81,10 @@
                                             <th><?= $this->lang->line('category'); ?></th>
                                             <th><?= $this->lang->line('lot_number'); ?></th>
                                             <th><?= $this->lang->line('unit'); ?></th>
-                                            <th><?= $this->lang->line('available_quantity'); ?></th>
-                                            <th><?= $this->lang->line('alert_quantity'); ?></th>
-                                            <th><?= $this->lang->line('sales_price'); ?></th>
-                                            <th><?= $this->lang->line('tax'); ?></th>
+                                            <th>Stock Qty.</th>
+                                            <th>Alert Qty.</th>
+                                            <th>trade Price</th>
+                                            <!-- <th><?= $this->lang->line('tax'); ?></th> -->
                                             <th><?= $this->lang->line('status'); ?></th>
                                             <th><?= $this->lang->line('action'); ?></th>
                                         </tr>
@@ -225,7 +225,7 @@
             ],
         });
         new $.fn.dataTable.FixedHeader(table);
-        
+
     });
     </script>
     <script>

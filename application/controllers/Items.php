@@ -108,11 +108,11 @@ class Items extends MY_Controller {
 			$row = array();
 			$row[] = '<input type="checkbox" name="checkbox[]" value='.$items->id.' class="checkbox column_checkbox '.$alert.'" >';
 
-
 			$row[] = (!empty($items->item_image)) ? "
-						<a title='Click for Bigger!' href='".base_url($items->item_image)."' data-toggle='lightbox'>
-						<image style='border:1px #72afd2 solid;' src='".base_url(return_item_image_thumb($items->item_image))."' width='75%' height='50%'> </a>" : "
-						<image style='border:1px #72afd2 solid;' src='".base_url()."theme/images/no_image.png' title='No Image!' width='75%' height='50%' >";
+				<a title='Click for Bigger!' href='".base_url($items->item_image)."' data-toggle='lightbox'>
+				<image style='border:1px #72afd2 solid;' src='".base_url(return_item_image_thumb($items->item_image))."' width='75%' height='50%'> </a>" : "
+				<image style='border:1px #72afd2 solid;' src='".base_url()."theme/images/no_image.png' title='No Image!' width='75%' height='50%' >
+			";
 			$row[] = $items->item_code;
 			$row[] = $items->item_name;
 			$row[] = $items->brand_name;//$this->get_brand_name($items->brand_id);
@@ -122,49 +122,42 @@ class Items extends MY_Controller {
 			$row[] = $items->stock;
 			$row[] = $items->alert_qty;
 			$row[] = $this->currency($items->sales_price);
-			$row[] = $items->tax_name."<br>(".$items->tax."%)";
-
-			 		if($items->status==1){
-			 			$str= "<span onclick='update_status(".$items->id.",0)' id='span_".$items->id."'  class='label label-success' style='cursor:pointer'>Active </span>";}
-					else{
-						$str = "<span onclick='update_status(".$items->id.",1)' id='span_".$items->id."'  class='label label-danger' style='cursor:pointer'> Inactive </span>";
-					}
+			if($items->status==1){
+				$str= "<span onclick='update_status(".$items->id.",0)' id='span_".$items->id."'  class='label label-success' style='cursor:pointer'>Active </span>";
+			} else{
+				$str = "<span onclick='update_status(".$items->id.",1)' id='span_".$items->id."'  class='label label-danger' style='cursor:pointer'> Inactive </span>";
+			}
 			$row[] = $str;
 
-			 		$str2 = '<div class="btn-group" title="View Account">
-										<a class="btn btn-primary btn-o dropdown-toggle" data-toggle="dropdown" href="#">
-											Action <span class="caret"></span>
-										</a>
-										<ul role="menu" class="dropdown-menu dropdown-light pull-right">';
-
-											if($this->permissions('items_edit'))
-											$str2.='<li>
-												<a title="Edit Record ?" href="'.base_url('items/update/'.$items->id).'">
-													<i class="fa fa-fw fa-edit text-blue"></i>Edit
-												</a>
-											</li>';
-
-											if($this->permissions('items_delete'))
-											$str2.='<li>
-												<a style="cursor:pointer" title="Delete Record ?" onclick="delete_items('.$items->id.')">
-													<i class="fa fa-fw fa-trash text-red"></i>Delete
-												</a>
-											</li>
-
-										</ul>
-									</div>';
+			$str2 = '<div class="btn-group" title="View Account">
+				<a class="btn btn-primary btn-o dropdown-toggle" data-toggle="dropdown" href="#">Action
+				<span class="caret"></span></a>
+				<ul role="menu" class="dropdown-menu dropdown-light pull-right">';
+					if($this->permissions('items_edit'))
+					$str2.='<li>
+						<a title="Edit Record ?" href="'.base_url('items/update/'.$items->id).'">
+							<i class="fa fa-fw fa-edit text-blue"></i>Edit
+						</a>
+					</li>';
+					if($this->permissions('items_delete'))
+					$str2.='<li>
+						<a style="cursor:pointer" title="Delete Record ?" onclick="delete_items('.$items->id.')">
+							<i class="fa fa-fw fa-trash text-red"></i>Delete
+						</a>
+					</li>
+				</ul>
+			</div>';
 			$row[] = $str2;
-
 			$data[] = $row;
 		}
 
 		$output = array(
-						"draw" => $_POST['draw'],
-						"recordsTotal" => $this->items->count_all(),
-						"recordsFiltered" => $this->items->count_filtered(),
-						"data" => $data,
-				);
-		//output to json format
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $this->items->count_all(),
+			"recordsFiltered" => $this->items->count_filtered(),
+			"data" => $data,
+		);
+
 		echo json_encode($output);
 	}
 	public function update_status(){

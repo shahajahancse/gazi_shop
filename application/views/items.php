@@ -10,14 +10,13 @@
       <?php include"sidebar.php"; ?>
       <?php
          if(!isset($item_name)){
-         $item_name=$sku=$opening_stock=$item_code=$brand_id=$category_id=$gst_percentage=$tax_type=
-         $sales_price=$purchase_price=$profit_margin=$unit_id=$price=$alert_qty=$lot_number="";
-         $stock = 0;
-         $expire_date ='';
+            $item_name=$sku=$opening_stock=$item_code=$brand_id=$category_id=$gst_percentage=$tax_type=
+            $sales_price=$purchase_price=$profit_margin=$unit_id=$price=$alert_qty=$lot_number="";
+            $stock = 0; $box_qty = 1; $company_id = ''; $expire_date = '';
+            $expire_date ='';
          }
          $new_opening_stock ='';
-
-         ?>
+      ?>
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
          <!-- Content Header (Page header) -->
@@ -42,11 +41,9 @@
                <div class="col-md-12">
                   <!-- Horizontal Form -->
                   <div class="box box-info ">
-
-                      <?= form_open('#', array('class' => 'form', 'id' => 'items-form', 'enctype'=>'multipart/form-data', 'method'=>'POST'));?>
+                     <?= form_open('#', array('class' => 'form', 'id' => 'items-form', 'enctype'=>'multipart/form-data', 'method'=>'POST'));?>
                         <input type="hidden" id="base_url" value="<?php echo $base_url;; ?>">
                         <div class="box-body">
-                           <!-- Item common details -->
                            <?php if($item_name!=""){
                               $btn_name="Update";
                               $btn_id="update";
@@ -56,6 +53,7 @@
                               $btn_name="Save";
                               $btn_id="save";
                            } ?>
+                           <!-- Item common details -->
                            <div class="row">
                               <div class="form-group col-md-3">
                                  <label for="item_name"><?= $this->lang->line('item_name'); ?><span class="text-danger">*</span></label>
@@ -69,20 +67,15 @@
                                        $query1="select * from db_category where status=1";
                                        $q1=$this->db->query($query1);
                                        if($q1->num_rows($q1)>0)
-                                        {  echo '<option value="">-Select-</option>';
-                                            foreach($q1->result() as $res1)
+                                       {  echo '<option value="">-Select-</option>';
+                                          foreach($q1->result() as $res1)
                                           {
                                             $selected = ($category_id==$res1->id)? 'selected' : '';
                                             echo "<option $selected value='".$res1->id."'>".$res1->category_name."</option>";
                                           }
-                                        }
-                                        else
-                                        {
-                                           ?>
-                                    <option value="">No Records Found</option>
-                                    <?php
-                                       }
-                                       ?>
+                                       } else {?>
+                                          <option value="">No Records Found</option>
+                                    <?php } ?>
                                  </select>
                                  <span id="category_id_msg" style="display:none" class="text-danger"></span>
                               </div>
@@ -96,12 +89,13 @@
 
                                  <span id="barcode_type_msg" style="display:none" class="text-danger"></span>
                               </div>
-
                               <div class="form-group col-md-3">
                                  <label for="item_code">Barcode <span class="text-danger">*</span></label>
                                  <input type="text" class="form-control" id="item_code" name="item_code" value="<?php print $item_code; ?>" readonly >
                                  <span id="item_code_msg" style="display:none" class="text-danger"></span>
                               </div>
+                           </div>
+                           <div class="row">
                               <div class="form-group col-md-3">
                                  <label for="company_id">Company</label>
                                  <select class="form-control select2" id="company_id" name="company_id"  style="width: 100%;"  value="<?php print $company_id; ?>">
@@ -120,7 +114,6 @@
                                  </select>
                                  <span id="company_id_msg" style="display:none" class="text-danger"></span>
                               </div>
-
                               <div class="form-group col-md-3">
                                  <label for="brand_id">Brand</label>
                                  <select class="form-control select2" id="brand_id" name="brand_id"  style="width: 100%;"  value="<?php print $brand_id; ?>">
@@ -128,24 +121,18 @@
                                        $query1="select * from db_brands where status=1";
                                        $q1=$this->db->query($query1);
                                        if($q1->num_rows($q1)>0)
-                                        {  echo '<option value="">-Select-</option>';
+                                       {  echo '<option value="">-Select-</option>';
                                             foreach($q1->result() as $res1)
                                           {
                                             $selected = ($brand_id==$res1->id)? 'selected' : '';
                                             echo "<option $selected value='".$res1->id."'>".$res1->brand_name."</option>";
                                           }
-                                        }
-                                        else
-                                        {
-                                           ?>
-                                    <option value="">No Records Found</option>
-                                    <?php
-                                       }
-                                       ?>
+                                       } else { ?>
+                                          <option value="">No Records Found</option>
+                                    <?php } ?>
                                  </select>
                                  <span id="brand_id_msg" style="display:none" class="text-danger"></span>
                               </div>
-
                               <div class="form-group col-md-3">
                                  <label for="unit_id" class="control-label"><?= $this->lang->line('unit'); ?><span class="text-danger">*</span></label>
                                  <select class="form-control select2" id="unit_id" name="unit_id"  style="width: 100%;" >
@@ -153,21 +140,16 @@
                                        $query1="select * from db_units where status=1";
                                        $q1=$this->db->query($query1);
                                        if($q1->num_rows($q1)>0)
-                                        {
+                                       {
                                          echo '<option value="">-Select-</option>';
                                             foreach($q1->result() as $res1)
                                           {
                                             $selected = ($res1->id==$unit_id)? 'selected' : '';
                                             echo "<option $selected value='".$res1->id."'>".$res1->unit_name."</option>";
                                           }
-                                        }
-                                        else
-                                        {
-                                           ?>
-                                    <option value="">No Records Found</option>
-                                    <?php
-                                       }
-                                       ?>
+                                       } else { ?>
+                                       <option value="">No Records Found</option>
+                                    <?php } ?>
                                  </select>
                                  <span id="unit_id_msg" style="display:none" class="text-danger"></span>
                               </div>
@@ -176,13 +158,19 @@
                                  <input type="text" class="form-control" id="sku" name="sku" placeholder="" value="<?php print $sku; ?>" >
                                  <span id="sku_msg" style="display:none" class="text-danger"></span>
                               </div>
-                              <div class="form-group col-md-3">
+                           </div>
+                           <div class="row">
+                              <div class="form-group col-md-2">
+                                 <label for="box_qty" >Poly/Box Quantity <span class="text-danger"> * </span></label>
+                                 <input onkeyup="open_qty()" type="number" class="form-control no_special_char" id="box_qty" name="box_qty" min="1"  value="<?php print $box_qty; ?>" >
+                                 <span id="box_qty_msg" style="display:none" class="text-danger"></span>
+                              </div>
+                              <div class="form-group col-md-2">
                                  <label for="alert_qty" ><?= $this->lang->line('alert_qty'); ?></label>
                                  <input type="number" class="form-control no_special_char" id="alert_qty" name="alert_qty" placeholder="" min="0"  value="<?php print $alert_qty; ?>" >
                                  <span id="alert_qty_msg" style="display:none" class="text-danger"></span>
                               </div>
-
-                              <div class="form-group col-md-3">
+                              <div class="form-group col-md-2">
                                  <label for="lot_number" ><?= $this->lang->line('lot_number'); ?></label>
                                  <input type="text" class="form-control no_special_char" id="lot_number" name="lot_number" placeholder=""  value="<?php print $lot_number; ?>" >
                                  <span id="lot_number_msg" style="display:none" class="text-danger"></span>
@@ -209,7 +197,7 @@
                            <!-- Item Price details -->
                            <div class="row">
                               <div class="form-group col-md-2">
-                                 <label for="price">Item Price<span class="text-danger"> *</span></label>
+                                 <label for="price">Price<span class="text-danger"> *</span></label>
                                  <input type="text" class="form-control only_currency" id="price" name="price" placeholder="Price of Item without Tax"  value="<?php print $price; ?>" >
                                  <span id="price_msg" style="display:none" class="text-danger"></span>
                               </div>
@@ -237,12 +225,12 @@
                                  <span id="tax_amt_msg" style="display:none" class="text-danger"></span>
                               </div>
                               <div class="form-group col-md-2">
-                                 <label for="purchase_price"><?= $this->lang->line('purchase_price'); ?><span class="text-danger"> * </span></label>
+                                 <label for="purchase_price">Distribute Price<span class="text-danger"> * </span></label>
                                  <input type="text" class="form-control only_currency" id="purchase_price" name="purchase_price" placeholder="Total Price with Vat Amount"  value="<?php print $purchase_price; ?>" readonly>
                                  <span id="purchase_price_msg" style="display:none" class="text-danger"></span>
                               </div>
                               <div class="form-group col-md-2">
-                                 <label for="mr_price">MR. Price <span class="text-danger"> * </span></label>
+                                 <label for="mr_price">Trade Price <span class="text-danger"> * </span></label>
                                  <input type="text" class="form-control only_currency" id="mr_price" name="mr_price" placeholder="Item MR. Price"  value="<?= isset($mr_price) ? $mr_price : '' ?>" >
                                  <span id="mr_price_msg" style="display:none" class="text-danger"></span>
                               </div>
@@ -253,14 +241,7 @@
                               </div>
                            </div>
 
-                           <div class="row">
-                              <!-- <div class="form-group col-md-3">
-                                 <label for="profit_margin"><?= $this->lang->line('profit_margin'); ?> <i class="hover-q " data-container="body" data-toggle="popover" data-placement="top" data-content="<?= $this->lang->line('based_on_purchase_price'); ?>" data-html="true" data-trigger="hover" data-original-title="">
-                                  <i class="fa fa-info-circle text-maroon text-black hover-q"></i>
-                                </i></label>
-                                 <input type="text" class="form-control only_currency" id="profit_margin" name="profit_margin" placeholder="Profit in %"  value="<?php print $profit_margin; ?>" >
-                                 <span id="profit_margin_msg" style="display:none" class="text-danger"></span>
-                              </div> -->
+                           <div class="row" style="display: none;">
                               <div class="form-group col-md-2">
                                  <label for="discount_type">Discount Type</label>
                                  <select class="form-control" id="discount_type" name="discount_type"  style="width: 100%;" >
@@ -311,14 +292,24 @@
                            <!-- /row -->
                            <hr>
                            <div class="row">
-                              <div class="form-group col-md-4">
+                              <div class="form-group col-md-3">
                                  <label for="current_opening_stock"><?= $this->lang->line('current_opening_stock'); ?></label>
                                  <input type="text" class="form-control only_currency" id="current_opening_stock" name="current_opening_stock" placeholder="" readonly=""  value="<?php print $stock; ?>" >
                                  <span id="current_opening_stock_msg" style="display:none" class="text-danger"></span>
                               </div>
-                              <div class="form-group col-md-4">
-                                 <label for="new_opening_stock"><?= $this->lang->line('new_opening_stock'); ?></label>
-                                 <input type="text" class="form-control" id="new_opening_stock" name="new_opening_stock" placeholder="-/+"  value="<?php print $new_opening_stock; ?>" >
+                              <div class="form-group col-md-3">
+                                 <label for="new_opening_box">New Opening Box</label>
+                                 <input onkeyup="open_qty()" type="number" class="form-control" id="new_opening_box" name="new_opening_box" placeholder="-/+" >
+                                 <span id="new_opening_box_msg" style="display:none" class="text-danger"></span>
+                              </div>
+                              <div class="form-group col-md-3">
+                                 <label for="new_opening_pcs">New Opening Pieces</label>
+                                 <input onkeyup="open_qty()" type="number" class="form-control" id="new_opening_pcs" name="new_opening_pcs" placeholder="-/+"  value="<?php print $new_opening_stock; ?>"  >
+                                 <span id="new_opening_pcs_msg" style="display:none" class="text-danger"></span>
+                              </div>
+                              <div class="form-group col-md-3">
+                                 <label for="new_opening_stock"> Opening Stock Quantity </label>
+                                 <input type="text" class="form-control" id="new_opening_stock" name="new_opening_stock"  value="<?php print $new_opening_stock; ?>" readonly >
                                  <span id="new_opening_stock_msg" style="display:none" class="text-danger"></span>
                               </div>
                            </div>
@@ -336,9 +327,9 @@
                               </div>
                            </div>
                            <!-- /.box-footer -->
+                        </div>
+                        <!-- /.box -->
                      <?= form_close(); ?>
-                     </div>
-                     <!-- /.box -->
                   </div>
                   <!--/.col (right) -->
                </div>
@@ -411,7 +402,18 @@
       <script src="<?php echo $theme_link; ?>js/items.js"></script>
 
       <script>
+         function open_qty() {
+            var boxQty = isNaN(parseInt($("#box_qty").val())) ? 0 : parseInt($("#box_qty").val());
+            var openingBoxQty = isNaN(parseInt($("#new_opening_box").val())) ? 0 : parseInt($("#new_opening_box").val());
+            var openingPcsQty = isNaN(parseInt($("#new_opening_pcs").val())) ? 0 : parseInt($("#new_opening_pcs").val());
 
+            if (boxQty >= 0 && openingBoxQty >= 0 && openingPcsQty >= 0) {
+               var totalStock = (boxQty * openingBoxQty) + openingPcsQty;
+               $("#new_opening_stock").val(totalStock);
+            } else {
+               $("#new_opening_stock").val('');
+            }
+         }
       </script>
 
       <!-- Make sidebar menu hughlighter/selector -->

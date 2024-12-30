@@ -28,7 +28,7 @@ $('#save,#update').click(function (e) {
 	check_field("purchase_price");
 	// check_field("tax_type");
 	//check_field("profit_margin");
-	check_field("sales_price");
+	// check_field("sales_price");
 	check_field("mr_price");
 
     if(flag==false)

@@ -148,30 +148,10 @@ class Items_model extends CI_Model {
 			$item_code = $item_init.str_pad($maxid, 10, '0', STR_PAD_LEFT);
 		}
 
-		//Create items unique Number  // 12-12-2024 commend on
-		/* $this->db->query("ALTER TABLE db_items AUTO_INCREMENT = 1");
-		$qs4="select coalesce(max(id),0)+1 as maxid from db_items";
-		$q1=$this->db->query($qs4);
-		$maxid=$q1->row()->maxid;
-		$item_code=$item_init.str_pad($maxid, 6, '0', STR_PAD_LEFT); */
-		//end
-
 		$new_opening_stock = (empty($new_opening_stock)) ? 0 :$new_opening_stock;
-		//$stock = $current_opening_stock + $new_opening_stock;
-
 		$alert_qty = empty(trim($alert_qty)) ? '0' : $alert_qty;
 		$profit_margin = (empty(trim($profit_margin))) ? '0' : $profit_margin;
-
 		$expire_date= (!empty(trim($expire_date))) ? date('Y-m-d',strtotime($expire_date)) : null;
-
-		/*$query1="insert into db_items(item_code,item_name,company_id,brand_id,category_id,sku,unit_id,alert_qty,lot_number,expire_date, price,tax_id,purchase_price,mr_price,vat_id,profit_margin, sales_price, system_ip,system_name,created_date,created_time,created_by,status,discount_type, discount)
-
-							values('$item_code','$item_name','$company_id','$brand_id','$category_id','$sku','$unit_id','$alert_qty','$lot_number','$expire_date', '$price','$tax_id', '$purchase_price','$mr_price','$vat_id','$profit_margin','$sales_price',$dif_price,'$SYSTEM_IP','$SYSTEM_NAME','$CUR_DATE','$CUR_TIME','$CUR_USERNAME', 1, '$discount_type','$discount')";
-
-		$query1 = $this->db->simple_query($query1);
-		if(!$query1){
-			return "failed";
-		}*/
 
 		$data = array(
 		    'item_code' => $item_code,
@@ -181,6 +161,7 @@ class Items_model extends CI_Model {
 		    'brand_id' => $brand_id,
 		    'unit_id' => $unit_id,
 		    'sku' => $sku,
+		    'box_qty' => $box_qty,
 		    'alert_qty' => $alert_qty,
 		    'lot_number' => $lot_number,
 		    'expire_date' => $expire_date,
@@ -221,19 +202,16 @@ class Items_model extends CI_Model {
 		}
 
 		if ($item_id){
-
-				if(!empty($file_name)){
-					//echo "update db_items set item_image ='$file_name' where id=".$item_id;exit();
-					$q1=$this->db->query("update db_items set item_image ='uploads/items/$file_name' where id=".$item_id);
-				}
-				$this->db->query("update db_items set expire_date=null where expire_date='0000-00-00'");
-				$this->db->trans_commit();
-				$this->session->set_flashdata('success', 'Success!! New Item Added Successfully!');
-		        return "success";
+			if(!empty($file_name)){
+				$q1=$this->db->query("update db_items set item_image ='uploads/items/$file_name' where id=".$item_id);
+			}
+			$this->db->query("update db_items set expire_date=null where expire_date='0000-00-00'");
+			$this->db->trans_commit();
+			$this->session->set_flashdata('success', 'Success!! New Item Added Successfully!');
+			return "success";
 		}else{
-				$this->db->trans_rollback();
-				//unlink('uploads/items/'.$file_name);
-		        return "failed";
+			$this->db->trans_rollback();
+			return "failed";
 		}
 	}
 
@@ -254,6 +232,7 @@ class Items_model extends CI_Model {
 			$data['category_id']=$query->category_id;
 			$data['sku']=$query->sku;
 			$data['unit_id']=$query->unit_id;
+			$data['box_qty']=$query->box_qty;
 			$data['alert_qty']=$query->alert_qty;
 			$data['price']=$query->price;
 			$data['tax_id']=$query->tax_id;
@@ -321,7 +300,6 @@ class Items_model extends CI_Model {
 		        }
 			}
 
-			//$stock = $current_opening_stock + $new_opening_stock;
 			$alert_qty = (empty(trim($alert_qty))) ? '0' : $alert_qty;
 			$profit_margin = (empty(trim($profit_margin))) ? 'null' : $profit_margin;
 			$expire_date= (!empty(trim($expire_date))) ? date('Y-m-d',strtotime($expire_date)) : 'null';
@@ -334,6 +312,7 @@ class Items_model extends CI_Model {
 						discount='$discount',
 						sku='$sku',
 						unit_id='$unit_id',
+						box_qty='$box_qty',
 						alert_qty='$alert_qty',
 						lot_number='$lot_number',
 						expire_date='$expire_date',
@@ -349,8 +328,8 @@ class Items_model extends CI_Model {
 						grand_sales_price='$grand_sales_price'
 						$item_image
 						where id=$q_id";
-
 			$query1=$this->db->query($query1);
+
 			if(!$query1){
 				return "failed";
 			}
@@ -360,7 +339,7 @@ class Items_model extends CI_Model {
 					return "failed";
 				}
 			}
-			//UPDATE itemS QUANTITY IN itemS TABLE
+
 			$this->load->model('pos_model');
 			$q6=$this->pos_model->update_items_quantity($q_id);
 			if(!$q6){
@@ -368,14 +347,13 @@ class Items_model extends CI_Model {
 			}
 
 			if ($query1){
-				   $this->db->query("update db_items set expire_date=null where expire_date='0000-00-00'");
-				   $this->db->trans_commit();
-				   $this->session->set_flashdata('success', 'Success!! Item Updated Successfully!');
-			        return "success";
-			}
-			else{
-					$this->db->trans_rollback();
-			        return "failed";
+				$this->db->query("update db_items set expire_date=null where expire_date='0000-00-00'");
+				$this->db->trans_commit();
+				$this->session->set_flashdata('success', 'Success!! Item Updated Successfully!');
+				return "success";
+			} else{
+				$this->db->trans_rollback();
+				return "failed";
 			}
 		}
 	}
@@ -472,22 +450,22 @@ class Items_model extends CI_Model {
 		$company_name = $this->db->query("SELECT company_name FROM db_company")->row()->company_name;
 		$rowcount = $this->input->post('hidden_rowcount');
 		?>
-	
+
 				<?php
 				// Process form data
 				for ($i = 1; $i <= $rowcount; $i++) {
-	
+
 					if (isset($_POST['tr_item_id_' . $i]) && !empty($_POST['tr_item_id_' . $i])) {
-	
+
 						$item_id = $this->xss_html_filter(trim($_POST['tr_item_id_' . $i]));
 						$item_count = $this->xss_html_filter(trim($_POST['td_data_' . $i . "_3"]));
-	
+
 						$res1 = $this->db->query("SELECT item_name, item_code, sales_price FROM db_items WHERE id=$item_id")->row();
-	
+
 						$item_name = $res1->item_name;
 						$item_code = $res1->item_code;
 						$item_price = $res1->sales_price;
-	
+
 						for ($j = 1; $j <= $item_count; $j++) {
 							?>
 							<div style="width:38mm !important; height:25mm !important; margin-bottom:5px; text-align:center; display: inline-block; page-break-inside: avoid;">
@@ -505,16 +483,16 @@ class Items_model extends CI_Model {
 							<?php
 						}
 					}
-	
+
 				} // end for
 				?>
-	
+
 			</div>
 		</div>
 		<?php
 	}
-	
-	
+
+
 
 
 	public function delete_stock_entry($entry_id){
