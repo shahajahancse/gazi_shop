@@ -10,23 +10,19 @@
 <div class="wrapper">
 
   <!-- Left side column. contains the logo and sidebar -->
-
   <?php include"sidebar.php"; ?>
 
   <?php
-      /*Total Invoices*/
-      $total_invoice=$this->db->query("SELECT COUNT(*) as total FROM db_sales")->row()->total;
-      /*Total Invoices Total*/
-      $sal_total=$this->db->query("SELECT COALESCE(sum(grand_total),0) AS tot_sal_grand_total FROM db_sales where sales_status='Final'")->row()->tot_sal_grand_total;
-      /*Total Invoices Return Total*/
-      $sal_return_total=$this->db->query("SELECT COALESCE(SUM(grand_total),0) AS sal_total FROM db_salesreturn where sales_id is not null")->row()->sal_total;
-       //total sales due
-      $sales_due_total=$this->db->query("SELECT COALESCE(SUM(sales_due),0) AS sales_due FROM db_customers")->row()->sales_due;
-
-
-      //$sales_due_total = $sal_total - $sal_return_total;
-
+    /*Total Invoices*/
+    $total_invoice=$this->db->query("SELECT COUNT(*) as total FROM db_sales")->row()->total;
+    /*Total Invoices Total*/
+    $sal_total=$this->db->query("SELECT COALESCE(sum(grand_total),0) AS tot_sal_grand_total FROM db_sales where sales_status='Final'")->row()->tot_sal_grand_total;
+    /*Total Invoices Return Total*/
+    $sal_return_total=$this->db->query("SELECT COALESCE(SUM(grand_total),0) AS sal_total FROM db_salesreturn where sales_id is not null")->row()->sal_total;
+      //total sales due
+    $sales_due_total=$this->db->query("SELECT COALESCE(SUM(sales_due),0) AS sales_due FROM db_customers")->row()->sales_due;
   ?>
+
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -48,120 +44,120 @@
 
     <!-- Main content -->
     <?= form_open('#', array('class' => '', 'id' => 'table_form')); ?>
-    <input type="hidden" id='base_url' value="<?=$base_url;?>">
-    <section class="content">
-      <!-- Small boxes (Stat box) -->
-      <div class="row">
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-aqua">
-            <div class="inner">
-              <h3><?= $total_invoice;?></h3>
+      <input type="hidden" id='base_url' value="<?=$base_url;?>">
+      <section class="content">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+          <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-aqua">
+              <div class="inner">
+                <h3><?= $total_invoice;?></h3>
 
-              <p><?= $this->lang->line('total_invoices'); ?></p>
+                <p><?= $this->lang->line('total_invoices'); ?></p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-bag"></i>
+              </div>
+              <a href="<?= base_url('reports/sales') ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
             </div>
-            <div class="icon">
-              <i class="ion ion-bag"></i>
-            </div>
-            <a href="<?= base_url('reports/sales') ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-green">
-            <div class="inner">
-              <h3><?= $CI->currency($sal_total);?></h3>
-              <p><?= $this->lang->line('total_invoices_amount'); ?></p>
+          <!-- ./col -->
+          <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-green">
+              <div class="inner">
+                <h3><?= $CI->currency($sal_total);?></h3>
+                <p><?= $this->lang->line('total_invoices_amount'); ?></p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-plus-square-o"></i>
+              </div>
+              <a href="<?= base_url('reports/sales') ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
             </div>
-            <div class="icon">
-              <i class="fa fa-plus-square-o"></i>
-            </div>
-            <a href="<?= base_url('reports/sales') ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-yellow">
-            <div class="inner">
-              <h3><?= $CI->currency($sal_return_total);?></h3>
-             <p><?= $this->lang->line('returned_against_sales_invoices'); ?></p>
+          <!-- ./col -->
+          <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-yellow">
+              <div class="inner">
+                <h3><?= $CI->currency($sal_return_total);?></h3>
+              <p><?= $this->lang->line('returned_against_sales_invoices'); ?></p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-undo"></i>
+              </div>
+              <a href="<?= base_url('reports/sales_return') ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
             </div>
-            <div class="icon">
-              <i class="fa fa-undo"></i>
-            </div>
-            <a href="<?= base_url('reports/sales_return') ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-red">
-            <div class="inner">
-              <h3><?= $CI->currency(number_format($sales_due_total,2,'.',''));?></h3>
-              <p><?= $this->lang->line('total_sales_due'); ?></p>
+          <!-- ./col -->
+          <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-red">
+              <div class="inner">
+                <h3><?= $CI->currency(number_format($sales_due_total,2,'.',''));?></h3>
+                <p><?= $this->lang->line('total_sales_due'); ?></p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-hourglass-2 "></i>
+              </div>
+              <a href="<?= base_url('reports/profit_loss') ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
             </div>
-            <div class="icon">
-              <i class="fa fa-hourglass-2 "></i>
-            </div>
-            <a href="<?= base_url('reports/profit_loss') ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
+          <!-- ./col -->
         </div>
-        <!-- ./col -->
-      </div>
-      <!-- /.row -->
-      <div class="row">
-        <!-- ********** ALERT MESSAGE START******* -->
-        <?php include"comman/code_flashdata.php"; ?>
-        <!-- ********** ALERT MESSAGE END******* -->
-        <div class="col-xs-12">
-          <div class="box">
-            <div class="box-header with-border">
-              <h3 class="box-title"><?=$page_title;?></h3>
-              <?php if($CI->permissions('sales_add')) { ?>
-              <!-- <div class="box-tools">
-                <a class="btn btn-block btn-info" href="<?php echo $base_url; ?>sales/add">
-                <i class="fa fa-plus"></i> <?= $this->lang->line('new_sales'); ?></a>
-              </div> -->
-              <?php } ?>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <table id="example2" class="table table-bordered table-striped" width="100%">
-                <thead class="bg-primary ">
-                <tr>
-                  <th class="text-center">
-                    <input type="checkbox" class="group_check checkbox" >
-                  </th>
-                  <th><?= $this->lang->line('sales_date'); ?></th>
-                  <th><?= $this->lang->line('sales_code'); ?></th>
-                  <th><?= $this->lang->line('sales_status'); ?></th>
-                  <th><?= $this->lang->line('reference_no'); ?></th>
-                  <th><?= $this->lang->line('customer_name'); ?></th>
-                  <!-- <th>Warehouse</th> -->
-                  <th><?= $this->lang->line('total'); ?></th>
-                  <th><?= $this->lang->line('paid_amount'); ?></th>
-                  <th><?= $this->lang->line('payment_status'); ?></th>
-                  <th><?= $this->lang->line('created_by'); ?></th>
-                  <th><?= $this->lang->line('action'); ?></th>
-                </tr>
-                </thead>
-                <tbody>
+        <!-- /.row -->
+        <div class="row">
+          <!-- ********** ALERT MESSAGE START******* -->
+          <?php include"comman/code_flashdata.php"; ?>
+          <!-- ********** ALERT MESSAGE END******* -->
+          <div class="col-xs-12">
+            <div class="box">
+              <div class="box-header with-border">
+                <h3 class="box-title"><?=$page_title;?></h3>
+                <?php if($CI->permissions('sales_add')) { ?>
+                <!-- <div class="box-tools">
+                  <a class="btn btn-block btn-info" href="<?php echo $base_url; ?>sales/add">
+                  <i class="fa fa-plus"></i> <?= $this->lang->line('new_sales'); ?></a>
+                </div> -->
+                <?php } ?>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body">
+                <table id="example2" class="table table-bordered table-striped" width="100%">
+                  <thead class="bg-primary ">
+                  <tr>
+                    <th class="text-center">
+                      <input type="checkbox" class="group_check checkbox" >
+                    </th>
+                    <th><?= $this->lang->line('sales_date'); ?></th>
+                    <th><?= $this->lang->line('sales_code'); ?></th>
+                    <th><?= $this->lang->line('sales_status'); ?></th>
+                    <th><?= $this->lang->line('reference_no'); ?></th>
+                    <th><?= $this->lang->line('customer_name'); ?></th>
+                    <!-- <th>Warehouse</th> -->
+                    <th><?= $this->lang->line('total'); ?></th>
+                    <th><?= $this->lang->line('paid_amount'); ?></th>
+                    <th><?= $this->lang->line('payment_status'); ?></th>
+                    <th><?= $this->lang->line('created_by'); ?></th>
+                    <th><?= $this->lang->line('action'); ?></th>
+                  </tr>
+                  </thead>
+                  <tbody>
 
-                </tbody>
+                  </tbody>
 
-              </table>
+                </table>
+              </div>
+              <!-- /.box-body -->
             </div>
-            <!-- /.box-body -->
+            <!-- /.box -->
           </div>
-          <!-- /.box -->
+          <!-- /.col -->
         </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
-    </section>
-    <!-- /.content -->
+        <!-- /.row -->
+      </section>
+      <!-- /.content -->
     <?= form_close();?>
   </div>
   <!-- /.content-wrapper -->

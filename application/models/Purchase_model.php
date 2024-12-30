@@ -95,17 +95,9 @@ class Purchase_model extends CI_Model {
 	public function verify_save_and_update(){
 		//Filtering XSS and html escape from user inputs
 		extract($this->xss_html_filter(array_merge($this->data,$_POST,$_GET)));
-		//echo "<pre>";print_r($this->xss_html_filter(array_merge($this->data,$_POST,$_GET)));exit();
 
 		$this->db->trans_begin();
 		$pur_date=date('Y-m-d',strtotime($pur_date));
-
-		if($other_charges_input=='' || $other_charges_input==0){$other_charges_input=null;}
-	    if($other_charges_tax_id=='' || $other_charges_tax_id==0){$other_charges_tax_id=null;}
-	    if($other_charges_amt=='' || $other_charges_amt==0){$other_charges_amt=null;}
-	    if($discount_to_all_input=='' || $discount_to_all_input==0){$discount_to_all_input=null;}
-	    if($tot_discount_to_all_amt=='' || $tot_discount_to_all_amt==0){$tot_discount_to_all_amt=null;}
-	    if($tot_round_off_amt=='' || $tot_round_off_amt==0){$tot_round_off_amt=null;}
 
 	    if($command=='save'){//Create purchase code unique if first time entry
 		    $qs5="select purchase_init from db_company";
@@ -118,38 +110,34 @@ class Purchase_model extends CI_Model {
 			$purchase_code=$purchase_init.str_pad($maxid, 4, '0', STR_PAD_LEFT);
 
 		    $purchase_entry = array(
-		    				'purchase_code' 			=> $purchase_code,
-		    				'reference_no' 				=> $reference_no,
-		    				'purchase_date' 			=> $pur_date,
-		    				'purchase_status' 			=> $purchase_status,
-		    				'supplier_id' 				=> $supplier_id,
-		    				/*'warehouse_id' 				=> $warehouse_id,*/
-		    				/*Other Charges*/
-		    				'other_charges_input' 		=> $other_charges_input,
-		    				'other_charges_tax_id' 		=> $other_charges_tax_id,
-		    				'other_charges_amt' 		=> $other_charges_amt,
-		    				/*Discount*/
-		    				'discount_to_all_input' 	=> $discount_to_all_input,
-		    				'discount_to_all_type' 		=> $discount_to_all_type,
-		    				'tot_discount_to_all_amt' 	=> $tot_discount_to_all_amt,
-		    				/*Subtotal & Total */
-		    				'subtotal' 					=> $tot_subtotal_amt,
-		    				'round_off' 				=> $tot_round_off_amt,
-		    				'grand_total' 				=> $tot_total_amt,
-		    				'purchase_note' 			=> $purchase_note,
-		    				/*System Info*/
-		    				'created_date' 				=> $CUR_DATE,
-		    				'created_time' 				=> $CUR_TIME,
-		    				'created_by' 				=> $CUR_USERNAME,
-		    				'system_ip' 				=> $SYSTEM_IP,
-		    				'system_name' 				=> $SYSTEM_NAME,
-		    				'status' 					=> 1,
-		    			);
+				'purchase_code' 			=> $purchase_code,
+				'reference_no' 				=> $reference_no,
+				'purchase_date' 			=> $pur_date,
+				'purchase_status' 			=> $purchase_status,
+				'supplier_id' 				=> $supplier_id,
+				'other_charges_input' 		=> $other_charges_input,
+				'other_charges_tax_id' 		=> 0,
+				'other_charges_amt' 		=> $other_charges_amt,
+				'discount_to_all_input' 	=> $discount_to_all_input,
+				'discount_to_all_type' 		=> $discount_to_all_type,
+				'tot_discount_to_all_amt' 	=> 0,
+				'subtotal' 					=> $tot_subtotal_amt,
+				'round_off' 				=> $tot_round_off_amt,
+				'grand_total' 				=> $tot_total_amt,
+				'purchase_note' 			=> $purchase_note,
+				'created_date' 				=> $CUR_DATE,
+				'created_time' 				=> $CUR_TIME,
+				'created_by' 				=> $CUR_USERNAME,
+				'system_ip' 				=> $SYSTEM_IP,
+				'system_name' 				=> $SYSTEM_NAME,
+				'status' 					=> 1,
+			);
 
 			$q1 = $this->db->insert('db_purchase', $purchase_entry);
 			$purchase_id = $this->db->insert_id();
-		}
-		else if($command=='update'){
+		}else if($command=='update'){
+			redirect('purchase','refresh');
+			exit();
 			$purchase_entry = array(
 		    				'reference_no' 				=> $reference_no,
 		    				'purchase_date' 			=> $pur_date,
@@ -186,46 +174,34 @@ class Purchase_model extends CI_Model {
 			if(isset($_REQUEST['tr_item_id_'.$i]) && !empty($_REQUEST['tr_item_id_'.$i])){
 
 				$item_id 			=$this->xss_html_filter(trim($_REQUEST['tr_item_id_'.$i]));
-				$purchase_qty		=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_3']));
-				$price_per_unit 	=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_4']));
-				$tax_id 			=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_15']));
-				$tax_amt 			=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_5']));
-				$unit_discount_per	=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_8']));
-				$unit_total_cost	=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_10']));
-				$total_cost			=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_9']));
-				$profit_margin_per	=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_12']));
-				$unit_sales_price	=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_13']));
-                $unit_discount_per  =(empty($unit_discount_per)) ? 0 : $unit_discount_per;
-
-				$discount_amt 		=(($purchase_qty * ($price_per_unit+$tax_amt))*$unit_discount_per)/100;
-
-				if($tax_id=='' || $tax_id==0){$tax_id=null;}
-				if($tax_amt=='' || $tax_amt==0){$tax_amt=null;}
-				if($unit_discount_per=='' || $unit_discount_per==0){$unit_discount_per=null;}
-				if($unit_total_cost=='' || $unit_total_cost==0){$unit_total_cost=null;}
-				if($total_cost=='' || $total_cost==0){$total_cost=null;}
-				if($profit_margin_per=='' || $profit_margin_per==0){$profit_margin_per=null;}
-				if($unit_sales_price=='' || $unit_sales_price==0){$unit_sales_price=null;}
-
-				if(!empty($discount_to_all_input) && $discount_to_all_input!=0){
-					$unit_discount_per =null;
-					$discount_amt =null;
-				}
+				$purchase_price 	=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_2']));
+				$box_qty			=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_3']));
+				$box_per_qty		=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_9']));
+				$pieces 			=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_4']));
+				$total_qty 			=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_5']));
+				$total_cost			=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_6']));
+				$sale_price			=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_7']));
+				$profit_total		=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_8']));
+				$profit_per_unit	=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_10']));
 
 				$purchaseitems_entry = array(
 		    				'purchase_id' 		=> $purchase_id,
 		    				'purchase_status'	=> $purchase_status,
 		    				'item_id' 			=> $item_id,
-		    				'purchase_qty' 		=> $purchase_qty,
-		    				'price_per_unit' 	=> $price_per_unit,
-		    				'tax_id' 			=> $tax_id,
-		    				'tax_amt' 			=> $tax_amt,
-		    				'unit_discount_per' => $unit_discount_per,
-		    				'discount_amt' 		=> $discount_amt,
-		    				'unit_total_cost' 	=> $unit_total_cost,
+		    				'price_per_unit' 	=> $purchase_price,
+		    				'box_qty' 			=> $box_qty,
+		    				'box_per_qty' 		=> $box_per_qty,
+		    				'pieces' 			=> $pieces,
+		    				'purchase_qty' 		=> $total_qty,
+		    				'tax_id' 			=> 0,
+		    				'tax_amt' 			=> 0,
+		    				'unit_discount_per' => 0,
+		    				'discount_amt' 		=> 0,
+		    				'unit_total_cost' 	=> $purchase_price,
 		    				'total_cost' 		=> $total_cost,
-		    				'profit_margin_per' => $profit_margin_per,
-		    				'unit_sales_price' 	=> $unit_sales_price,
+		    				'profit_margin_per' => $profit_per_unit,
+		    				'profit_total' 		=> $profit_total,
+		    				'unit_sales_price' 	=> $sale_price,
 		    				'status'			=> 1,
 		    			);
 
@@ -239,16 +215,15 @@ class Purchase_model extends CI_Model {
 				}
 
 				/*Update the item profit margin & item sales price*/
-				$this->db->where('id',$item_id)->update('db_items',array(
-																'profit_margin' => $profit_margin_per,
-																'sales_price'=>$unit_sales_price,
-																'price'=>$price_per_unit,
-																'purchase_price'=>$unit_total_cost,
-																'tax_id'=>$tax_id,
-															));
-
+				$rr = $this->db->where('id',$item_id)->get('db_items')->row();
+				if ($rr->sales_price < $sale_price) {
+					$this->db->where('id',$item_id)->update('db_items',array(
+						'profit_margin' => $profit_per_unit,
+						'sales_price'	=>$sale_price,
+						'purchase_price'=>$purchase_price,
+					));
+				}
 			}
-
 		}//for end
 
 		if($amount=='' || $amount==0){$amount=null;}
@@ -266,9 +241,7 @@ class Purchase_model extends CI_Model {
     				'system_name' 		=> $SYSTEM_NAME,
     				'status' 			=> 1,
 				);
-
 			$q3 = $this->db->insert('db_purchasepayments', $purchasepayments_entry);
-
 		}
 
 		$q10=$this->update_purchase_payment_status($purchase_id);
@@ -397,8 +370,6 @@ class Purchase_model extends CI_Model {
 		return true;
 	}
 
-
-
 	public function delete_purchase($ids){
       	$this->db->trans_begin();
 
@@ -441,6 +412,7 @@ class Purchase_model extends CI_Model {
 		        return "success";
 		}
 	}
+
 	public function search_item($q){
 		$json_array=array();
         $query1="select id,item_name from db_items where (upper(item_name) like upper('%$q%') or upper(item_code) like upper('%$q%'))";
@@ -475,31 +447,70 @@ class Purchase_model extends CI_Model {
         return json_encode($json_array);
 	}
 
-
-
-
 	public function inclusive($price='',$tax_per){
 		return $price/(($tax_per/100)+1)/10;
 	}
 
 	public function get_items_info($rowcount,$item_id){
 		$q1=$this->db->select('*')->from('db_items')->where("id=$item_id")->get();
-		$tax=$this->db->query("select tax from db_tax where id=".$q1->row()->tax_id)->row()->tax;
+		// $tax=$this->db->query("select tax from db_tax where id=".$q1->row()->tax_id)->row()->tax;
 
 		$info['item_id'] = $q1->row()->id;
 		$info['item_name'] = $q1->row()->item_name;
 		$info['item_available_qty'] = $q1->row()->stock;
+		$info['box_qty'] = $q1->row()->box_qty;
 		$info['item_price'] = $q1->row()->price;
-		$info['item_purchase_price'] = $q1->row()->purchase_price;
+		$info['purchase_price'] = $q1->row()->purchase_price;
 		$info['item_tax_id'] = $q1->row()->tax_id;
-		$info['item_profit_margin'] = $q1->row()->profit_margin;
-		$info['item_sales_price'] = $q1->row()->sales_price;
+		$info['profit_margin'] = $q1->row()->profit_margin;
+		$info['mr_price'] = $q1->row()->mr_price;
 		$info['item_purchase_qty'] = 1;
-		$info['item_tax'] = $tax;
+		$info['item_tax'] = $q1->row()->tax_amt;
 		$info['item_tax_type'] = $q1->row()->tax_type;
 		$info['item_discount'] = '';
 		$this->return_row_with_data($rowcount,$info);
 	}
+
+	public function return_row_with_data($rowcount,$info){
+		extract($info); $ttqty = (int)$box_qty + 1; ?>
+
+		<tr id="row_<?=$rowcount;?>" data-row='<?=$rowcount;?>'>
+			<!-- item name  -->
+			<td id="td_<?=$rowcount;?>_1">
+				<input type="text" style="font-weight: bold;" id="td_data_<?=$rowcount;?>_1" class="form-control no-padding" value='<?=$item_name;?>' readonly >
+			</td>
+			<!-- Purchase Price -->
+			<td id="td_<?=$rowcount;?>_2"><input type="text" name="td_data_<?=$rowcount;?>_2" id="td_data_<?=$rowcount;?>_2" class="form-control no-padding only_currency text-center" onkeyup="cal_qty_price(<?=$rowcount;?>)" value="<?=$item_price;?>" ></td>
+
+			<!-- Box/Poly -->
+			<td id="td_<?=$rowcount;?>_3"><input type="text" name="td_data_<?=$rowcount;?>_3" id="td_data_<?=$rowcount;?>_3" class="form-control no-padding only_currency text-center" onkeyup="cal_qty_price(<?=$rowcount;?>)" value="1" ></td>
+			<!-- Pieces Qty -->
+			<td id="td_<?=$rowcount;?>_4"><input type="text" name="td_data_<?=$rowcount;?>_4" id="td_data_<?=$rowcount;?>_4" class="form-control no-padding only_currency text-center" onkeyup="cal_qty_price(<?=$rowcount;?>)" value="1" ></td>
+
+			<!-- Total Quantity -->
+			<td id="td_<?=$rowcount;?>_5"><input type="text" name="td_data_<?=$rowcount;?>_5" id="td_data_<?=$rowcount;?>_5" class="form-control no-padding only_currency text-center" readonly value="<?= $ttqty ?>"></td>
+
+			<!-- Amount -->
+			<td id="td_<?=$rowcount;?>_6"><input type="text" name="td_data_<?=$rowcount;?>_6" id="td_data_<?=$rowcount;?>_6" class="form-control text-right no-padding only_currency text-center" style='border-color: #f39c12;' title='Total' readonly value="<?= $purchase_price * $ttqty; ?>"></td>
+
+			<!-- sales price -->
+			<td id="td_<?=$rowcount;?>_7"><input type="text" name="td_data_<?=$rowcount;?>_7" id="td_data_<?=$rowcount;?>_7" class="form-control text-right no-padding only_currency text-center" onkeyup="cal_qty_price(<?=$rowcount;?>)" value="<?=$mr_price;?>" ></td>
+
+			<!-- Profit Margin -->
+			<td id="td_<?=$rowcount;?>_8"><input type="text" name="td_data_<?=$rowcount;?>_8" id="td_data_<?=$rowcount;?>_8" class="form-control no-padding text-center" readonly value="<?=$profit_margin;?>" ></td>
+
+			<!-- ADD button -->
+			<td id="td_<?=$rowcount;?>_16" style="text-align: center;">
+				<a class=" fa fa-fw fa-minus-square text-red" style="cursor: pointer;font-size: 34px;" onclick="removerow(<?=$rowcount;?>)" title="Delete ?" name="td_data_<?=$rowcount;?>_16" id="td_data_<?=$rowcount;?>_16"></a>
+			</td>
+			<input type="hidden" name="td_data_<?=$rowcount;?>_9" id="td_data_<?=$rowcount;?>_9" value="<?=$box_qty;?>">
+			<input type="hidden" name="td_data_<?=$rowcount;?>_10" id="td_data_<?=$rowcount;?>_10" value="0">
+			<input type="hidden" id="tr_item_id_<?=$rowcount;?>" name="tr_item_id_<?=$rowcount;?>" value="<?=$item_id;?>">
+		</tr>
+
+	<?php
+	}
+
 	/* For Purchase Items List Retrieve*/
 	public function return_purchase_list($purchase_id){
 		$q1=$this->db->select('*')->from('db_purchaseitems')->where("purchase_id=$purchase_id")->get();
@@ -512,7 +523,7 @@ class Purchase_model extends CI_Model {
 			$info['item_name'] = $q2->row()->item_name;
 			$info['item_available_qty'] = $q2->row()->stock;
 			$info['item_price'] = $q2->row()->price;
-			$info['item_purchase_price'] = $res1->price_per_unit;
+			$info['purchase_price'] = $res1->price_per_unit;
 			$info['item_tax_id'] = $res1->tax_id;
 			$info['item_profit_margin'] = $res1->profit_margin_per;
 			$info['item_sales_price'] = $res1->unit_sales_price;
@@ -524,98 +535,6 @@ class Purchase_model extends CI_Model {
 			$result = $this->return_row_with_data($rowcount++,$info);
 		}
 		return $result;
-	}
-
-	public function return_row_with_data($rowcount,$info){
-		extract($info);
-		//print_r($info);exit();
-		$item_tax_amt = (($item_purchase_price * $item_purchase_qty)*$item_tax)/100;
-		$item_amount = ($item_purchase_price * $item_purchase_qty) + $item_tax_amt;
-		$item_unit_cost = $item_purchase_price+($item_purchase_price*$item_tax)/100;
-
-		if($item_tax_type=='Exclusive'){
-			$item_purchase_price=$item_price;
-		}
-		else{//Inclusive //Working Great
-			$item_tax_amt=number_format($this->inclusive($item_price,$item_tax),2,'.','');
-			//$item_purchase_price=$item_price-$item_tax_amt;
-
-
-			$item_purchase_price=$item_price;
-		}
-		?>
-            <tr id="row_<?=$rowcount;?>" data-row='<?=$rowcount;?>'>
-               <td id="td_<?=$rowcount;?>_1">
-                  <!-- item name  -->
-                  <input type="text" style="font-weight: bold;" id="td_data_<?=$rowcount;?>_1" class="form-control no-padding" value='<?=$item_name;?>' readonly >
-               </td>
-               <!-- Qty -->
-               <td id="td_<?=$rowcount;?>_3">
-                  <div class="input-group ">
-                     <span class="input-group-btn">
-                     <button onclick="decrement_qty(<?=$rowcount;?>)" type="button" class="btn btn-default btn-flat"><i class="fa fa-minus text-danger"></i></button></span>
-                     <input typ="text" value="<?=$item_purchase_qty;?>" class="form-control no-padding text-center" onkeyup="calculate_tax(<?=$rowcount;?>)" id="td_data_<?=$rowcount;?>_3" name="td_data_<?=$rowcount;?>_3">
-                     <span class="input-group-btn">
-                     <button onclick="increment_qty(<?=$rowcount;?>)" type="button" class="btn btn-default btn-flat"><i class="fa fa-plus text-success"></i></button></span>
-                  </div>
-               </td>
-               <!-- Purchase Price -->
-               <td id="td_<?=$rowcount;?>_4"><input type="text" name="td_data_<?=$rowcount;?>_4" id="td_data_<?=$rowcount;?>_4" class="form-control text-right no-padding only_currency text-center" onkeyup="calculate_tax(<?=$rowcount;?>)" value="<?=$item_purchase_price;?>" ></td>
-
-               <!-- TAX -->
-               <td id="td_<?=$rowcount;?>_15">
-                  <select class="form-control no-padding text-center" id="td_data_<?=$rowcount;?>_15" name="td_data_<?=$rowcount;?>_15"  style="width: 100%;" onchange="calculate_tax(<?=$rowcount;?>)">
-                     <?php
-                        $q1="select * from db_tax where status=1";
-                        $q1=$this->db->query($q1);
-                         if($q1->num_rows()>0)
-                         {
-                          echo '<option value="">None</option>';
-                           foreach($q1->result() as $res1)
-                           {
-                           	 $selected=($res1->id==$item_tax_id) ? 'selected' : '';
-                             echo "<option $selected data-tax='".$res1->tax."' value='".$res1->id."'>".$res1->tax_name."</option>";
-                           }
-                         }
-                         else
-                         {
-                            ?>
-                     <option value="">None</option>
-                     <?php
-                        }
-                        ?>
-                  </select>
-               </td>
-               <!-- Tax Amount -->
-               <td id="td_<?=$rowcount;?>_5"><input type="text" name="td_data_<?=$rowcount;?>_5" id="td_data_<?=$rowcount;?>_5" class="form-control text-right no-padding only_currency text-center" readonly  value="<?=$item_tax_amt;?>"></td>
-
-               <!-- Discount -->
-               <td id="td_<?=$rowcount;?>_8">
-                  <input type="text" name="td_data_<?=$rowcount;?>_8" id="td_data_<?=$rowcount;?>_8" class="form-control text-right no-padding only_currency text-center item_discount" value="<?=$item_discount;?>" onkeyup="calculate_tax(<?=$rowcount;?>)">
-               </td>
-
-               <!-- Unit Cost -->
-               <td id="td_<?=$rowcount;?>_10"><input type="text" name="td_data_<?=$rowcount;?>_10" id="td_data_<?=$rowcount;?>_10" class="form-control text-right no-padding only_currency text-center" readonly value="<?=$item_unit_cost;?>"></td>
-
-               <!-- Amount -->
-               <td id="td_<?=$rowcount;?>_9"><input type="text" name="td_data_<?=$rowcount;?>_9" id="td_data_<?=$rowcount;?>_9" class="form-control text-right no-padding only_currency text-center" style='border-color: #f39c12;' title='Total' readonly value="<?=$item_amount;?>"></td>
-
-               <!-- Profit Margin -->
-               <td id="td_<?=$rowcount;?>_12"><input type="text" name="td_data_<?=$rowcount;?>_12" id="td_data_<?=$rowcount;?>_12" class="form-control no-padding text-center" value="<?=$item_profit_margin;?>" onkeyup="calculate_sales_price(<?=$rowcount;?>)" ></td>
-			   <input type="hidden" id="tr_profit_<?=$rowcount;?>_100" value="<?=$item_profit_margin;?>">
-
-               <!-- sales price -->
-               <td id="td_<?=$rowcount;?>_13"><input type="text" name="td_data_<?=$rowcount;?>_13" id="td_data_<?=$rowcount;?>_13" class="form-control text-right no-padding only_currency text-center" onkeyup="calculate_profit_margin(<?=$rowcount;?>)" value="<?=$item_sales_price;?>" ></td>
-
-               <!-- ADD button -->
-               <td id="td_<?=$rowcount;?>_16" style="text-align: center;">
-                  <a class=" fa fa-fw fa-minus-square text-red" style="cursor: pointer;font-size: 34px;" onclick="removerow(<?=$rowcount;?>)" title="Delete ?" name="td_data_<?=$rowcount;?>_16" id="td_data_<?=$rowcount;?>_16"></a>
-               </td>
-               <input type="hidden" id="tr_available_qty_<?=$rowcount;?>_13" value="<?=$item_available_qty;?>">
-               <input type="hidden" id="tr_item_id_<?=$rowcount;?>" name="tr_item_id_<?=$rowcount;?>" value="<?=$item_id;?>">
-            </tr>
-		<?php
-
 	}
 
 	public function show_pay_now_modal($purchase_id){

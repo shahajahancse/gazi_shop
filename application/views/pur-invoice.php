@@ -194,70 +194,53 @@
               <th>#</th>
               <th><?= $this->lang->line('item_name'); ?></th>
               <th><?= $this->lang->line('purchase_price'); ?></th>
-              <th><?= $this->lang->line('quantity'); ?></th>
-              <th><?= $this->lang->line('tax'); ?></th>
-              <th><?= $this->lang->line('tax_amount'); ?></th>
-              <th><?= $this->lang->line('discount'); ?></th>
-              <th><?= $this->lang->line('discount_amount'); ?></th>
-              <th><?= $this->lang->line('unit_cost'); ?></th>
+              <th>Box/Poly</th>
+              <th>Pieces</th>
+              <th>Quantity</th>
               <th><?= $this->lang->line('total_amount'); ?></th>
+              <th>Sale Price</th>
+              <th>Profit</th>
             </tr>
             </thead>
             <tbody>
 
               <?php
               $i=0;
-              $tot_qty=0;
-              $tot_purchase_price=0;
-              $tot_tax_amt=0;
-              $tot_discount_amt=0;
-              $tot_unit_total_cost=0;
               $tot_total_cost=0;
-              $q2=$this->db->query("SELECT c.item_name, a.purchase_qty,c.tax_type,
-                                  a.price_per_unit, b.tax,b.tax_name,a.tax_amt,
-                                  a.unit_discount_per,a.discount_amt, a.unit_total_cost,
-                                  a.total_cost
+              $tot_profit_total=0;
+              $q2=$this->db->query("SELECT c.item_name, a.*
                                   FROM
-                                  db_purchaseitems AS a,db_tax AS b,db_items AS c
+                                  db_purchaseitems AS a, db_items AS c
                                   WHERE
-                                  c.id=a.item_id AND b.id=a.tax_id AND a.purchase_id='$purchase_id'");
+                                  c.id=a.item_id AND a.purchase_id='$purchase_id'");
               foreach ($q2->result() as $res2) {
-                  $str = ($res2->tax_type=='Inclusive')? 'Inc.' : 'Exc.';
-                  $discount = (empty($res2->unit_discount_per)||$res2->unit_discount_per==0)? '0':$res2->unit_discount_per."%";
-                  $discount_amt = (empty($res2->discount_amt)||$res2->unit_discount_per==0)? '0':$res2->discount_amt."";
+                  $str = 0;
                   echo "<tr>";
                   echo "<td>".++$i."</td>";
                   echo "<td>".$res2->item_name."</td>";
                   echo "<td>".$CI->currency($res2->price_per_unit)."</td>";
+                  echo "<td>".$res2->box_qty."</td>";
+                  echo "<td>".$res2->pieces."</td>";
                   echo "<td>".$res2->purchase_qty."</td>";
-                  echo "<td>".$res2->tax_name."[".$str."]</td>";
-                  echo "<td class='text-right'>".$CI->currency($res2->tax_amt)."</td>";
-                  echo "<td class='text-right'>".$discount."</td>";
-                  echo "<td class='text-right'>".$CI->currency($discount_amt)."</td>";
-                  echo "<td class='text-right'>".$CI->currency($res2->unit_total_cost)."</td>";
-                  echo "<td class='text-right'>".$CI->currency($res2->total_cost)."</td>";
+                  echo "<td>".$CI->currency($res2->total_cost)."</td>";
+                  echo "<td>".$CI->currency($res2->unit_sales_price * $res2->purchase_qty)."</td>";
+                  echo "<td>".$CI->currency($res2->profit_total)."</td>";
                   echo "</tr>";
-                  $tot_qty +=$res2->purchase_qty;
-                  $tot_purchase_price +=$res2->price_per_unit;
-                  $tot_tax_amt +=$res2->tax_amt;
-                  $tot_discount_amt +=$res2->discount_amt;
-                  $tot_unit_total_cost +=$res2->unit_total_cost;
                   $tot_total_cost +=$res2->total_cost;
+                  $tot_profit_total +=$res2->profit_total;
               }
               ?>
-
-
             </tbody>
             <tfoot class="text-right text-bold bg-gray">
               <tr>
-                <td colspan="3" class="text-center"><?= $this->lang->line('total'); ?></td>
-                <td class="text-left"><?=$tot_qty;?></td>
+                <td colspan="2" class="text-center"><?= $this->lang->line('total'); ?></td>
                 <td>-</td>
-                <td><?=$CI->currency($tot_tax_amt);?></td>
                 <td>-</td>
-                <td><?= $CI->currency(number_format($tot_discount_amt,2,'.','')) ;?></td>
-                <td><?= $CI->currency(number_format($tot_unit_total_cost,2,'.','')) ;?></td>
+                <td>-</td>
+                <td>-</td>
                 <td><?= $CI->currency(number_format($tot_total_cost,2,'.','')) ;?></td>
+                <td>-</td>
+                <td><?= $CI->currency(number_format($tot_profit_total,2,'.','')) ;?></td>
               </tr>
             </tfoot>
           </table>
@@ -268,26 +251,6 @@
 
       <div class="row">
        <div class="col-md-6">
-           <div class="row">
-              <div class="col-md-12">
-                 <div class="form-group">
-                    <label for="discount_to_all_input" class="col-sm-4 control-label" style="font-size: 17px;"><?= $this->lang->line('discount_on_all'); ?></label>
-                    <div class="col-sm-8">
-                       <label class="control-label  " style="font-size: 17px;">: <?=$discount_to_all_input; ?> (<?= $discount_to_all_type ?>)</label>
-                    </div>
-                 </div>
-              </div>
-           </div>
-          <div class="row">
-              <div class="col-md-12">
-                 <div class="form-group">
-                    <label for="purchase_note" class="col-sm-4 control-label" style="font-size: 17px;"><?= $this->lang->line('note'); ?></label>
-                    <div class="col-sm-8">
-                       <label class="control-label  " style="font-size: 17px;">: <?=$purchase_note;?></label>
-                    </div>
-                 </div>
-              </div>
-           </div>
            <div class="row">
               <div class="col-md-12">
                  <div class="form-group">
@@ -356,19 +319,7 @@
                        </tr>
 
                        <input type="hidden" id="discount_to_all_amt" name="discount_to_all_amt" value="0">
-                       <!-- <tr>
-                          <th class="text-right" style="font-size: 17px;"><?= $this->lang->line('discount_on_all'); ?></th>
-                          <th class="text-right" style="padding-left:10%;font-size: 17px;">
-                             <h4><b id="discount_to_all_amt" name="discount_to_all_amt"><?=$CI->currency($tot_discount_to_all_amt);?></b></h4>
-                          </th>
-                       </tr> -->
 
-                       <tr>
-                          <th class="text-right" style="font-size: 17px;"><?= $this->lang->line('round_off'); ?></th>
-                          <th class="text-right" style="padding-left:10%;font-size: 17px;">
-                             <h4><b id="round_off_amt" name="tot_round_off_amt"><?=$CI->currency($round_off);?></b></h4>
-                          </th>
-                       </tr>
                        <tr>
                           <th class="text-right" style="font-size: 17px;"><?= $this->lang->line('grand_total'); ?></th>
                           <th class="text-right" style="padding-left:10%;font-size: 17px;">

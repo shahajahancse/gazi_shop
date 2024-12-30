@@ -30,7 +30,7 @@
         <ul class="dropdown-menu" >
               <?php if($CI->permissions('sales_add')) { ?>
               <li class="border_bottom">
-                <a href="<?php echo $base_url; ?>sales/add" ><h4><i class="fa fa-plus text-green"></i> <?= $this->lang->line('sales'); ?></h4></a>
+                <a href="<?php echo $base_url; ?>sales/add" ><h4><i class="fa fa-plus text-green"></i> Delivery </h4></a>
               </li>
               <?php } ?>
               <?php if($CI->permissions('purchase_add')) { ?>
@@ -63,18 +63,9 @@
       <!-- Navbar Right Menu -->
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
-          <!-- <li class="text-center hidden-xs" id="">
-            <form class="navbar-form navbar-left" role="search">
-            <div class="form-group">
-              <input type="text" class="form-control" id="navbar-search-input" placeholder="Search Sales Invoice">
-            </div>
-          </form>
-          </li> -->
-          <!-- User Account Menu -->
-
-            <li class="dropdown tasks-menu">
+          <li class="dropdown tasks-menu">
             <a href="#" class="dropdown-toggle text-right" data-toggle="dropdown">
-                    <?= $this->session->userdata('language'); ?>
+              <?= $this->session->userdata('language'); ?>
             </a>
             <ul class="dropdown-menu " style="width: auto;height: auto;">
               <li>
@@ -95,13 +86,6 @@
               </li>
             </ul>
           </li>
-
-          <?php if($CI->permissions('sales_add')) { ?>
-          <li class="text-center" id="">
-            <a title="POS" href="<?php echo $base_url; ?>pos"><i class="fa fa-plus-square " ></i> POS </a>
-          </li>
-          <?php } ?>
-
           <li class="text-center hidden-xs" id="">
             <a title="Dashboard" href="<?php echo $base_url; ?>dashboard"><i class="fa fa-dashboard " ></i> <?= $this->lang->line('dashboard'); ?></a>
           </li>
@@ -115,7 +99,6 @@
               <!-- User image -->
               <li class="user-header">
                 <img src="<?php echo $theme_link; ?>dist/img/avatar5.png" class="img-circle" alt="User Image">
-
                 <p>
                  <?php print ucfirst($this->session->userdata('inv_username')); ?>
                   <small>Year <?=date("Y");?></small>
@@ -130,13 +113,11 @@
               </li>
             </ul>
           </li>
-          <!-- <li class="hidden-xs">
-            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-          </li> -->
         </ul>
       </div>
     </nav>
   </header>
+
 
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
@@ -160,15 +141,14 @@
         <?php if($CI->permissions('sales_add')  || $CI->permissions('sales_view') || $CI->permissions('sales_return_view')) { ?>
           <li class="pos-active-li sales-list-active-li sales-active-li sales-return-active-li sales-return-list-active-li treeview">
             <a href="#">
-              <i class=" fa fa-shopping-cart text-aqua"></i> <span><?= $this->lang->line('sales'); ?></span>
+              <i class=" fa fa-shopping-cart text-aqua"></i> <span>Delivery</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
             </a>
             <ul class="treeview-menu">
               <?php if($CI->permissions('sales_add')) { ?>
-                <li class="pos-active-li"><a href="<?php echo $base_url; ?>pos"><i class="fa fa-calculator "></i> <span>POS</span></a></li>
-                <!-- <li class="sales-active-li"><a href="<?php echo $base_url; ?>sales/add"><i class="fa fa-plus-square-o "></i> <span><?= $this->lang->line('new_sales'); ?></span></a></li> -->
+                <li class="sales-active-li"><a href="<?php echo $base_url; ?>sales/add"><i class="fa fa-plus-square-o "></i> <span>New Delivery</span></a></li>
               <?php } ?>
 
               <?php if($CI->permissions('sales_view')) { ?>
@@ -179,31 +159,6 @@
               <li class="sales-return-list-active-li sales-return-active-li">
                 <a href="<?php echo $base_url; ?>sales_return"><i class="fa fa-list "></i> <span><?= $this->lang->line('sales_returns_list'); ?></span> <span class="pull-right-container"> <small class="label pull-right bg-green">New</small> </span></a>
               </li>
-              <?php } ?>
-            </ul>
-          </li>
-        <?php } ?>
-
-        <!--<li class="header">CUSTOMERS</li>-->
-        <?php if($CI->permissions('customers_add') || $CI->permissions('customers_view') || $CI->permissions('import_customers')) { ?>
-          <li class="customers-view-active-li customers-active-li import_customers-active-li treeview">
-            <a href="#">
-              <i class="fa fa-group text-aqua"></i> <span><?= $this->lang->line('customers'); ?></span>
-              <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
-            </a>
-            <ul class="treeview-menu">
-              <?php if($CI->permissions('customers_add')) { ?>
-              <li class="customers-active-li"><a href="<?php echo $base_url; ?>customers/add"><i class="fa fa-plus-square-o "></i> <span><?= $this->lang->line('new_customer'); ?></span></a></li>
-              <?php } ?>
-              <?php if($CI->permissions('customers_view')) { ?>
-              <li class="customers-view-active-li"><a href="<?php echo $base_url; ?>customers"><i class="fa fa-list "></i> <span><?= $this->lang->line('customers_list'); ?></span></a></li>
-              <?php } ?>
-
-              <?php if($CI->permissions('import_customers')) { ?>
-              <li class="import_customers-active-li"><a href="<?php echo $base_url; ?>import/customers"><i class="fa fa-arrow-circle-o-left "></i> <span><?= $this->lang->line('import_customers'); ?></span>
-              <span class="pull-right-container"> <small class="label pull-right bg-green">New</small> </span>  </a></li>
               <?php } ?>
             </ul>
           </li>
@@ -228,34 +183,6 @@
               <?php if($CI->permissions('purchase_return_view')) { ?>
               <li class="purchase-returns-list-active-li"><a href="<?php echo $base_url; ?>purchase_return"><i class="fa fa-list "></i> <span><?= $this->lang->line('purchase_returns_list'); ?></span>
               <span class="pull-right-container"> <small class="label pull-right bg-green">New</small> </span> </a></li>
-              <?php } ?>
-            </ul>
-          </li>
-        <?php } ?>
-
-        <!-- suppliers -->
-        <?php if($CI->permissions('suppliers_add') || $CI->permissions('suppliers_view') || $CI->permissions('import_suppliers')) { ?>
-          <li class="suppliers-list-active-li suppliers-active-li import_suppliers-active-li treeview">
-            <a href="#">
-              <i class="fa fa-user-plus text-aqua"></i> <span><?= $this->lang->line('suppliers'); ?></span>
-              <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
-            </a>
-            <ul class="treeview-menu">
-              <?php if($CI->permissions('suppliers_add')) { ?>
-              <li class="suppliers-active-li"><a href="<?php echo $base_url; ?>suppliers/add"><i class="fa fa-plus-square-o "></i> <span><?= $this->lang->line('new_supplier'); ?></span></a></li>
-              <?php } ?>
-              <?php if($CI->permissions('suppliers_view')) { ?>
-              <li class="suppliers-list-active-li"><a href="<?php echo $base_url; ?>suppliers"><i class="fa fa-list "></i> <span><?= $this->lang->line('suppliers_list'); ?></span></a></li>
-              <?php } ?>
-
-              <?php if($CI->permissions('import_suppliers')) { ?>
-              <li class="import_suppliers-active-li"><a href="<?php echo $base_url; ?>import/suppliers"><i class="fa fa-arrow-circle-o-left "></i> <span><?= $this->lang->line('import_suppliers'); ?></span>
-              <span class="pull-right-container">
-                  <small class="label pull-right bg-green">New</small>
-                </span>
-              </a></li>
               <?php } ?>
             </ul>
           </li>
@@ -309,6 +236,59 @@
 
               <?php if($CI->permissions('print_labels')) { ?>
               <li class="labels-active-li"><a href="<?php echo $base_url; ?>items/labels"><i class="fa fa-barcode "></i> <span><?= $this->lang->line('print_labels'); ?></span></a></li>
+              <?php } ?>
+            </ul>
+          </li>
+        <?php } ?>
+
+        <!--<li class="header">CUSTOMERS</li>-->
+        <?php if($CI->permissions('customers_add') || $CI->permissions('customers_view') || $CI->permissions('import_customers')) { ?>
+          <li class="customers-view-active-li customers-active-li import_customers-active-li treeview">
+            <a href="#">
+              <i class="fa fa-group text-aqua"></i> <span><?= $this->lang->line('customers'); ?></span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <?php if($CI->permissions('customers_add')) { ?>
+              <li class="customers-active-li"><a href="<?php echo $base_url; ?>customers/add"><i class="fa fa-plus-square-o "></i> <span><?= $this->lang->line('new_customer'); ?></span></a></li>
+              <?php } ?>
+              <?php if($CI->permissions('customers_view')) { ?>
+              <li class="customers-view-active-li"><a href="<?php echo $base_url; ?>customers"><i class="fa fa-list "></i> <span><?= $this->lang->line('customers_list'); ?></span></a></li>
+              <?php } ?>
+
+              <?php if($CI->permissions('import_customers')) { ?>
+              <li class="import_customers-active-li"><a href="<?php echo $base_url; ?>import/customers"><i class="fa fa-arrow-circle-o-left "></i> <span><?= $this->lang->line('import_customers'); ?></span>
+              <span class="pull-right-container"> <small class="label pull-right bg-green">New</small> </span>  </a></li>
+              <?php } ?>
+            </ul>
+          </li>
+        <?php } ?>
+
+        <!-- suppliers -->
+        <?php if($CI->permissions('suppliers_add') || $CI->permissions('suppliers_view') || $CI->permissions('import_suppliers')) { ?>
+          <li class="suppliers-list-active-li suppliers-active-li import_suppliers-active-li treeview">
+            <a href="#">
+              <i class="fa fa-user-plus text-aqua"></i> <span><?= $this->lang->line('suppliers'); ?></span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <?php if($CI->permissions('suppliers_add')) { ?>
+              <li class="suppliers-active-li"><a href="<?php echo $base_url; ?>suppliers/add"><i class="fa fa-plus-square-o "></i> <span><?= $this->lang->line('new_supplier'); ?></span></a></li>
+              <?php } ?>
+              <?php if($CI->permissions('suppliers_view')) { ?>
+              <li class="suppliers-list-active-li"><a href="<?php echo $base_url; ?>suppliers"><i class="fa fa-list "></i> <span><?= $this->lang->line('suppliers_list'); ?></span></a></li>
+              <?php } ?>
+
+              <?php if($CI->permissions('import_suppliers')) { ?>
+              <li class="import_suppliers-active-li"><a href="<?php echo $base_url; ?>import/suppliers"><i class="fa fa-arrow-circle-o-left "></i> <span><?= $this->lang->line('import_suppliers'); ?></span>
+              <span class="pull-right-container">
+                  <small class="label pull-right bg-green">New</small>
+                </span>
+              </a></li>
               <?php } ?>
             </ul>
           </li>

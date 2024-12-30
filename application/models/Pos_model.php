@@ -379,8 +379,7 @@ class Pos_model extends CI_Model {
 		$q7=$this->db->query("update db_items set stock=$stock where id='$item_id'");
 		if($q7){
 			return true;
-		}
-		else{
+		}else{
 			return false;
 		}
 	}
