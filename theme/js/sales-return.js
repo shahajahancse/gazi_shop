@@ -128,73 +128,54 @@ $('#save,#update,#create').click(function (e) {
 $("#item_search").autocomplete({
     source: function(data, cb){
         $.ajax({
-        	autoFocus:true,
-            url: $("#base_url").val()+'items/get_json_items_details',
-            method: 'GET',
-            dataType: 'json',
-            /*showHintOnFocus: true,
-			autoSelect: true,
+          autoFocus: true,
+          url: $("#base_url").val() + "sales_return/get_json_items_details",
+          method: "GET",
+          dataType: "json",
+          data: {
+            name: data.term,
+            sale_id: $("#sales_id").val(),
+          },
+          success: function (res) {
+            var result;
+            result = [
+              {
+                label: "No Records Found ",
+                value: "",
+              },
+            ];
 
-			selectInitial :true,*/
-
-            data: {
-                name: data.term,
-                /*warehouse_id:$("#warehouse_id").val().trim(),*/
-            },
-            success: function(res){
-              //console.log(res);
-                var result;
-                result = [
-                    {
-                        //label: 'No Records Found '+data.term,
-                        label: 'No Records Found ',
-                        value: ''
-                    }
-                ];
-
-                if (res.length) {
-                    result = $.map(res, function(el){
-                        return {
-                            label: el.item_code +'--[Qty:'+el.stock+'] --'+ el.label,
-                            value: '',
-                            id: el.id,
-                            item_name: el.value,
-                            stock: el.stock,
-                           // mobile: el.mobile,
-                            //customer_dob: el.customer_dob,
-                            //address: el.address,
-                        };
-                    });
-                }
-
-                cb(result);
+            if (res.length) {
+              result = $.map(res, function (el) {
+                return {
+                  label:
+                    el.item_code + "--[Qty:" + el.stock + "] --" + el.label,
+                  value: "",
+                  id: el.id,
+                  item_name: el.value,
+                  stock: el.stock,
+                };
+              });
             }
+            cb(result);
+          },
         });
     },
-        //loader start
-        search: function (e, u) {
-        },
-        select: function (e, u) {
-
-            //$("#mobile").val(u.item.mobile)
-            //$("#item_search").val(u.item.value);
-            //$("#customer_dob").val(u.item.customer_dob)
-            //$("#address").val(u.item.address)
-            //alert("id="+u.item.id);
-            if(parseInt(u.item.stock)<=0){
-              toastr["warning"](u.item.stock+" Items in Stock!!");
-              failed.currentTime = 0;
-              failed.play();
-              return false;
-            }
-            var item_id =u.item.id;
-            if(restrict_quantity(item_id)){
-              return_row_with_data(item_id);
-            }
-
-
-        },
-        //loader end
+    //loader start
+    search: function (e, u) {
+    },
+    select: function (e, u) {
+        if(parseInt(u.item.stock)<=0){
+          toastr["warning"](u.item.stock+" Items in Stock!!");
+          failed.currentTime = 0;
+          failed.play();
+          return false;
+        }
+        var item_id =u.item.id;
+        if(restrict_quantity(item_id)){
+          return_row_with_data(item_id);
+        }
+    },
 });
 
 function return_row_with_data(item_id){

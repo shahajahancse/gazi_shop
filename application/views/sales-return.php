@@ -180,35 +180,6 @@
                            </div>
 
                            <input type="hidden" value="<?php echo  $reference_no; ?>" id="reference_no" name="reference_no">
-
-                           <!-- <div class="form-group">
-                              <label for="warehouse_id" class="col-sm-2 control-label"><?= $this->lang->line('warehouse'); ?> <label class="text-danger">*</label></label>
-                              <div class="col-sm-3">
-                                    <select class="form-control select2" id="warehouse_id" name="warehouse_id"  style="width: 100%;" onkeyup="shift_cursor(event,'mobile')">
-                                       <?php
-
-                                          $query1="select * from db_warehouse where status=1";
-                                          $q1=$this->db->query($query1);
-                                          if($q1->num_rows($q1)>0)
-                                             {
-                                                echo "<option value=''>-Select-</option>";
-                                                foreach($q1->result() as $res1)
-                                             {
-                                                $selected=($warehouse_id==$res1->id) ? 'selected' : '';
-                                                echo "<option $selected  value='".$res1->id."'>".$res1->warehouse_name ."</option>";
-                                             }
-                                             }
-                                             else
-                                             {
-                                                ?>
-                                       <option value="">No Records Found</option>
-                                       <?php
-                                          }
-                                          ?>
-                                    </select>
-                                 <span id="warehouse_id_msg" style="display:none" class="text-danger"></span>
-                              </div>
-                           </div> -->
                         </div>
                         <!-- /.box-body -->
 
@@ -464,16 +435,6 @@
                                  $btn_name="Create";
                               }
 
-                              /*if(isset($sales_id)){
-                                 $btn_id='update';
-                                 $btn_name="Update";
-                                 echo '<input type="hidden" name="sales_id" id="sales_id" value="'.$sales_id.'"/>';
-                              }
-                              else{
-                                 $btn_id='save';
-                                 $btn_name="Save";
-                              }*/
-
                               ?>
                               <div class="col-md-3 col-md-offset-3">
                                  <button type="button" id="<?php echo $btn_id;?>" class="btn bg-maroon btn-block btn-flat btn-lg payments_modal" title="Save Data"><?php echo $btn_name;?></button>
@@ -484,8 +445,6 @@
                               </div>
                            </center>
                         </div>
-
-
                      <?= form_close(); ?>
                      <!-- OK END -->
                   </div>

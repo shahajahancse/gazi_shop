@@ -185,7 +185,6 @@ class Items extends MY_Controller {
 	public function get_json_items_details(){
 		$data = array();
 		$display_json = array();
-		//if (!empty($_GET['name'])) {
 			$name = strtolower(trim($_GET['name']));
 			$sql =$this->db->query("SELECT id,item_name,item_code,stock FROM db_items where  status=1 and  (LOWER(item_name) LIKE '%$name%' or LOWER(item_code) LIKE '%$name%')   limit 10");
 
@@ -196,12 +195,7 @@ class Items extends MY_Controller {
 				  $json_arr["item_code"] = $res->item_code;
 				  $json_arr["stock"] = $res->stock;
 				  array_push($display_json, $json_arr);
-				 /* $display_json[] =$res->id;
-				  $display_json[] =$res->item_name;
-				  $display_json[] =$res->item_code;*/
 			}
-		//}
-		//echo json_encode($data);exit;
 		echo json_encode($display_json);exit;
 	}
 

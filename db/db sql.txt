@@ -4,3 +4,6 @@ ALTER TABLE `db_purchaseitems` ADD `profit_total` DECIMAL(12,2) NOT NULL DEFAULT
 ALTER TABLE `db_sales` ADD `profit_total` DECIMAL(12,2) NOT NULL DEFAULT '0' AFTER `grand_total`;
 ALTER TABLE `db_salesitems` ADD `sales_box` INT NOT NULL DEFAULT '0' AFTER `item_id`, ADD `sales_pieces` INT NOT NULL DEFAULT '0' AFTER `sales_box`;
 ALTER TABLE `db_salesitems` ADD `purchase_price` DECIMAL(12,2) NOT NULL DEFAULT '0' AFTER `total_cost`, ADD `profit_per` DECIMAL(12,2) NOT NULL DEFAULT '0' AFTER `purchase_price`, ADD `tot_profit` DECIMAL(12,2) NOT NULL DEFAULT '0' AFTER `profit_per`;
+ALTER TABLE `db_sales` ADD `dsr_name` VARCHAR(128) NULL DEFAULT NULL AFTER `customer_id`;
+ALTER TABLE `db_salesitemsreturn` ADD `return_box` INT NULL DEFAULT '0' AFTER `item_id`, ADD `return_pieces` INT NULL DEFAULT '0' AFTER `return_box`;
+ALTER TABLE `db_salesitemsreturn` ADD `damage` INT NOT NULL DEFAULT '0' AFTER `return_qty`;

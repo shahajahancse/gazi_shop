@@ -201,29 +201,136 @@
           <table class="table table-striped records_table table-bordered">
             <thead class="bg-gray-active">
             <tr>
-              <th style="vertical-align: middle;" rowspan="2">#</th>
-              <th style="vertical-align: middle;" rowspan="2">Product Name</th>
-              <th style="text-align: center;" colspan="2">Load</th>
-              <th style="text-align: center;" colspan="2">Return</th>
-              <th style="text-align: center;">Damage</th>
-              <th style="text-align: center;">Delivery</th>
-              <th style="text-align: center;">Sales</th>
-              <th style="text-align: center;">Damage</th>
-            </tr>
-            <tr>
-              <th style="text-align: center;">Poly</th>
-              <th style="text-align: center;">Pcs</th>
-              <th style="text-align: center;">Poly</th>
-              <th style="text-align: center;">Pcs</th>
-              <th style="text-align: center;">Pcs</th>
-              <th style="text-align: center;">Pcs</th>
-              <th style="text-align: center;">TK</th>
-              <th style="text-align: center;">TK.</th>
+              <th>#</th>
+              <th><?= $this->lang->line('item_name'); ?></th>
+              <th style="text-align:right">Box</th>
+              <th style="text-align:right">Pieces</th>
+              <th style="text-align:right"><?= $this->lang->line('unit_price'); ?></th>
+              <th style="text-align:right">Total Qty</th>
+              <th style="text-align:right"><?= $this->lang->line('total_amount'); ?></th>
             </tr>
             </thead>
             <tbody>
+
+              <?php
+              $i=0;
+              $tot_total_cost=0;
+
+              $q2=$this->db->query("SELECT c.item_name, a.*
+                                  FROM
+                                  db_salesitems AS a,db_items AS c
+                                  WHERE
+                                  c.id=a.item_id AND a.sales_id='$sales_id'");
+              foreach ($q2->result() as $res2) {
+
+                  echo "<tr>";
+                  echo "<td>".++$i."</td>";
+                  echo "<td>".$res2->item_name."</td>";
+                  echo "<td class='text-right'>".$res2->sales_box."</td>";
+                  echo "<td class='text-right'>".$res2->sales_pieces."</td>";
+                  echo "<td class='text-right'>".$res2->sales_qty."</td>";
+                  echo "<td class='text-right'>".$res2->price_per_unit."</td>";
+                  echo "<td class='text-right'>".$CI->currency(number_format($res2->total_cost,2,'.',''))."</td>";
+                  echo "</tr>";
+                  $tot_total_cost +=$res2->total_cost;
+              }
+              ?>
+
+
             </tbody>
+            <tfoot class="text-right text-bold bg-gray">
+              <tr>
+                <td colspan="2" class="text-center">Total</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td><?= $CI->currency(number_format($tot_total_cost,2,'.','')) ;?></td>
+              </tr>
+            </tfoot>
           </table>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+      <div class="row">
+       <div class="col-md-6">
+          <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                  <table class="table table-hover table-bordered" style="width:100%" id=""><h4 class="box-title text-info"><?= $this->lang->line('payments_information'); ?> : </h4>
+                      <thead>
+                        <tr class="bg-purple " >
+                            <th>#</th>
+                            <th><?= $this->lang->line('date'); ?></th>
+                            <th><?= $this->lang->line('payment_type'); ?></th>
+                            <th><?= $this->lang->line('payment_note'); ?></th>
+                            <th><?= $this->lang->line('payment'); ?></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php
+                          if(isset($sales_id)){
+                            $q3 = $this->db->query("select * from db_salespayments where sales_id=$sales_id");
+                            if($q3->num_rows()>0){
+                              $i=1;
+                              $total_paid = 0;
+                              foreach ($q3->result() as $res3) {
+                                echo "<tr class='text-center text-bold' id='payment_row_".$res3->id."'>";
+                                echo "<td>".$i++."</td>";
+                                echo "<td>".show_date($res3->payment_date)."</td>";
+                                echo "<td>".$res3->payment_type."</td>";
+                                echo "<td>".$res3->payment_note."</td>";
+                                echo "<td class='text-right'>".$res3->payment."</td>";
+                                echo "</tr>";
+                                $total_paid +=$res3->payment;
+                              }
+                              echo "<tr class='text-right text-bold'><td colspan='4' >Total</td><td>".number_format($total_paid,2,'.','')."</td></tr>";
+                            }
+                            else{
+                              echo "<tr><td colspan='5' class='text-center text-bold'>No Previous Payments Found!!</td></tr>";
+                            }
+
+                          }
+                          else{
+                            echo "<tr><td colspan='5' class='text-center text-bold'>Payments Pending!!</td></tr>";
+                          }
+                        ?>
+                      </tbody>
+                  </table>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+           <div class="row">
+              <div class="col-md-12">
+                 <div class="form-group">
+                    <table  class="col-md-11">
+                       <tr>
+                          <th class="text-right" style="font-size: 17px;"><?= $this->lang->line('subtotal'); ?></th>
+                          <th class="text-right" style="padding-left:10%;font-size: 17px;">
+                             <h4><b id="subtotal_amt" name="subtotal_amt"><?=$subtotal;?></b></h4>
+                          </th>
+                       </tr>
+                       <tr>
+                          <th class="text-right" style="font-size: 17px;"><?= $this->lang->line('other_charges'); ?></th>
+                          <th class="text-right" style="padding-left:10%;font-size: 17px;">
+                             <h4><b id="other_charges_amt" name="other_charges_amt"><?=$other_charges_amt;?></b></h4>
+                          </th>
+                       </tr>
+                       <tr>
+                          <th class="text-right" style="font-size: 17px;"><?= $this->lang->line('grand_total'); ?></th>
+                          <th class="text-right" style="padding-left:10%;font-size: 17px;">
+                             <h4><b id="total_amt" name="total_amt"><?=$grand_total;?></b></h4>
+                          </th>
+                       </tr>
+                    </table>
+                 </div>
+              </div>
+           </div>
         </div>
         <!-- /.col -->
       </div>
@@ -233,7 +340,24 @@
       <!-- this row will not appear when printing -->
       <div class="row no-print">
         <div class="col-xs-12">
-          <a href="<?php echo $base_url; ?>sales/print_invoice/<?php echo  $sales_id ?>" target="_blank" class="btn btn-warning"> <i class="fa fa-print"></i> Print </a>
+          <?php if($CI->permissions('sales_edit')) {
+           // $str2= ($pos==1)? 'pos/edit/':'sales/update/'; ?>
+          <!-- <a href="<?php echo $base_url; ?><?=$str2;?><?php echo  $sales_id ?>" class="btn btn-success">
+            <i class="fa  fa-edit"></i> Edit
+          </a> -->
+        <?php } ?>
+
+
+          <a href="<?php echo $base_url; ?>sales/print_invoice/<?php echo  $sales_id ?>" target="_blank" class="btn btn-warning">
+            <i class="fa fa-print"></i>
+          Print
+        </a>
+
+        <a href="<?php echo $base_url; ?>pos/print_invoice_pos/<?php echo  $sales_id ?>" target="_blank" class="btn btn-info">
+            <i class="fa fa-file-text"></i>
+          POS Invoice
+        </a>
+
 
         <a href="<?php echo $base_url; ?>sales/pdf/<?php echo  $sales_id ?>" target="_blank" class="btn btn-primary">
             <i class="fa fa-file-pdf-o"></i>
@@ -242,7 +366,7 @@
 
         <?php if($CI->permissions('sales_return_add')) { ?>
             <a href="<?php echo $base_url; ?>sales_return/add/<?php echo  $sales_id ?>" class="btn btn-danger">
-            <i class="fa  fa-undo"></i> Return
+            <i class="fa  fa-undo"></i> Sales Return
           </a>
           <?php } ?>
 

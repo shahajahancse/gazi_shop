@@ -54,16 +54,6 @@ class Sales_return extends MY_Controller {
 	    $this->load->view('sales-return', $data);
 	}
 
-	/*
-	public function add()
-	{
-		$this->permission_check('sales_return_add');
-		$data=$this->data;
-		$data['page_title']=$this->lang->line('sales_return');
-		$this->load->view('sales-return',$data);
-	}*/
-
-
 	public function sales_save_and_update(){
 		$this->form_validation->set_rules('return_date', 'Return Date', 'trim|required');
 		$this->form_validation->set_rules('customer_id', 'Customer Name', 'trim|required');
@@ -75,7 +65,6 @@ class Sales_return extends MY_Controller {
 			echo "Please Fill Compulsory(* marked) Fields.";
 		}
 	}
-
 
 	public function edit($id){
 		// dd(base_url('sales_return'));
@@ -92,6 +81,24 @@ class Sales_return extends MY_Controller {
 		$this->load->view('sales-return', $data);
 	}
 
+	//Used in Purchase and sales Forms
+	public function get_json_items_details(){
+		dd($_GET);
+		$data = array();
+		$display_json = array();
+			$name = strtolower(trim($_GET['name']));
+			$sql =$this->db->query("SELECT id,item_name,item_code,stock FROM db_items where  status=1 and  (LOWER(item_name) LIKE '%$name%' or LOWER(item_code) LIKE '%$name%')   limit 10");
+
+			foreach ($sql->result() as $res) {
+			      $json_arr["id"] = $res->id;
+				  $json_arr["value"] = $res->item_name;
+				  $json_arr["label"] = $res->item_name;
+				  $json_arr["item_code"] = $res->item_code;
+				  $json_arr["stock"] = $res->stock;
+				  array_push($display_json, $json_arr);
+			}
+		echo json_encode($display_json);exit;
+	}
 
 	public function ajax_list()
 	{
