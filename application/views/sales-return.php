@@ -71,16 +71,16 @@
          <!-- **********************MODALS END***************** -->
          <!-- Content Header (Page header) -->
          <section class="content-header">
-               <h1>
-                  <?=$page_title;?>
-                  <small><?=$subtitle;?></small>
-               </h1>
-               <ol class="breadcrumb">
-                  <li><a href="<?php echo $base_url; ?>dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
-                  <li><a href="<?php echo $base_url; ?>sales_return"><?= $this->lang->line('sales_return_list'); ?></a></li>
-                  <li><a href="<?php echo $base_url; ?>sales_return/create"><?= $this->lang->line('new_sales'); ?></a></li>
-                  <li class="active"><?=$page_title;?></li>
-               </ol>
+            <h1>
+               <?=$page_title;?>
+               <small><?=$subtitle;?></small>
+            </h1>
+            <ol class="breadcrumb">
+               <li><a href="<?php echo $base_url; ?>dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
+               <li><a href="<?php echo $base_url; ?>sales_return"><?= $this->lang->line('sales_return_list'); ?></a></li>
+               <li><a href="<?php echo $base_url; ?>sales_return/create"><?= $this->lang->line('new_sales'); ?></a></li>
+               <li class="active"><?=$page_title;?></li>
+            </ol>
          </section>
 
          <!-- Main content -->
@@ -103,6 +103,7 @@
                         <input type="hidden" value='0' id="hidden_update_rowid" name="hidden_update_rowid">
 
 
+                        <!-- Customer info -->
                         <div class="box-body">
                            <div class="form-group">
                               <?php if(!empty($sales_code)) { ?>
@@ -181,136 +182,132 @@
 
                            <input type="hidden" value="<?php echo  $reference_no; ?>" id="reference_no" name="reference_no">
                         </div>
+                        <!-- Customer info -->
                         <!-- /.box-body -->
 
-                        <div class="row">
+                        <!-- Item section -->
+                        <row class="row">
                            <div class="col-xs-12 ">
                               <div class="col-sm-12">
+                                 <!-- Item Search Section for Purchase -->
                                  <div class="box box-info">
-                                    <!-- /.box-header -->
                                     <div class="box-body ">
-
-                                       <style type="text/css">
-                                          table.table-bordered > thead > tr > th {
-                                          /* border:1px solid black;*/
-                                          text-align: center;
-                                          }
-                                          .table > tbody > tr > td,
-                                          .table > tbody > tr > th,
-                                          .table > tfoot > tr > td,
-                                          .table > tfoot > tr > th,
-                                          .table > thead > tr > td,
-                                          .table > thead > tr > th
-                                          {
-                                          padding-left: 2px;
-                                          padding-right: 2px;
-
-                                          }
-                                       </style>
-
                                        <div class="col-md-8 col-md-offset-2 d-flex justify-content" >
                                           <div class="input-group">
-                                          <span class="input-group-addon" title="Select Items"><i class="fa fa-barcode"></i></span>
+                                             <span class="input-group-addon" title="Select Items"><i class="fa fa-barcode"></i></span>
                                              <input type="text" class="form-control " placeholder="Item name/Barcode/Itemcode" id="item_search">
                                           </div>
                                        </div>
                                        <br>
                                        <br>
-
-
-                                       <table class="table table-hover table-bordered" style="width:100%" id="sales_table">
-                                          <thead class="custom_thead">
-                                             <tr class="bg-primary" >
-                                                <th rowspan='2' style="width:15%"><?= $this->lang->line('item_name'); ?></th>
-                                                <th rowspan='2' style="width:10%"><?= $this->lang->line('quantity'); ?></th>
-                                                <th rowspan='2' style="width:10%"><?= $this->lang->line('unit_price'); ?></th>
-                                                <th rowspan='2' style="width:10%">Vat</th>
-                                                <th rowspan='2' style="width:10%">Discount</th>
-                                                <th rowspan='2' style="width:7.5%"><?= $this->lang->line('total_amount'); ?></th>
-                                                <th rowspan='2' style="width:7.5%"><?= $this->lang->line('action'); ?></th>
-                                             </tr>
-                                          </thead>
-                                          <tbody>
-
-                                          </tbody>
-                                       </table>
                                     </div>
-                                    <!-- /.box-body -->
                                  </div>
+                                 <!-- Item Search Section for Purchase -->
+                                 <style type="text/css">
+                                    .center {
+                                       text-align: center;
+                                    }
+                                    .left {
+                                       text-align: left;
+                                       padding-left: 10px;
+                                    }
+                                    .right {
+                                       text-align: right;
+                                       padding-right: 10px;
+                                    }
+                                    .table > tbody > tr > td,
+                                    .table > tbody > tr > th,
+                                    .table > tfoot > tr > td,
+                                    .table > tfoot > tr > th,
+                                    .table > thead > tr > td,
+                                    .table > thead > tr > th
+                                    {
+                                       padding-left: 2px;
+                                       padding-right: 2px;
+                                    }
+                                 </style>
+                                 <!-- Item list show here -->
+                                 <table class="table table-hover table-bordered" style="width:100%" id="purchase_table">
+                                    <thead class="custom_thead">
+                                       <tr class="bg-primary" >
+                                          <th class="left" rowspan='2' style="width:20%">Item Name</th>
+                                          <th class="center" rowspan='2' style="width:7.5%">Trade Price</th>
+                                          <th class="center" rowspan='2' style="width:7.5%">Box/Poly</th>
+                                          <th class="center" rowspan='2' style="width:9.5%">Pieces</th>
+                                          <th class="center" rowspan='2' style="width:10%">Total Qty</th>
+                                          <th class="center" rowspan='2' style="width:7.5%">Total Amount</th>
+                                          <th class="center" rowspan='2' style="width:7.5%">Action</th>
+                                       </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                 </table>
+                                 <!-- Item list show here -->
                               </div>
                               <!-- /.box -->
                            </div>
 
-                           <!-- left side -->
+                           <!-- Grand section -->
                            <div class="col-md-6">
                               <div class="row">
                                  <div class="col-md-12">
                                     <div class="form-group">
-                                       <label for="" class="col-sm-4 control-label">Quantity</label>
-                                       <div class="col-sm-4">
-                                          <label class="control-label total_quantity text-success" style="font-size: 15pt;">0</label>
+                                       <label for="other_charges_input" class="col-sm-4 control-label"><?= $this->lang->line('other_charges'); ?></label>
+                                       <div class="col-sm-8">
+                                          <input type="text" class="form-control text-right only_currency" id="other_charges_input" name="other_charges_input" onkeyup="final_total();" value="0">
                                        </div>
                                     </div>
                                  </div>
                               </div>
-                              <input type="hidden" id="other_charges_input" name="other_charges_input" value="0">
-                              <input type="hidden" id="other_charges_tax_id" name="other_charges_tax_id" value="0">
-                              <input type="hidden" id="discount_to_all_input" name="discount_to_all_input" value="<?php echo  $discount_input; ?>" >
-                              <input type="hidden" id="discount_to_all_type" name="discount_to_all_type" value="<?php echo  $discount_type; ?>" >
+
+                              <input type="hidden" id="discount_to_all_input" name="discount_to_all_input" value="0">
+                              <input type="hidden" id="discount_to_all_type" name="discount_to_all_type" value="in_fixed">
+
                               <div class="row">
                                  <div class="col-md-12">
                                     <div class="form-group">
-                                       <label for="return_note" class="col-sm-4 control-label"><?= $this->lang->line('note'); ?></label>
+                                       <label for="sales_note" class="col-sm-4 control-label"><?= $this->lang->line('note'); ?></label>
                                        <div class="col-sm-8">
-                                          <textarea class="form-control text-left" id='return_note' name="return_note"><?= $return_note; ?></textarea>
-                                          <span id="return_note_msg" style="display:none" class="text-danger"></span>
+                                          <textarea class="form-control text-left" id='sales_note' name="sales_note"></textarea>
+                                          <span id="sales_note_msg" style="display:none" class="text-danger"></span>
                                        </div>
                                     </div>
                                  </div>
                               </div>
                            </div>
-                           <!-- left side -->
 
-                           <!-- right side -->
                            <div class="col-md-6">
                               <div class="row">
                                  <div class="col-md-12">
                                     <div class="form-group">
+
                                        <table  class="col-md-9">
                                           <tr>
                                              <th class="text-right" style="font-size: 17px;"><?= $this->lang->line('subtotal'); ?></th>
                                              <th class="text-right" style="padding-left:10%;font-size: 17px;">
-                                                <h4><b id="subtotal_amt" name="subtotal_amt">0.00</b></h4>
+                                                <h4>
+                                                   <?= $CI->currency('<b id="subtotal_amt" name="subtotal_amt">0.00</b>'); ?>
+                                                </h4>
                                              </th>
                                           </tr>
-                                          <input type="hidden" id="other_charges_amt" name="other_charges_amt">
+                                          <input type="hidden" id="profit_total" name="profit_total" value="0">
+                                          <tr>
+                                             <th class="text-right" style="font-size: 17px;"><?= $this->lang->line('other_charges'); ?></th>
+                                             <th class="text-right" style="padding-left:10%;font-size: 17px;">
+                                                <h4>
+                                                   <?= $CI->currency('<b id="other_charges_amt" name="other_charges_amt">0.00</b>'); ?>
+                                                </h4>
+                                             </th>
+                                          </tr>
 
-                                          <tr>
-                                             <th class="text-right" style="font-size: 17px;"><?= $this->lang->line('discount_on_all'); ?></th>
-                                             <th class="text-right" style="padding-left:10%;font-size: 17px;">
-                                                <h4><b id="discount_to_all_amt" name="discount_to_all_amt">0.00</b></h4>
-                                             </th>
-                                          </tr>
-                                          <tr style="<?= (!is_enabled_round_off()) ? 'display: none;' : '';?>">
-                                             <th class="text-right" style="font-size: 17px;"><?= $this->lang->line('round_off'); ?>
-                                                <i class="hover-q " data-container="body" data-toggle="popover" data-placement="top" data-content="Go to Site Settings-> Site -> Disable the Round Off(Checkbox)." data-html="true" data-trigger="hover" data-original-title="" title="Do you wants to Disable Round Off ?">
-                                                   <i class="fa fa-info-circle text-maroon text-black hover-q"></i>
-                                                   </i>
-                                             </th>
-                                             <th class="text-right" style="padding-left:10%;font-size: 17px;">
-                                                <h4><b id="round_off_amt" name="tot_round_off_amt">0.00</b></h4>
-                                             </th>
-                                          </tr>
-                                          <tr>
-                                             <th class="text-right" style="font-size: 17px;">Vat</th>
-                                             <th class="text-right" style="padding-left:10%;font-size: 17px;">
-                                                <h4><b id="vat_grand" name="vat_grand">0.00</b></h4>
-                                             </th>
-                                          </tr>
+                                          <input type="hidden" id="discount_to_all_amt" name="discount_to_all_amt" value="0">
+
                                           <tr>
                                              <th class="text-right" style="font-size: 17px;"><?= $this->lang->line('grand_total'); ?></th>
                                              <th class="text-right" style="padding-left:10%;font-size: 17px;">
-                                                <h4><b id="total_amt" name="total_amt">0.00</b></h4>
+                                                <h4>
+                                                   <?= $CI->currency('<b id="total_amt" name="total_amt">0.00</b>'); ?></h4>
                                              </th>
                                           </tr>
                                        </table>
@@ -318,102 +315,70 @@
                                  </div>
                               </div>
                            </div>
-                           <!-- right side -->
+                           <!-- Grand section -->
 
+                           <!-- Payment section -->
                            <div class="col-xs-12 ">
                               <div class="col-sm-12">
-                                    <div class="box-body ">
+                                 <div class="box-body ">
 
-                                       <div class="col-md-12 payments_div payments_div_">
-                                          <h4 class="box-title text-info"><?= $this->lang->line('subtotal'); ?> : </h4>
-                                       <div class="box box-solid bg-gray">
-                                          <div class="box-body">
-                                             <div class="row">
+                                    <div class="col-md-12 payments_div payments_div_">
+                                       <h4 class="box-title text-info"><?= $this->lang->line('make_payment'); ?> : </h4>
+                                    <div class="box box-solid bg-gray">
+                                       <div class="box-body">
+                                          <div class="row">
 
-                                             <div class="col-md-6">
-                                                <div class="">
-                                                <label for="amount"><?= $this->lang->line('amount'); ?></label>
-                                                   <input type="text" class="form-control text-right paid_amt only_currency" id="amount" name="amount" placeholder="" >
-                                                   <span id="amount_msg" style="display:none" class="text-danger"></span>
-                                             </div>
-                                             </div>
-                                             <div class="col-md-6">
-                                                <div class="">
-                                                   <label for="payment_type"><?= $this->lang->line('payment_type'); ?></label>
-                                                   <select class="form-control select2" id='payment_type' name="payment_type" required>
-                                                   <?php
-                                                      $q1=$this->db->query("select * from db_paymenttypes where status=1");
-                                                      if($q1->num_rows()>0){
-                                                         echo "<option value='' >-Select-</option>";
-                                                            foreach($q1->result() as $res1){
-                                                            echo "<option value='".$res1->payment_type."'>".$res1->payment_type ."</option>";
-                                                         }
+                                          <div class="col-md-6">
+                                             <div class="">
+                                             <label for="amount"><?= $this->lang->line('amount'); ?></label>
+                                                <input type="text" class="form-control text-right paid_amt only_currency" id="amount" name="amount" placeholder="" >
+                                                <span id="amount_msg" style="display:none" class="text-danger"></span>
+                                          </div>
+                                          </div>
+                                          <div class="col-md-6">
+                                             <div class="">
+                                                <label for="payment_type"><?= $this->lang->line('payment_type'); ?></label>
+                                                <select class="form-control select2" id='payment_type' name="payment_type">
+                                                <?php
+                                                   $q1=$this->db->query("select * from db_paymenttypes where status=1");
+                                                   if($q1->num_rows()>0){
+                                                      echo "<option value=''>-Select-</option>";
+                                                         foreach($q1->result() as $res1){
+                                                         echo "<option value='".$res1->payment_type."'>".$res1->payment_type ."</option>";
                                                       }
-                                                      else{
-                                                         echo "<option>None</option>";
-                                                      }
-                                                      ?>
-                                                   </select>
-                                                   <span id="payment_type_msg" style="display:none" class="text-danger"></span>
-                                                </div>
+                                                   }
+                                                   else{
+                                                      echo "<option>None</option>";
+                                                   }
+                                                   ?>
+                                                </select>
+                                                <span id="payment_type_msg" style="display:none" class="text-danger"></span>
                                              </div>
-                                          <div class="clearfix"></div>
-                                       </div>
-                                       <div class="row">
-                                             <div class="col-md-12">
-                                                <div class="">
-                                                   <label for="payment_note"><?= $this->lang->line('payment_note'); ?></label>
-                                                   <textarea type="text" class="form-control" id="payment_note" name="payment_note" placeholder="" ></textarea>
-                                                   <span id="payment_note_msg" style="display:none" class="text-danger"></span>
-                                                </div>
-                                             </div>
-
-                                          <div class="clearfix"></div>
-                                       </div>
-                                       </div>
-                                       </div>
-                                       </div><!-- col-md-12 -->
+                                          </div>
+                                       <div class="clearfix"></div>
                                     </div>
-                                    <!-- /.box-body -->
+                                    <div class="row">
+                                          <div class="col-md-12">
+                                             <div class="">
+                                                <label for="payment_note"><?= $this->lang->line('payment_note'); ?></label>
+                                                <textarea type="text" class="form-control" id="payment_note" name="payment_note" placeholder="" ></textarea>
+                                                <span id="payment_note_msg" style="display:none" class="text-danger"></span>
+                                             </div>
+                                          </div>
+
+                                       <div class="clearfix"></div>
+                                    </div>
+                                    </div>
+                                    </div>
+                                    </div><!-- col-md-12 -->
                                  </div>
+                                 <!-- /.box-body -->
+                              </div>
                               <!-- /.box -->
                            </div>
-
-                           <!-- SMS Sender while saving -->
-                              <?php
-                                 //Change Return
-                                 $send_sms_checkbox='disabled';
-                                 if($CI->is_sms_enabled()){
-                                    if(!isset($sales_id)){
-                                       $send_sms_checkbox='checked';
-                                    }else{
-                                       $send_sms_checkbox='';
-                                    }
-                                 }
-
-                           ?>
-
-                           <div class="col-xs-12 ">
-                              <div class="col-sm-12">
-                                    <div class="box-body ">
-                                       <div class="col-md-12">
-                                          <div class="checkbox icheck">
-                                    <label>
-                                       <input type="checkbox" <?=$send_sms_checkbox;?> class="form-control" id="send_sms" name="send_sms" > <label for="sales_discount" class=" control-label"><?= $this->lang->line('send_sms_to_customer'); ?>
-                                       <i class="hover-q " data-container="body" data-toggle="popover" data-placement="top" data-content="If checkbox is Disabled! You need to enable it from SMS -> SMS API <br><b>Note:<i>Walk-in Customer will not receive SMS!</i></b>" data-html="true" data-trigger="hover" data-original-title="" title="Do you wants to send SMS ?">
-                                 <i class="fa fa-info-circle text-maroon text-black hover-q"></i>
-                              </i>
-                                       </label>
-                                    </label>
-                                 </div>
-                                       </div><!-- col-md-12 -->
-                                    </div>
-                                    <!-- /.box-body -->
-                                 </div>
-                              <!-- /.box -->
-                           </div>
+                           <!-- Payment section -->
                         </div>
-
+                        
                         <!-- /.box-body -->
                         <div class="box-footer col-sm-12">
                            <center>

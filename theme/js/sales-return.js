@@ -188,7 +188,7 @@ function return_row_with_data(item_id){
        	$("#hidden_rowcount").val(parseInt(rowcount)+1);
         success.currentTime = 0;
         success.play();
-        enable_or_disable_item_discount();
+        final_total();
         $("#item_search").removeClass('ui-autocomplete-loader-center');
     });
 }
