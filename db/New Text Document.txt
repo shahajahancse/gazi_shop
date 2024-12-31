@@ -1,3 +1,0 @@
-ALTER TABLE `db_items` ADD `box_qty` INT NOT NULL DEFAULT '1' AFTER `unit_id`;
-ALTER TABLE `db_purchaseitems` ADD `box_qty` DECIMAL(12,2) NOT NULL DEFAULT '0' AFTER `item_id`, ADD `box_per_qty` DECIMAL(12,2) NOT NULL DEFAULT '0' AFTER `box_qty`, ADD `pieces` DECIMAL(12,2) NOT NULL DEFAULT '0' AFTER `box_per_qty`;
-ALTER TABLE `db_purchaseitems` ADD `profit_total` DECIMAL(12,2) NOT NULL DEFAULT '0' AFTER `profit_margin_per`;

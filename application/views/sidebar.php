@@ -152,12 +152,12 @@
               <?php } ?>
 
               <?php if($CI->permissions('sales_view')) { ?>
-              <li class="sales-list-active-li"><a href="<?php echo $base_url; ?>sales"><i class="fa fa-list "></i> <span><?= $this->lang->line('sales_list'); ?></span></a></li>
+              <li class="sales-list-active-li"><a href="<?php echo $base_url; ?>sales"><i class="fa fa-list "></i> <span>Delivery List</span></a></li>
               <?php } ?>
 
               <?php if($CI->permissions('sales_return_view')) { ?>
               <li class="sales-return-list-active-li sales-return-active-li">
-                <a href="<?php echo $base_url; ?>sales_return"><i class="fa fa-list "></i> <span><?= $this->lang->line('sales_returns_list'); ?></span> <span class="pull-right-container"> <small class="label pull-right bg-green">New</small> </span></a>
+                <a href="<?php echo $base_url; ?>sales_return"><i class="fa fa-list "></i> <span>Return List</span> <span class="pull-right-container"> <small class="label pull-right bg-green">New</small> </span></a>
               </li>
               <?php } ?>
             </ul>
