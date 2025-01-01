@@ -547,58 +547,149 @@ class Sales_return_model extends CI_Model {
         return json_encode($json_array);
 	}
 
-
-
-
-
-
 	/*v1.1*/
 	public function inclusive($price='',$tax_per){
 		return ($tax_per!=0) ? $price/(($tax_per/100)+1)/10 : $tax_per;
 	}
+
 	public function get_items_info($rowcount,$item_id){
 		$q1=$this->db->select('*')->from('db_items')->where("id=$item_id")->get();
-		$tax=$this->db->query("select tax from db_tax where id=".$q1->row()->tax_id)->row()->tax;
 
 		$info['item_id'] = $q1->row()->id;
 		$info['item_name'] = $q1->row()->item_name;
 		$info['item_available_qty'] = $q1->row()->stock;
-		$info['item_sales_price'] = $q1->row()->sales_price;
-		$info['item_tax_id'] = $q1->row()->tax_id;
+		$info['box_qty'] = $q1->row()->box_qty;
 		$info['item_price'] = $q1->row()->price;
-		$info['item_sales_qty'] = 1;
-		$info['item_tax'] = $tax;
+		$info['purchase_price'] = $q1->row()->purchase_price;
+		$info['item_tax_id'] = $q1->row()->tax_id;
+		$info['profit_margin'] = $q1->row()->profit_margin;
+		$info['mr_price'] = $q1->row()->mr_price;
+		$info['item_purchase_qty'] = 1;
+		$info['item_tax'] = $q1->row()->tax_amt;
 		$info['item_tax_type'] = $q1->row()->tax_type;
 		$info['item_discount'] = '';
 		$this->return_row_with_data($rowcount,$info);
 	}
 
+	public function return_row_with_data($rowcount,$info){
+		extract($info); $ttqty = (int)$box_qty + 1; ?>
+
+		<tr id="row_<?=$rowcount;?>" data-row='<?=$rowcount;?>'>
+			<!-- item name  -->
+			<td id="td_<?=$rowcount;?>_1">
+				<input type="text" style="font-weight: bold;" id="td_data_<?=$rowcount;?>_1" class="form-control no-padding" value='<?=$item_name;?>' readonly >
+			</td>
+			<!-- Sale Price -->
+			<td id="td_<?=$rowcount;?>_2"><input type="text" name="td_data_<?=$rowcount;?>_2" id="td_data_<?=$rowcount;?>_2" class="form-control no-padding only_currency text-center" onblur="cal_qty_price(<?=$rowcount;?>)" value="<?=$mr_price;?>" ></td>
+
+			<!-- Box/Poly -->
+			<td id="td_<?=$rowcount;?>_3"><input type="text" name="td_data_<?=$rowcount;?>_3" id="td_data_<?=$rowcount;?>_3" class="form-control no-padding only_currency text-center" onkeyup="cal_qty_price(<?=$rowcount;?>)" value="1" ></td>
+			<!-- Pieces Qty -->
+			<td id="td_<?=$rowcount;?>_4"><input type="text" name="td_data_<?=$rowcount;?>_4" id="td_data_<?=$rowcount;?>_4" class="form-control no-padding only_currency text-center" onkeyup="cal_qty_price(<?=$rowcount;?>)" value="1" ></td>
+
+			<!-- Total Quantity -->
+			<td id="td_<?=$rowcount;?>_5"><input type="text" name="td_data_<?=$rowcount;?>_5" id="td_data_<?=$rowcount;?>_5" class="form-control no-padding only_currency text-center" readonly value="<?= $ttqty ?>"></td>
+
+			<!-- Amount -->
+			<td id="td_<?=$rowcount;?>_6"><input type="text" name="td_data_<?=$rowcount;?>_6" id="td_data_<?=$rowcount;?>_6" class="form-control text-right no-padding only_currency text-center" style='border-color: #f39c12;' title='Total' readonly value="<?= $mr_price * $ttqty; ?>"></td>
+
+			<!-- ADD button -->
+			<td id="td_<?=$rowcount;?>_16" style="text-align: center;">
+				<a class=" fa fa-fw fa-minus-square text-red" style="cursor: pointer;font-size: 34px;" onclick="removerow(<?=$rowcount;?>)" title="Delete ?" name="td_data_<?=$rowcount;?>_16" id="td_data_<?=$rowcount;?>_16"></a>
+			</td>
+
+			<input type="hidden" name="td_data_<?=$rowcount;?>_7" id="td_data_<?=$rowcount;?>_7" value="<?=$purchase_price;?>" >
+			<input type="hidden" name="td_data_<?=$rowcount;?>_11" id="td_data_<?=$rowcount;?>_11" value="<?=$mr_price;?>" >
+			<input type="hidden" name="td_data_<?=$rowcount;?>_8" id="td_data_<?=$rowcount;?>_8" value="<?=$profit_margin;?>" >
+
+			<input type="hidden" name="td_data_<?=$rowcount;?>_9" id="td_data_<?=$rowcount;?>_9" value="<?=$box_qty;?>">
+			<input type="hidden" name="td_data_<?=$rowcount;?>_10" id="td_data_<?=$rowcount;?>_10" value="0">
+			<input type="hidden" id="tr_item_id_<?=$rowcount;?>" name="tr_item_id_<?=$rowcount;?>" value="<?=$item_id;?>">
+		</tr>
+
+	<?php
+	}
+
 	/* For Sales Items List Retrieve*/
 	public function sales_list($sales_id){
-		$q1=$this->db->select('*')->from('db_salesitems')->where("sales_id=$sales_id")->get();
+		$this->db->select('a.*, i.item_name, i.item_name');
+		$this->db->from('db_salesitems as a');
+		$this->db->join('db_items as i','i.id=a.item_id','left');
+		$this->db->where('a.sales_id',$sales_id);
+		$q1 = $this->db->get();
+
 		$rowcount =1;
 		foreach ($q1->result() as $res1) {
-			$q2=$this->db->query("select item_name,stock,tax_type,price from db_items where id=".$res1->item_id);
-			// $tax=$this->db->query("select tax from db_tax where id=".$res1->tax_id)->row()->tax;
-
 			$info['sales_details_id'] = $res1->id;
 			$info['sales_id'] = $res1->sales_id;
-			$info['item_name'] = $q2->row()->item_name;
-			$info['item_tax_type'] = $q2->row()->tax_type;
+			$info['item_name'] = $res1->item_name;
+			$info['item_tax_type'] = 0;
 			$info['item_id'] = $res1->item_id;
+			$info['box_qty'] = $res1->box_qty;
+			$info['sales_box'] = $res1->sales_box;
+			$info['sales_pieces'] = $res1->sales_pieces;
 			$info['sales_qty'] = $res1->sales_qty;
-			$info['mr_price'] = $res1->mr_price;
 			$info['price_per_unit'] = $res1->price_per_unit;
+
 			$info['vat_unit'] = $res1->vat_unit;
 			$info['tax_amt'] = $res1->tax_amt;
 			$info['discount_amt'] = $res1->discount_amt;
 			$info['additional_dis'] = $res1->additional_dis;
 			$info['unit_total_cost'] = $res1->unit_total_cost;
 			$info['total_cost'] = $res1->total_cost;
+			$info['profit_per'] = $res1->profit_per;
+			$info['tot_profit'] = $res1->tot_profit;
 
-			$result = $this->return_row_with_data($rowcount++,$info);
+			$result = $this->return_data_with_row($rowcount++,$info);
 		}
+
 		return $result;
+	}
+	public function return_data_with_row($trow,$info){
+		extract($info); ?>
+
+		<tr id="row_<?=$trow;?>" data-row='<?=$trow;?>'>
+			<!-- item name  -->
+			<td id="td_<?=$trow;?>_1">
+				<input type="text" style="font-weight: bold;" id="td_data_<?=$trow;?>_1" class="form-control no-padding" value='<?=$item_name;?>' readonly >
+			</td>
+			<!-- Sale Price -->
+			<td id="td_<?=$trow;?>_2"><input type="text" name="td_data_<?=$trow;?>_2" id="td_data_<?=$trow;?>_2" class="form-control no-padding only_currency text-center" value="<?=$price_per_unit;?>" readonly></td>
+
+			<!-- Box/Poly -->
+			<td id="td_<?=$trow;?>_3"><input type="text" name="td_data_<?=$trow;?>_3" id="td_data_<?=$trow;?>_3" class="form-control no-padding only_currency text-center" onkeyup="cal_qty_price(<?=$trow;?>)" value="<?= $sales_box ?>" readonly></td>
+			<!-- Pieces Qty -->
+			<td id="td_<?=$trow;?>_4"><input type="text" name="td_data_<?=$trow;?>_4" id="td_data_<?=$trow;?>_4" class="form-control no-padding only_currency text-center" onkeyup="cal_qty_price(<?=$trow;?>)" value="<?= $sales_pieces ?>" readonly></td>
+
+			<!-- Total Quantity -->
+			<td id="td_<?=$trow;?>_5"><input type="text" name="td_data_<?=$trow;?>_5" id="td_data_<?=$trow;?>_5" class="form-control no-padding only_currency text-center" readonly value="<?= $sales_qty ?>"></td>
+
+			<!-- Amount -->
+			<td id="td_<?=$trow;?>_6"><input type="text" name="td_data_<?=$trow;?>_6" id="td_data_<?=$trow;?>_6" class="form-control text-right no-padding only_currency text-center" style='border-color: #f39c12;' title='Total' readonly value="<?= $total_cost; ?>"></td>
+
+			<!-- Return box -->
+			<td id="td_<?=$trow;?>_7"><input type="text" name="td_data_<?=$trow;?>_7" id="td_data_<?=$trow;?>_6" class="form-control text-right no-padding only_currency text-center" style='border-color: #f39c12;' title='Total' value=""></td>
+
+			<!-- Return Pieces -->
+			<td id="td_<?=$trow;?>_8"><input type="text" name="td_data_<?=$trow;?>_8" id="td_data_<?=$trow;?>_6" class="form-control text-right no-padding only_currency text-center" style='border-color: #f39c12;' title='Total' value=""></td>
+
+			<!-- ADD button -->
+			<td id="td_<?=$trow;?>_16" style="text-align: center;">
+				<a class=" fa fa-fw fa-minus-square text-red" style="cursor: pointer;font-size: 34px;" onclick="removerow(<?=$trow;?>)" title="Delete ?" name="td_data_<?=$trow;?>_16" id="td_data_<?=$trow;?>_16"></a>
+			</td>
+
+			<input type="hidden" name="td_data_<?=$trow;?>_9" id="td_data_<?=$trow;?>_9" value="<?=$sales_box;?>">
+			<input type="hidden" name="td_data_<?=$trow;?>_10" id="td_data_<?=$trow;?>_10" value="<?=$sales_pieces;?>">
+			<input type="hidden" name="td_data_<?=$trow;?>_11" id="td_data_<?=$trow;?>_11" value="<?=$sales_qty;?>">
+			<input type="hidden" name="td_data_<?=$trow;?>_12" id="td_data_<?=$trow;?>_12" value="<?=$box_qty;?>">
+			<input type="hidden" name="td_data_<?=$trow;?>_13" id="td_data_<?=$trow;?>_13" value="<?=$profit_per;?>" >
+
+			<input type="hidden" id="tr_item_id_<?=$trow;?>" name="tr_item_id_<?=$trow;?>" value="<?=$item_id;?>">
+			<input type="hidden" id="sales_id_<?=$trow;?>" name="sales_id_<?=$trow;?>" value="<?=$sales_id;?>">
+			<input type="hidden" id="sal_details_id_<?=$trow;?>" name="sal_details_id_<?=$trow;?>" value="<?=$sales_details_id;?>">
+		</tr>
+
+	<?php
 	}
 
 	/* For Return Items List Retrieve*/
@@ -635,80 +726,6 @@ class Sales_return_model extends CI_Model {
 			$result = $this->return_row_with_data($rowcount++,$info);
 		}
 		return $result;
-	}
-	/*public function return_sales_list($sales_id){dis_unit
-		$q1=$this->db->select('*')->from('db_salesitems')->where("sales_id=$sales_id")->get();
-		$rowcount =1;
-		foreach ($q1->result() as $res1) {
-			$q2=$this->db->query("select item_name,stock,price,sales_price,tax_type from db_items where id=".$res1->item_id);
-			$tax=$this->db->query("select tax from db_tax where id=".$res1->tax_id)->row()->tax;
-
-			$info['item_id'] = $res1->item_id;
-			$info['item_name'] = $q2->row()->item_name;
-			$info['item_available_qty'] = $q2->row()->stock;
-			$info['item_price'] = $q2->row()->price;
-			$info['item_sales_price'] = $q2->row()->sales_price;
-			$info['item_tax_id'] = $res1->tax_id;
-			$info['item_sales_qty'] = $res1->sales_qty;
-			$info['item_tax'] = $tax;
-			$info['item_tax_type'] = $q2->row()->tax_type;
-			$info['item_discount'] = $res1->unit_discount_per;
-
-			$result = $this->return_row_with_data($rowcount++,$info);
-		}
-		return $result;
-	}*/
-
-	public function return_row_with_data($rowcount,$info){ extract($info); ?>
-		<tr id="row_<?=$rowcount;?>" data-row='<?=$rowcount;?>'>
-			<!-- item name  -->
-			<td id="td_<?=$rowcount;?>_1">
-				<input type="text" style="font-weight: bold;" id="td_data_<?=$rowcount;?>_1" class="form-control no-padding" value='<?=$item_name;?>' readonly >
-			</td>
-			<!-- item name  -->
-			<!-- Qty -->
-			<td id="td_<?=$rowcount;?>_3">
-				<div class="input-group ">
-					<span class="input-group-btn">
-					<button onclick="decrement_qty(<?=$rowcount;?>)" type="button" class="btn btn-default btn-flat"><i class="fa fa-minus text-danger"></i></button></span>
-					<input typ="text" value="<?=$sales_qty;?>" class="form-control no-padding text-center" onkeyup="calculate_tax(<?=$rowcount;?>)" id="td_data_<?=$rowcount;?>_3" name="td_data_<?=$rowcount;?>_3">
-					<span class="input-group-btn">
-					<button onclick="increment_qty(<?=$rowcount;?>)" type="button" class="btn btn-default btn-flat"><i class="fa fa-plus text-success"></i></button></span>
-					<input type="hidden" id="item_sales_qty_<?=$rowcount;?>" value="<?=$sales_qty;?>">
-				</div>
-			</td>
-			<!-- Qty -->
-			<!-- Unit Cost -->
-			<td id="td_<?=$rowcount;?>_10"><input type="text" name="td_data_<?=$rowcount;?>_10" id="td_data_<?=$rowcount;?>_10" class="form-control text-right no-padding only_currency text-center" readonly value="<?=$unit_total_cost;?>"></td>
-			<!-- Unit Cost -->
-			<!-- Vat -->
-			<td id="td_<?=$rowcount;?>_8">
-				<input name="td_data_<?=$rowcount;?>_8" id="td_data_<?=$rowcount;?>_8" class="form-control text-right no-padding only_currency text-center vat_unit" value="<?=$tax_amt;?>" readonly>
-			</td>
-			<!-- Vat -->
-			<!-- Discount -->
-			<td id="td_<?=$rowcount;?>_7">
-				<input name="td_data_<?=$rowcount;?>_7" id="td_data_<?=$rowcount;?>_7" class="form-control text-right no-padding only_currency text-center vat_unit" value="<?=$tax_amt;?>" readonly>
-			</td>
-			<!-- discount -->
-			<!-- Amount -->
-			<td id="td_<?=$rowcount;?>_9"><input name="td_data_<?=$rowcount;?>_9" id="td_data_<?=$rowcount;?>_9" class="form-control text-right no-padding only_currency text-center" style="border-color: #f39c12;" readonly value="<?=($total_cost);?>"></td>
-			<!-- Amount -->
-
-			<!-- ADD button -->
-			<td id="td_<?=$rowcount;?>_16" style="text-align: center;">
-				<a class=" fa fa-fw fa-minus-square text-red" style="cursor: pointer;font-size: 34px;" onclick="removerow(<?=$rowcount;?>)" title="Delete ?" name="td_data_<?=$rowcount;?>_16" id="td_data_<?=$rowcount;?>_16"></a>
-			</td>
-			<input type="hidden" id="td_data_<?=$rowcount;?>_4" name="td_data_<?=$rowcount;?>_4" value="<?=$tax_amt;?>">
-			<input type="hidden" id="td_data_<?=$rowcount;?>_15" name="td_data_<?=$rowcount;?>_15" value="1">
-			<input type="hidden" id="sales_qty_<?=$rowcount;?>_13" name="sales_qty_<?=$rowcount;?>_13" value="<?=$sales_qty;?>">
-			<input type="hidden" id="item_id_<?=$rowcount;?>" name="item_id_<?=$rowcount;?>" value="<?=$item_id;?>">
-			<input type="hidden" id="dis_unit_<?=$rowcount;?>" name="dis_unit_<?=$rowcount;?>" value="<?=$dis_unit;?>">
-			<input type="hidden" id="addi_dis_<?=$rowcount;?>" name="addi_dis_<?=$rowcount;?>" value="<?=$additional_dis;?>">
-			<input type="hidden" id="vat_unit_<?=$rowcount;?>" name="vat_unit_<?=$rowcount;?>" value="<?=$vat_unit;?>">
-		</tr>
-
-		<?php
 	}
 
 	public function delete_payment($payment_id){

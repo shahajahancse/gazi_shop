@@ -83,11 +83,11 @@ class Sales_return extends MY_Controller {
 
 	//Used in Purchase and sales Forms
 	public function get_json_items_details(){
-		dd($_GET);
 		$data = array();
 		$display_json = array();
 			$name = strtolower(trim($_GET['name']));
-			$sql =$this->db->query("SELECT id,item_name,item_code,stock FROM db_items where  status=1 and  (LOWER(item_name) LIKE '%$name%' or LOWER(item_code) LIKE '%$name%')   limit 10");
+			$sale_id = strtolower(trim($_GET['sale_id']));
+			$sql =$this->db->query("SELECT id,item_name,item_code,stock FROM db_items where status=1 and (LOWER(item_name) LIKE '%$name%' or LOWER(item_code) LIKE '%$name%')   limit 10");
 
 			foreach ($sql->result() as $res) {
 			      $json_arr["id"] = $res->id;
