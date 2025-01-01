@@ -230,11 +230,11 @@
               <tr class="text-right">
                 <th>#</th>
                 <th class="text-left"><?= $this->lang->line('item_name'); ?></th>
-                <th class="text-right"><?= $this->lang->line('quantity'); ?></th>
                 <th class="text-right"><?= $this->lang->line('unit_price'); ?></th>
-                <th class="text-right">Item Cost</th>
-                <th class="text-right">Vat</th>
-                <th class="text-right">Discount</th>
+                <th class="text-right">Box/Poly</th>
+                <th class="text-right">Pieces</th>
+                <th class="text-right">Damage</th>
+                <th class="text-right"><?= $this->lang->line('quantity'); ?></th>
                 <th class="text-right"><?= $this->lang->line('total_amount'); ?></th>
               </tr>
             </thead>
@@ -254,19 +254,19 @@
                   <tr>
                     <td class="text-left"><?= $key+1 ?></td>
                     <td class="text-left"><?= $res2->item_name ?></td>
-                    <td><?= $res2->return_qty ?></td>
                     <td><?= $res2->price_per_unit ?></td>
+                    <td><?= $res2->return_box ?></td>
+                    <td><?= $res2->return_pieces ?></td>
+                    <td><?= $res2->damage ?></td>
+                    <td><?= $res2->return_qty ?></td>
                     <td><?= $res2->total_cost ?></td>
-                    <td><?= $res2->tax_amt ?></td>
-                    <td><?= $res2->discount_amt ?></td>
-                    <td><?= $res2->total_cost + $res2->tax_amt - $res2->discount_amt ?></td>
                   </tr>
                 <?php
                   $tot_qty    += $res2->return_qty;
                   $unit_cost  += $res2->total_cost;
                   $tax_amt    += $res2->tax_amt;
                   $dis_amt    += $res2->discount_amt;
-                  $total_cost += $res2->total_cost + $res2->tax_amt - $res2->discount_amt;
+                  $total_cost += $res2->total_cost;
                 ?>
               <?php } ?>
             </tbody>
@@ -342,24 +342,6 @@
                  <div class="form-group">
 
                     <table  class="col-md-11">
-                       <tr>
-                          <th class="text-right" style="font-size: 17px;"><?= $this->lang->line('subtotal'); ?></th>
-                          <th class="text-right" style="padding-left:10%;font-size: 17px;">
-                             <h4><b id="subtotal_amt" name="subtotal_amt"><?=$unit_cost;?></b></h4>
-                          </th>
-                       </tr>
-                       <tr>
-                          <th class="text-right" style="font-size: 17px;"><?= $this->lang->line('discount_on_all'); ?></th>
-                          <th class="text-right" style="padding-left:10%;font-size: 17px;">
-                             <h4><b id="discount_to_all_amt" name="discount_to_all_amt"><?=$dis_amt;?></b></h4>
-                          </th>
-                       </tr>
-                       <tr>
-                          <th class="text-right" style="font-size: 17px;">Vat</th>
-                          <th class="text-right" style="padding-left:10%;font-size: 17px;">
-                             <h4><b id="round_off_amt" name="tot_round_off_amt"><?=$tax_amt;?></b></h4>
-                          </th>
-                       </tr>
                        <tr>
                           <th class="text-right" style="font-size: 17px;"><?= $this->lang->line('grand_total'); ?></th>
                           <th class="text-right" style="padding-left:10%;font-size: 17px;">

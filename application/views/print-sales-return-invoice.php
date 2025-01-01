@@ -183,16 +183,16 @@
           <?php echo (!empty(trim($customer_tax_number))) ? $this->lang->line('tax_number').": ".$customer_tax_number."<br>" : '';?>
         </td>
       </tr>
-      <tr class="text-right">
-        <th>#</th>
-        <th class="text-left"><?= $this->lang->line('item_name'); ?></th>
-        <th class="text-right"><?= $this->lang->line('quantity'); ?></th>
-        <th class="text-right"><?= $this->lang->line('unit_price'); ?></th>
-        <th class="text-right">Item Cost</th>
-        <th class="text-right">Vat</th>
-        <th class="text-right">Discount</th>
-        <th class="text-right"><?= $this->lang->line('total_amount'); ?></th>
-      </tr>
+        <tr class="text-right">
+          <th>#</th>
+          <th class="text-left"><?= $this->lang->line('item_name'); ?></th>
+          <th class="text-right"><?= $this->lang->line('unit_price'); ?></th>
+          <th class="text-right">Box/Poly</th>
+          <th class="text-right">Pieces</th>
+          <th class="text-right">Damage</th>
+          <th class="text-right"><?= $this->lang->line('quantity'); ?></th>
+          <th class="text-right"><?= $this->lang->line('total_amount'); ?></th>
+        </tr>
     </thead>
     <tbody>
       <?php
@@ -210,19 +210,19 @@
           <tr>
             <td class="text-left"><?= $key+1 ?></td>
             <td class="text-left"><?= $res2->item_name ?></td>
-            <td><?= $res2->return_qty ?></td>
             <td><?= $res2->price_per_unit ?></td>
+            <td><?= $res2->return_box ?></td>
+            <td><?= $res2->return_pieces ?></td>
+            <td><?= $res2->damage ?></td>
+            <td><?= $res2->return_qty ?></td>
             <td><?= $res2->total_cost ?></td>
-            <td><?= $res2->tax_amt ?></td>
-            <td><?= $res2->discount_amt ?></td>
-            <td><?= $res2->total_cost + $res2->tax_amt - $res2->discount_amt ?></td>
           </tr>
         <?php
           $tot_qty    += $res2->return_qty;
           $unit_cost  += $res2->total_cost;
           $tax_amt    += $res2->tax_amt;
           $dis_amt    += $res2->discount_amt;
-          $total_cost += $res2->total_cost + $res2->tax_amt - $res2->discount_amt;
+          $total_cost += $res2->total_cost;
         ?>
       <?php } ?>
     </tbody>
@@ -235,19 +235,6 @@
         <td><?= $CI->currency(number_format($tax_amt,2,'.','')) ;?></td>
         <td><?= $CI->currency(number_format($dis_amt,2,'.','')) ;?></td>
         <td><?= $CI->currency(number_format($total_cost,2,'.','')) ;?></td>
-      </tr>
-
-      <tr>
-        <td colspan="7" style="text-align: right;"><b><?= $this->lang->line('subtotal'); ?></b></td>
-        <td colspan="1" style="text-align: right;" ><b><?php echo number_format($unit_cost,2,'.',''); ?></b></td>
-      </tr>
-      <tr>
-        <td colspan="7" style="text-align: right;"><b>Vat</b></td>
-        <td colspan="1" style="text-align: right;" ><b><?php echo number_format($tax_amt,2,'.',''); ?></b></td>
-      </tr>
-      <tr>
-        <td colspan="7" style="text-align: right;"><b><?= $this->lang->line('discount_on_all'); ?>(<?= $discount_to_all_input." ".$discount_to_all_type; ?>)</b></td>
-        <td colspan="1" style="text-align: right;" ><b><?php echo number_format($dis_amt,2,'.',''); ?></b></td>
       </tr>
       <tr>
         <td colspan="7" style="text-align: right;"><b><?= $this->lang->line('grand_total'); ?></b></td>
