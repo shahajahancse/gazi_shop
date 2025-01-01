@@ -35,30 +35,23 @@ $('#save,#update,#create').click(function (e) {
 
     if(!$("#payment_type").val().trim() ) //Also check Others????
     {
-        $('#payment_type_msg').fadeIn(200).show().html('Required Field').addClass('required');
-        // $('#'+id).css({'background-color' : '#E8E2E9'});
+      $('#payment_type_msg').fadeIn(200).show().html('Required Field').addClass('required');
         flag=false;
     }
     else
     {
-          $("#payment_type_msg").fadeOut(200).hide();
-          //$('#'+id).css({'background-color' : '#FFFFFF'});    //White color
+      $("#payment_type_msg").fadeOut(200).hide();
     }
 
    //Validate Input box or selection box should not be blank or empty
 	  check_field("customer_id");
     check_field("return_date");
     check_field("return_status");
-    //check_field("warehouse_id");
-	/*if(!isNaN($("#amount").val().trim()) && parseInt($("#amount").val().trim())==0){
-        toastr["error"]("You have entered Payment Amount! <br>Please Select Payment Type!");
-        return;
-    }*/
-	if(flag==false)
-	{
-		toastr["error"]("You have missed Something to Fillup!");
-		return;
-	}
+    if(flag==false)
+    {
+      toastr["error"]("You have missed Something to Fillup!");
+      return;
+    }
 
 	//Atleast one record must be added in sales table
     var rowcount=document.getElementById("hidden_rowcount").value;
@@ -90,8 +83,6 @@ $('#save,#update,#create').click(function (e) {
         /*Check XSS Code*/
         if(!xss_validation(data)){ return false; }
 
-        //$(".box").append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
-        //$("#"+this_id).attr('disabled',true);  //Enable Save or Update button
 				$.ajax({
 				type: 'POST',
 				url: base_url+'sales_return/sales_save_and_update?command='+this_id+'&rowcount='+rowcount+'&tot_subtotal_amt='+tot_subtotal_amt+'&tot_discount_to_all_amt='+tot_discount_to_all_amt+'&tot_round_off_amt='+tot_round_off_amt+'&tot_total_amt='+tot_total_amt+"&other_charges_amt="+other_charges_amt,
@@ -183,14 +174,13 @@ function return_row_with_data(item_id){
 	var base_url=$("#base_url").val().trim();
 	var rowcount=$("#hidden_rowcount").val();
 	$.post(base_url+"sales_return/return_row_with_data/"+rowcount+"/"+item_id,{},function(result){
-        //alert(result);
-        $('#sales_table tbody').append(result);
-       	$("#hidden_rowcount").val(parseInt(rowcount)+1);
-        success.currentTime = 0;
-        success.play();
-        final_total();
-        $("#item_search").removeClass('ui-autocomplete-loader-center');
-    });
+    $('#sales_table tbody').append(result);
+    $("#hidden_rowcount").val(parseInt(rowcount)+1);
+    success.currentTime = 0;
+    // success.play();
+    final_total();
+    $("#item_search").removeClass('ui-autocomplete-loader-center');
+  });
 }
 
 //INCREMENT ITEM

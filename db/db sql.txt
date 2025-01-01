@@ -7,3 +7,22 @@ ALTER TABLE `db_salesitems` ADD `purchase_price` DECIMAL(12,2) NOT NULL DEFAULT 
 ALTER TABLE `db_sales` ADD `dsr_name` VARCHAR(128) NULL DEFAULT NULL AFTER `customer_id`;
 ALTER TABLE `db_salesitemsreturn` ADD `return_box` INT NULL DEFAULT '0' AFTER `item_id`, ADD `return_pieces` INT NULL DEFAULT '0' AFTER `return_box`;
 ALTER TABLE `db_salesitemsreturn` ADD `damage` INT NOT NULL DEFAULT '0' AFTER `return_qty`;
+
+ALTER TABLE `db_salesitemsreturn` ADD `box_qty` INT NOT NULL DEFAULT '0' AFTER `item_id`;
+ALTER TABLE `db_salesitemsreturn` ADD `sal_details_id` INT NULL DEFAULT NULL AFTER `sales_id`;
+ALTER TABLE `db_salesitemsreturn` ADD INDEX(`sales_id`);
+ALTER TABLE `db_salesitemsreturn` ADD INDEX(`return_id`);
+ALTER TABLE `db_salesitemsreturn` ADD INDEX(`item_id`);
+
+
+
+
+
+
+
+
+
+
+
+
+

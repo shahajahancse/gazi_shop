@@ -182,11 +182,7 @@ class Sales_return extends MY_Controller {
 													<i class="fa fa-fw fa-file-pdf-o text-blue"></i>PDF
 												</a>
 											</li>
-											<li>
-												<a style="cursor:pointer" title="Print POS Invoice ?" onclick="print_invoice('.$sales->id.')">
-													<i class="fa fa-fw fa-file-text text-blue"></i>POS Invoice
-												</a>
-											</li>';
+											<li>';
 
 											if($this->permissions('sales_return_delete'))
 											$str2.='<li>
