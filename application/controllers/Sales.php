@@ -17,7 +17,7 @@ class Sales extends MY_Controller {
 	{
 		$this->permission_check('sales_view');
 		$data=$this->data;
-		$data['page_title']=$this->lang->line('sales_list');
+		$data['page_title']= "Delivery List";
 		$this->load->view('sales-list',$data);
 	}
 	public function add()
@@ -134,21 +134,16 @@ class Sales extends MY_Controller {
 												<a title="Update Record ?" target="_blank" href="sales/pdf/'.$sales->id.'">
 													<i class="fa fa-fw fa-file-pdf-o text-blue"></i>PDF
 												</a>
-											</li>
-											<li>
-												<a style="cursor:pointer" title="Print POS Invoice ?" onclick="print_invoice('.$sales->id.')">
-													<i class="fa fa-fw fa-file-text text-blue"></i>POS Invoice
-												</a>
 											</li>';
 
-											if ($sales->return_bit != 1) {
-												if($this->permissions('sales_return'))
+											if (empty($sales->return_bit) && $sales->return_bit != 1) {
 												$str2.='<li>
 													<a title="Sales Return" href="sales_return/add/'.$sales->id.'">
 														<i class="fa fa-fw fa-undo text-blue"></i>Sales Return
 													</a>
 												</li>';
 											}
+
 											if($this->permissions('sales_delete'))
 											$str2.='<li>
 												<a style="cursor:pointer" title="Delete Record ?" onclick="delete_sales(\''.$sales->id.'\')">

@@ -227,7 +227,7 @@
                                     }
                                  </style>
                                  <!-- Item list show here -->
-                                 <table class="table table-hover table-bordered" style="width:100%" id="purchase_table">
+                                 <table class="table table-hover table-bordered" style="width:100%" id="sales_table">
                                     <thead class="custom_thead">
                                        <tr class="bg-primary" >
                                           <th class="left" rowspan='2' style="width:20%">Item Name</th>
@@ -236,6 +236,9 @@
                                           <th class="center" rowspan='2' style="width:9.5%">Pieces</th>
                                           <th class="center" rowspan='2' style="width:10%">Total Qty</th>
                                           <th class="center" rowspan='2' style="width:7.5%">Total Amount</th>
+                                          <th class="center" rowspan='2' style="width:7.5%">Return Poly</th>
+                                          <th class="center" rowspan='2' style="width:7.5%">Return Pieces</th>
+                                          <th class="center" rowspan='2' style="width:7.5%">Damage</th>
                                           <th class="center" rowspan='2' style="width:7.5%">Action</th>
                                        </tr>
                                     </thead>
@@ -267,10 +270,10 @@
                               <div class="row">
                                  <div class="col-md-12">
                                     <div class="form-group">
-                                       <label for="sales_note" class="col-sm-4 control-label"><?= $this->lang->line('note'); ?></label>
+                                       <label for="return_note" class="col-sm-4 control-label"><?= $this->lang->line('note'); ?></label>
                                        <div class="col-sm-8">
-                                          <textarea class="form-control text-left" id='sales_note' name="sales_note"></textarea>
-                                          <span id="sales_note_msg" style="display:none" class="text-danger"></span>
+                                          <textarea class="form-control text-left" id='return_note' name="return_note"></textarea>
+                                          <span id="return_note_msg" style="display:none" class="text-danger"></span>
                                        </div>
                                     </div>
                                  </div>
@@ -378,7 +381,7 @@
                            </div>
                            <!-- Payment section -->
                         </div>
-                        
+
                         <!-- /.box-body -->
                         <div class="box-footer col-sm-12">
                            <center>
@@ -449,7 +452,7 @@
                   $('#sales_table tbody').append(result);
                   $("#hidden_rowcount").val(parseInt(<?=$items_count;?>)+1);
                   success.currentTime = 0;
-                  success.play();
+                  // success.play();
                   final_total();
                   $(".overlay").remove();
                });
@@ -460,53 +463,78 @@
 
    <!-- /* ---------- Final Description of amount ------------*/ -->
    <script>
-      function final_total(){
-         var rowcount = $("#hidden_rowcount").val();
-         var subtotal = parseFloat(0);
-         var discount = parseFloat(0);
-         var grand_total = parseFloat(0);
-         var vat_amt = parseFloat(0);
-         total_quantity = 0;
+      /* ---------- //CALCUALATED SALES qty and total price -------------*/
+      function cal_qty_price(i){
+         var bqty = (isNaN(parseFloat($("#td_data_"+i+"_10").val()))) ? 0 :parseFloat($("#td_data_"+i+"_10").val());
+         var s_box = (isNaN(parseFloat($("#td_data_"+i+"_3").val()))) ? 0 :parseFloat($("#td_data_"+i+"_3").val());
+         var box_qty = (isNaN(parseFloat($("#td_data_"+i+"_7").val()))) ? 0 :parseFloat($("#td_data_"+i+"_7").val());
+         var pieces  = (isNaN(parseFloat($("#td_data_"+i+"_8").val()))) ? 0 :parseFloat($("#td_data_"+i+"_8").val());
+         var s_price = (isNaN(parseFloat($("#td_data_"+i+"_2").val()))) ? 0 :parseFloat($("#td_data_"+i+"_2").val());
 
-         for(i=1; i < rowcount; i++){
-            // price cal
-            var qty = $("#td_data_" + i + "_3").val();
-            var unit_price = $("#td_data_" + i + "_10").val();
-            if (qty > 0 && unit_price > 0) {
-               sub_amt = (parseFloat(qty) * parseFloat(unit_price));
-               $("#td_data_" + i + "_9").val(sub_amt);
+         // cal total quantity and set in total quantity field
+         if (box_qty > 0 && bqty > 0 && s_box >= box_qty) {
+            var total_qty = (parseInt(box_qty * bqty)) + parseInt(pieces);
+         } else {
+            $("#td_data_"+i+"_7").val(0);
+            total_qty = parseInt(pieces);
+         }
+         $("#td_data_"+i+"_12").val(total_qty);  // set total quantity
 
-               // grand sub total
-               subtotal = subtotal + parseFloat(sub_amt);
-
-               // additional dis cal
-               var addi_dis = $("#addi_dis_" + i).val();
-               discount = discount + parseFloat((qty * addi_dis).toFixed(2));
-               $("#td_data_" + i + "_7").val(parseFloat((qty * addi_dis).toFixed(2)));
-
-               // vat cal
-               var vat_unit = $("#vat_unit_" + i).val();
-               vat_amt = vat_amt + parseFloat((vat_unit * qty).toFixed(2));
-               $("#td_data_" + i + "_8").val(parseFloat((qty * vat_unit).toFixed(2)));
-
-               total_quantity = total_quantity + parseInt(qty);
-            }
-
-         }//for end
-
-         //Show grand total
-         grand_total = grand_total + subtotal - discount + vat_amt;
-         $("#subtotal_amt").html(parseFloat(subtotal).toFixed(2));
-         $("#discount_to_all_amt").html(parseFloat(discount).toFixed(2));
-         $("#vat_grand").html(parseFloat(vat_amt).toFixed(2));
-         $("#total_amt").html(parseFloat(grand_total).toFixed(2));
-         $("#amount").val(parseFloat(grand_total).toFixed(2));
-
-         //Show total Sales Quantity
-         $(".total_quantity").html(total_quantity);
-
-         //alert("final_total() end");
+         // cal total Amount and set in total amount field
+         if (total_qty > 0 && s_price > 0) {
+            var total_amt = parseFloat(total_qty) * parseFloat(s_price);
+         } else {
+            total_amt = 0;
+         }
+         $("#td_data_"+i+"_13").val(total_amt);  // set total amount
+         final_total();
       }
+      /* ---------- CALCULATE END -------------*/
+
+      /* ---------- Final Description of amount ------------*/
+      function final_total(){
+         var rowcount=$("#hidden_rowcount").val();
+         //other charges total amount
+         var other_charges = 0;;
+         if($("#other_charges_input").val()!=null && $("#other_charges_input").val()!=''){
+            other_charges=$("#other_charges_input").val();
+         }
+         $("#other_charges_amt").html(parseFloat(other_charges).toFixed(2));
+
+         var sub_total = parseFloat(0);
+
+         for(i=1; i<=rowcount; i++){
+            var bqty = (isNaN(parseFloat($("#td_data_"+i+"_10").val()))) ? 0 :parseFloat($("#td_data_"+i+"_10").val());
+            var box_qty = (isNaN(parseFloat($("#td_data_"+i+"_7").val()))) ? 0 :parseFloat($("#td_data_"+i+"_7").val());
+            var pieces  = (isNaN(parseFloat($("#td_data_"+i+"_8").val()))) ? 0 :parseFloat($("#td_data_"+i+"_8").val());
+            var s_price = (isNaN(parseFloat($("#td_data_"+i+"_2").val()))) ? 0 :parseFloat($("#td_data_"+i+"_2").val());
+            // cal total quantity and set in total quantity field
+            if (box_qty > 0 && bqty > 0) {
+               var total_qty = (parseInt(box_qty * bqty)) + parseInt(pieces);
+            } else {
+               total_qty = parseInt(pieces);
+            }
+            $("#td_data_"+i+"_12").val(total_qty);  // set total quantity
+
+            // cal total Amount and set in total amount field
+            if (total_qty > 0 && s_price > 0) {
+               var total_amt = parseFloat(total_qty) * parseFloat(s_price);
+            } else {
+               total_amt = 0;
+            }
+            $("#td_data_"+i+"_13").val(total_amt);  // set total amount
+            sub_total += parseFloat(total_amt);
+
+         } //for end
+
+         //subtotal
+         $("#profit_total").html(0);
+         $("#subtotal_amt").html(sub_total.toFixed(2));
+         g_total = parseFloat(sub_total) + parseFloat(other_charges);
+         $("#total_amt").html(parseFloat(g_total).toFixed(2));
+         $("#amount").val(parseFloat(g_total).toFixed(2));
+      }
+      /* ---------- Final Description of amount end ------------*/
 
       function removerow(id){//id=Rowid\
          $("#row_"+id).remove();

@@ -259,11 +259,7 @@ $(document).ready(function() {
 });
 </script>
 <script src="<?php echo $theme_link; ?>js/sales-return.js"></script>
-<script type="text/javascript">
-  function print_invoice(id){
-  window.open("<?= base_url();?>sales_return/print_invoice_pos/"+id, "_blank", "scrollbars=1,resizable=1,height=500,width=500");
-}
-</script>
+
 <!-- Make sidebar menu hughlighter/selector -->
 <script>$(".<?php echo basename(__FILE__,'.php');?>-active-li").addClass("active");</script>
 
