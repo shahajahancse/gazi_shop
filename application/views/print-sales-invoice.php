@@ -1,25 +1,20 @@
-<!DOCTYPE html>
-<html>
-<title><?= $page_title;?>- Default Format</title>
-<head>
-<link rel='shortcut icon' href='<?php echo $theme_link; ?>images/favicon.ico' />
 
-<style>
-table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-    font-family: 'Open Sans', 'Martel Sans', sans-serif;
-}
-th, td {
-    padding: 5px;
-    text-align: left;   
-    vertical-align:top 
-}
-</style>
-</head>
-<body onload="window.print();"><!--  -->
-<?php
+<?php include"comman/code_css_form.php"; ?>
+<body class="hold-transition skin-blue" onload="window.print();">
+<div class="wrapper">
 
+  <div>
+    <!-- Content Header (Page header) -->
+  
+    <div class="row">
+      <div class="col-md-12">
+      <!-- ********** ALERT MESSAGE START******* -->
+      <?php include"comman/code_flashdata.php"; ?>
+      <!-- ********** ALERT MESSAGE END******* -->
+      </div>
+    </div>
+    <?php
+    $CI =& get_instance();
     $q1=$this->db->query("select * from db_company where id=1 and status=1");
     $res1=$q1->row();
     $company_name=$res1->company_name;
@@ -32,15 +27,13 @@ th, td {
     $company_address=$res1->address;
     $company_gst_no=$res1->gst_no;
     $company_vat_no=$res1->vat_no;
+    $company_pan_no=$res1->pan_no;
 
-    $q4=$this->db->query("select sales_invoice_footer_text from db_sitesettings where id=1");
-    $res4=$q4->row();
-    $sales_invoice_footer_text=$res4->sales_invoice_footer_text;
-    
+
     $q3=$this->db->query("SELECT a.customer_name,a.mobile,a.phone,a.gstin,a.tax_number,a.email,
                            a.opening_balance,a.country_id,a.state_id,a.city,
                            a.postcode,a.address,b.sales_date,b.created_time,b.reference_no,
-                           b.sales_code,b.sales_note,b.sales_status,
+                           b.sales_code,b.sales_status,b.sales_note,
                            coalesce(b.grand_total,0) as grand_total,
                            coalesce(b.subtotal,0) as subtotal,
                            coalesce(b.paid_amount,0) as paid_amount,
@@ -51,17 +44,15 @@ th, td {
                            b.discount_to_all_type,
                            coalesce(b.tot_discount_to_all_amt,0) as tot_discount_to_all_amt,
                            coalesce(b.round_off,0) as round_off,
-                           b.payment_status
-
+                           b.payment_status,b.pos
                            FROM db_customers a,
-                           db_sales b 
-                           WHERE 
-                           a.`id`=b.`customer_id` AND 
-                           b.`id`='$sales_id' 
-                           ");
-                           /*GROUP BY 
-                           b.`customer_code`*/
-    
+                           db_sales b
+                           WHERE
+                           a.`id`=b.`customer_id` AND
+                           b.`id`='$sales_id'
+    ");
+
+
     $res3=$q3->row();
     $customer_name=$res3->customer_name;
     $customer_mobile=$res3->mobile;
@@ -79,10 +70,10 @@ th, td {
     $created_time=$res3->created_time;
     $reference_no=$res3->reference_no;
     $sales_code=$res3->sales_code;
-    $sales_note=$res3->sales_note;
     $sales_status=$res3->sales_status;
+    $sales_note=$res3->sales_note;
 
-    
+
     $subtotal=$res3->subtotal;
     $grand_total=$res3->grand_total;
     $other_charges_input=$res3->other_charges_input;
@@ -95,49 +86,58 @@ th, td {
     $tot_discount_to_all_amt=$res3->tot_discount_to_all_amt;
     $round_off=$res3->round_off;
     $payment_status=$res3->payment_status;
-    
-    if(!empty($customer_country)){
-      $customer_country = $this->db->query("select country from db_country where id='$customer_country'")->row()->country;  
+    $pos=$res3->pos;
+
+    if (!empty($customer_country)) {
+      $q = $this->db->query("select country from db_country where id = ?", array($customer_country));
+      if ($q->num_rows() > 0) {
+        $row = $q->row();
+        $customer_country = $row->country;
+      }
     }
-    if(!empty($customer_state)){
-      $customer_state = $this->db->query("select state from db_states where id='$customer_state'")->row()->state;  
+    if (!empty($customer_state)) {
+      $q = $this->db->query("select state from db_states where id = ?", array($customer_state));
+      if ($q->num_rows() > 0) {
+        $row = $q->row();
+        $customer_state = $row->state;
+      }
     }
-    
 
     ?>
 
-<table align="center" width="100%" height='100%'>
-    <thead>
-      
-      <tr>
-          <th colspan="5" rowspan="2" style="padding-left: 15px;">
-            <b><?php echo $company_name; ?></b><br/>
-            <?php echo $this->lang->line('address')." : ".$company_address; ?><br/>
-            <?php echo $company_country; ?><br/>
-            <?php echo $this->lang->line('mobile').":".$company_mobile; ?><br/>
+
+    <!-- Main content -->
+    <section class="invoice">
+      <!-- title row -->
+      <div class="printableArea">
+      <div class="row">
+        <div class="col-xs-12">
+          <h2 class="page-header">
+            <i class="fa fa-globe"></i> <?= $this->lang->line('sales_invoice'); ?>
+            <small class="pull-right">Date: <?php echo  show_date($sales_date)." ".$created_time; ?></small>
+          </h2>
+        </div>
+      </div>
+      <div class="row invoice-info">
+        <div class="col-sm-4 invoice-col">
+          <i><?= $this->lang->line('from'); ?></i>
+          <address>
+            <strong><?php echo  $company_name; ?></strong><br>
+            <?php echo  $company_address; ?>,
+            <?= $this->lang->line('city'); ?>:<?php echo  $company_city; ?><br>
+            <?= $this->lang->line('phone'); ?>: <?php echo  $company_phone; ?>,
+            <?= $this->lang->line('mobile'); ?>: <?php echo  $company_mobile; ?><br>
             <?php echo (!empty(trim($company_email))) ? $this->lang->line('email').": ".$company_email."<br>" : '';?>
             <?php echo (!empty(trim($company_gst_no))) ? $this->lang->line('gst_number').": ".$company_gst_no."<br>" : '';?>
             <?php echo (!empty(trim($company_vat_no))) ? $this->lang->line('vat_number').": ".$company_vat_no."<br>" : '';?>
-          </th>
-          <th colspan="5" rowspan="1"><b style="text-transform: capitalize;"><?= $this->lang->line('sales_invoice'); ?> </b>(<?=$sales_status;?>)</th>
-            
-      </tr>
-      <tr>
-          <th colspan="3" rowspan="1">
-              <?= $this->lang->line('invoice_no'); ?> : <?php echo "$sales_code"; ?><br>
-              <?= $this->lang->line('reference_no'); ?> : <?php echo "$reference_no"; ?>
-          </th>  
-          <th colspan="2" rowspan="1"><?= $this->lang->line('date'); ?> : <?php echo show_date($sales_date)." ".$created_time; ?></th>
-      </tr>
-    
-
-
-      <tr>
-    <td colspan="5" style="padding-left: 15px;">
-    <b><?= $this->lang->line('customer_address'); ?></b><br/>
-    <?php echo $this->lang->line('name').": ".$customer_name; ?><br/>
-      <?php echo (!empty(trim($customer_mobile))) ? $this->lang->line('mobile').": ".$customer_mobile."<br>" : '';?>
-      <?php 
+            <?php echo (!empty(trim($company_pan_no))) ? $this->lang->line('vat_number').": ".$company_pan_no."<br>" : '';?>
+          </address>
+        </div>
+        <div class="col-sm-4 invoice-col">
+          <i><?= $this->lang->line('customer_details'); ?><br></i>
+          <address>
+            <strong><?php echo  $customer_name; ?></strong><br>
+            <?php
               if(!empty($customer_address)){
                 echo $customer_address;
               }
@@ -155,183 +155,107 @@ th, td {
               }
             ?>
             <br>
-      <?php echo (!empty(trim($customer_email))) ? $this->lang->line('email').": ".$customer_email."<br>" : '';?>
-      <?php echo (!empty(trim($customer_gst_no))) ? $this->lang->line('gst_number').": ".$customer_gst_no."<br>" : '';?>
-      <?php echo (!empty(trim($customer_tax_number))) ? $this->lang->line('tax_number').": ".$customer_tax_number."<br>" : '';?>
-  </td>
-    
-    <td colspan="5" style="padding-left: 15px;">
-    <b><?= $this->lang->line('shipping_address'); ?></b><br/>
-   <?php echo $this->lang->line('name').": ".$customer_name; ?><br/>
-      <?php echo (!empty(trim($customer_mobile))) ? $this->lang->line('mobile').": ".$customer_mobile."<br>" : '';?>
-      
-      <?php 
-              if(!empty($customer_address)){
-                echo $customer_address;
-              }
-              if(!empty($customer_country)){
-                echo $customer_country;
-              }
-              if(!empty($customer_state)){
-                echo ",".$customer_state;
-              }
-              if(!empty($customer_city)){
-                echo ",".$customer_city;
-              }
-              if(!empty($customer_postcode)){
-                echo "-".$customer_postcode;
-              }
-            ?>
-            <br>
-      <?php echo (!empty(trim($customer_email))) ? $this->lang->line('email').": ".$customer_email."<br>" : '';?>
-      <?php echo (!empty(trim($customer_gst_no))) ? $this->lang->line('gst_number').": ".$customer_gst_no."<br>" : '';?>
-      <?php echo (!empty(trim($customer_tax_number))) ? $this->lang->line('tax_number').": ".$customer_tax_number."<br>" : '';?>
-  </td>
-  </tr>
-  
-    
-  <tr>
-    <th rowspan='2'>#</th>
-    <th rowspan='2'><?= $this->lang->line('item_name'); ?></th>
-    <th rowspan='2'><?= $this->lang->line('sales_price'); ?></th>
-    <th rowspan='2'><?= $this->lang->line('quantity'); ?></th>
-    <th rowspan='2'><?= $this->lang->line('tax'); ?></th>
-    <th rowspan='2'><?= $this->lang->line('tax_amount'); ?></th>
-    <th rowspan='2'><?= $this->lang->line('discount'); ?></th>
-    <th rowspan='2'><?= $this->lang->line('discount_amount'); ?></th>
-    <th rowspan='2'><?= $this->lang->line('unit_cost'); ?></th>
-    <th rowspan='2'><?= $this->lang->line('total_amount'); ?></th>
-  </tr>
-  </thead>
-<tbody>
-  <tr>
- <?php
-              $i=0;
-              $tot_qty=0;
-              $tot_sales_price=0;
-              $tot_tax_amt=0;
-              $tot_discount_amt=0;
-              $tot_unit_total_cost=0;
-              $tot_total_cost=0;
-              $q2=$this->db->query("SELECT c.item_name, a.sales_qty,
-                                  a.price_per_unit, b.tax,b.tax_name,a.tax_amt,
-                                  a.unit_discount_per,a.discount_amt, a.unit_total_cost,
-                                  a.total_cost 
-                                  FROM 
-                                  db_salesitems AS a,db_tax AS b,db_items AS c 
-                                  WHERE 
-                                  c.id=a.item_id AND b.id=a.tax_id AND a.sales_id='$sales_id'");
-              foreach ($q2->result() as $res2) {
-                  $discount = (empty($res2->unit_discount_per)||$res2->unit_discount_per==0)? '0':$res2->unit_discount_per."%";
-                  $discount_amt = (empty($res2->discount_amt)||$res2->unit_discount_per==0)? '0':$res2->discount_amt."";
-                  echo "<tr>";  
-                  echo "<td>".++$i."</td>";
-                  echo "<td>".$res2->item_name."</td>";
-                  echo "<td>".$res2->price_per_unit."</td>";
-                  echo "<td>".$res2->sales_qty."</td>";
-                  echo "<td>".$res2->tax."%<br>".$res2->tax_name."</td>";
-                  echo "<td style='text-align: right;'>".$res2->tax_amt."</td>";
-                  echo "<td style='text-align: right;'>".$discount."</td>";
-                  echo "<td style='text-align: right;'>".$discount_amt."</td>";
-                  echo "<td style='text-align: right;'>".$res2->unit_total_cost."</td>";
-                  echo "<td style='text-align: right;'>".$res2->total_cost."</td>";
-                  echo "</tr>";  
-                  $tot_qty +=$res2->sales_qty;
-                  $tot_sales_price +=$res2->price_per_unit;
-                  $tot_tax_amt +=$res2->tax_amt;
-                  $tot_discount_amt +=$res2->discount_amt;
-                  $tot_unit_total_cost +=$res2->unit_total_cost;
-                  $tot_total_cost +=$res2->total_cost;
-              }
+            <?php echo (!empty(trim($customer_mobile))) ? $this->lang->line('mobile').": ".$customer_mobile."<br>" : '';?>
+            <?php echo (!empty(trim($customer_phone))) ? $this->lang->line('phone').": ".$customer_phone."<br>" : '';?>
+            <?php echo (!empty(trim($customer_email))) ? $this->lang->line('email').": ".$customer_email."<br>" : '';?>
+            <?php echo (!empty(trim($customer_gst_no))) ? $this->lang->line('gst_number').": ".$customer_gst_no."<br>" : '';?>
+            <?php echo (!empty(trim($customer_tax_number))) ? $this->lang->line('tax_number').": ".$customer_tax_number."<br>" : '';?>
+          </address>
+        </div>
+        <div class="col-sm-4 invoice-col">
+          <b><?= $this->lang->line('invoice'); ?> #<?php echo  $sales_code; ?></b><br>
+          <b><?= $this->lang->line('sales_status'); ?> :<?php echo  $sales_status; ?></b><br>
+          <b><?= $this->lang->line('reference_no'); ?> :<?php echo  $reference_no; ?></b><br>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 table-responsive">
+          <table class="table table-striped">
+            <thead style="border: 1px solid black;">
+            <tr>
+              <th style="border: 1px solid black;vertical-align: middle;" rowspan="2">#</th>
+              <th style="border: 1px solid black;vertical-align: middle;text-align: center;" rowspan="2">Product Name</th>
+              <th style="border: 1px solid black;text-align: center;" colspan="2">Load</th>
+              <th style="border: 1px solid black;text-align: center;" colspan="2">Return</th>
+              <th style="border: 1px solid black;text-align: center;">Damage</th>
+              <th style="border: 1px solid black;text-align: center;">Delivery</th>
+              <th style="border: 1px solid black;text-align: center;">Sales</th>
+              <th style="border: 1px solid black;text-align: center;">Damage</th>
+            </tr>
+            <tr>
+              <th style="border: 1px solid black;text-align: center;">Poly</th>
+              <th style="border: 1px solid black;text-align: center;">Pcs</th>
+              <th style="border: 1px solid black;text-align: center;">Poly</th>
+              <th style="border: 1px solid black;text-align: center;">Pcs</th>
+              <th style="border: 1px solid black;text-align: center;">Pcs</th>
+              <th style="border: 1px solid black;text-align: center;">Pcs</th>
+              <th style="border: 1px solid black;text-align: center;">TK</th>
+              <th style="border: 1px solid black;text-align: center;">TK.</th>
+            </tr>
+            </thead>
+            <tbody>
+              <?php 
+                @$sales_id = end(explode('/', $_SERVER['REQUEST_URI']));
+                $this->db->select('db_items.item_name,db_salesitems.sales_box,db_salesitems.price_per_unit,db_salesitems.sales_pieces,db_salesitems.sales_qty,db_salesitems.unit_total_cost,db_salesitems.total_cost,db_items.item_name as return_item_name,db_salesitemsreturn.return_box,db_salesitemsreturn.return_pieces,db_salesitemsreturn.return_qty,db_salesitemsreturn.damage,db_salesitemsreturn.total_cost as return_total_cost,db_salesitemsreturn.unit_total_cost as return_unit_total_cost');
+                $this->db->from('db_sales');
+                $this->db->join('db_salesitems','db_salesitems.sales_id = db_sales.id');
+                $this->db->join('db_items','db_items.id = db_salesitems.item_id');
+                $this->db->join('db_salesreturn','db_salesreturn.sales_id = db_salesitems.sales_id','left');
+                $this->db->join('db_salesitemsreturn','db_items.id = db_salesitemsreturn.item_id','left');
+                $this->db->where('db_sales.id', $sales_id);
+                $query = $this->db->get()->result();
+                // dd($query);
               ?>
-  </tr>
-  </tbody>
-<tfoot>
-  <tr>
-    <td colspan="3" style="text-align: center;font-weight: bold;"><?= $this->lang->line('total'); ?></td>
-    <td colspan="1" style="font-weight: bold;"><?=$tot_qty; ?></td>
-    <td colspan="1" style="">-</td>
-    <td colspan="1" style="text-align: right;" ><b><?php echo number_format(($tot_tax_amt),2,'.',''); ?></b></td>
-    <td colspan="1" style="">-</td>
-    <td colspan="1" style="text-align: right;" ><b><?php echo number_format(($tot_discount_amt),2,'.',''); ?></b></td>
-    <td colspan="1" style="text-align: right;" ><b><?php echo number_format(($tot_unit_total_cost),2,'.',''); ?></b></td>
-    <td colspan="1" style="text-align: right;" ><b><?php echo number_format(($tot_total_cost),2,'.',''); ?></b></td>
-  </tr>
-  <tr>
-    <td colspan="9" style="text-align: right;"><b><?= $this->lang->line('subtotal'); ?></b></td>
-    <td colspan="1" style="text-align: right;" ><b><?php echo number_format(round($subtotal),2,'.',''); ?></b></td>
-  </tr>
-  <tr>
-    <td colspan="9" style="text-align: right;"><b><?= $this->lang->line('other_charges'); ?></b></td>
-    <td colspan="1" style="text-align: right;" ><b><?php echo number_format(round($other_charges_amt),2,'.',''); ?></b></td>
-  </tr>
-  <tr>
-    <td colspan="9" style="text-align: right;"><b><?= $this->lang->line('discount_on_all'); ?>(<?= $discount_to_all_input." ".$discount_to_all_type; ?>)</b></td>
-    <td colspan="1" style="text-align: right;" ><b><?php echo number_format(round($tot_discount_to_all_amt),2,'.',''); ?></b></td>
-  </tr>
-  <tr>
-    <td colspan="9" style="text-align: right;"><b><?= $this->lang->line('grand_total'); ?></b></td>
-    <td colspan="1" style="text-align: right;" ><b><?php echo number_format(round($grand_total),2,'.',''); ?></b></td>
-  </tr>
-  <tr>
-    <td colspan="10">
-<?php
-      function no_to_words($no)
-      {   
-       $words = array('0'=> '' ,'1'=> 'One' ,'2'=> 'Two' ,'3' => 'Three','4' => 'Four','5' => 'Five','6' => 'Six','7' => 'Seven','8' => 'Eight','9' => 'Nine','10' => 'Ten','11' => 'Eleven','12' => 'Twelve','13' => 'Thirteen','14' => 'Fouteen','15' => 'Fifteen','16' => 'Sixteen','17' => 'Seventeen','18' => 'Eighteen','19' => 'Nineteen','20' => 'Twenty','30' => 'Thirty','40' => 'Fourty','50' => 'Fifty','60' => 'Sixty','70' => 'Seventy','80' => 'Eighty','90' => 'Ninty','100' => 'Hundred &','1000' => 'Thousand','100000' => 'Lakh','10000000' => 'Crore');
-        if($no == 0)
-          return ' ';
-        else {
-        $novalue='';
-        $highno=$no;
-        $remainno=0;
-        $value=100;
-        $value1=1000;       
-            while($no>=100)    {
-              if(($value <= $no) &&($no  < $value1))    {
-              $novalue=$words["$value"];
-              $highno = (int)($no/$value);
-              $remainno = $no % $value;
-              break;
-              }
-              $value= $value1;
-              $value1 = $value * 100;
-            }       
-            if(array_key_exists("$highno",$words))
-              return $words["$highno"]." ".$novalue." ".no_to_words($remainno);
-            else {
-             $unit=$highno%10;
-             $ten =(int)($highno/10)*10;            
-             return $words["$ten"]." ".$words["$unit"]." ".$novalue." ".no_to_words($remainno);
-             }
-        }
-      }
-      echo "<span class='amt-in-word'>Amount in words: <i style='font-weight:bold;'>".no_to_words(round($grand_total))." Only</i></span>";
+              <?php foreach($query as $row){?>
+              <tr style="text-align: center;">
+              <td style="border: 1px solid black;"><?= @$i+=1; ?></td>
+                <td style="border: 1px solid black;"><?= $row->item_name; ?></td>
+                <td style="border: 1px solid black;"><?= (isset($row->sales_box) && $row->sales_box != 0) ? $row->sales_box : ' '; ?></td>
+                <td style="border: 1px solid black;"><?= (isset($row->sales_qty) && $row->sales_qty != 0) ? $row->sales_qty : ' '; ?></td>
+                <td style="border: 1px solid black;"><?= (isset($row->return_box) && $row->return_box != 0) ? $row->return_box : ' '; ?></td>
+                <td style="border: 1px solid black;"><?= (isset($row->return_pieces) && $row->return_pieces != 0) ? $row->return_pieces : ' '; ?></td>
+                <td style="border: 1px solid black;"><?= (isset($row->damage) && $row->damage != 0) ? $row->damage : ' '; ?></td>
+                <td style="border: 1px solid black;"><?= (isset($row->return_qty) ? $row->return_qty : 0); ?></td>
+                <td style="border: 1px solid black;"><?= (isset($row->return_total_cost) ? round($row->return_total_cost,2) : 0); ?></td>
+                <td style="border: 1px solid black;"><?= (isset($row->return_unit_total_cost) && isset($row->damage) ? round($row->return_unit_total_cost*$row->damage,2) : 0); ?></td>
+              </tr>
+              <?php }?>
+              <tfoot>
+                <tr >
+                  <td colspan="2" style="text-align: center;border: 1px solid black;"><b>Total Amount</b></td>
+                  <td colspan="5" style="text-align: center;border: 1px solid black;"><b></b></td>
+                  <td colspan="1" style="text-align: center;border: 1px solid black;"><b>Total Sale</b></td>
+                  <td colspan="1" style="text-align: center;border: 1px solid black;"><b><?php echo  round($subtotal,2); ?></b></td>
+                  <td colspan="1" style="text-align: center;border: 1px solid black;"><b><?php echo  round($subtotal,2); ?></b></td>
+                </tr>
+                <tr >
+                  <td colspan="2" style="text-align: center;border: none; "><b></b></td>
+                  <td colspan="5" style="text-align: center;border: none;"><b></b></td>
+                  <td colspan="1" style="text-align: center;border: 1px solid black;"><b>Commission</b></td>
+                  <td colspan="1" style="text-align: center;border: 1px solid black;"></td>
+                  <td colspan="1" style="text-align: center;border: 1px solid black;"></td>
+                </tr>
 
-      ?>
-  
-</td>
-  </tr>
-
-  <tr>
-    <td colspan="5" style="height:100px;">
-      <b><?= $this->lang->line('customer_signature'); ?></b><br/>&nbsp;<br/>&nbsp;<br/>&nbsp;<br/>&nbsp;<br/>
-    </td>
-    <td colspan="5">
-      <b><?= $this->lang->line('authorised_signature'); ?></b><br/><br/><br/><br/><br/>
-    </td>
-  </tr>
-  <?php if(!empty($sales_invoice_footer_text)) {?>
-  <tr style="border-top: 1px solid;">
-    <td colspan="10" style="text-align: center;">
-      <b><?= $sales_invoice_footer_text; ?></b>
-    </td>
-  </tr>
-  <?php } ?>
-</tfoot>
-</table>
-
-
-
-</body>
-</html>
+                <tr >
+                  <td colspan="2" style="text-align: center;border: none;"><b></b></td>
+                  <td colspan="5" style="text-align: center;border: none;"><b></b></td>
+                  <td colspan="1" style="text-align: center;border: 1px solid black;"><b>Cash paid</b></td>
+                  <td colspan="1" style="text-align: center;border: 1px solid black;"></td>
+                  <td colspan="1" style="text-align: center;border: 1px solid black;"></td>
+                </tr>
+                <tr >
+                  <td colspan="2" style="text-align: center;border: 0px solid;"><b></b></td>
+                  <td colspan="5" style="text-align: center;border: none;"><b></b></td>
+                  <td colspan="1" style="text-align: center;border: 1px solid black;"><b>Total Due</b></td>
+                  <td colspan="1" style="text-align: center;border: 1px solid black;"></td>
+                  <td colspan="1" style="text-align: center;border: 1px solid black;"></td>
+                </tr>
+              </tfoot>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    </section>
+  </div>
+</div>
