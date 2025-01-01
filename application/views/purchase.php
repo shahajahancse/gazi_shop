@@ -186,12 +186,12 @@
                                  <thead class="custom_thead">
                                     <tr class="bg-primary" >
                                        <th class="left" rowspan='2' style="width:20%">Item Name</th>
-                                       <th class="center" rowspan='2' style="width:5%">Purchase Price </th>
+                                       <th class="center" rowspan='2' style="width:5%">DP. Price </th>
                                        <th class="center" rowspan='2' style="width:7.5%">Box/Poly</th>
                                        <th class="center" rowspan='2' style="width:9.5%">Pieces</th>
                                        <th class="center" rowspan='2' style="width:10%">Total Qty</th>
                                        <th class="center" rowspan='2' style="width:7.5%">Total Amount</th>
-                                       <th class="center" rowspan='2' style="width:7.5%">Sales Price</th>
+                                       <th class="center" rowspan='2' style="width:7.5%">TP Price</th>
                                        <th class="center" rowspan='2' style="width:7.5%">Profit Margin</th>
                                        <th class="center" rowspan='2' style="width:7.5%">Action</th>
                                     </tr>
