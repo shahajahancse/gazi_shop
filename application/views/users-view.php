@@ -10,7 +10,7 @@
 <div class="wrapper">
 
   <!-- Left side column. contains the logo and sidebar -->
-  
+
   <?php include"sidebar.php"; ?>
 
   <!-- Content Wrapper. Contains page content -->
@@ -60,7 +60,7 @@
                 </tr>
                 </thead>
                 <tbody>
- 
+
 					<?php
 					$i=1;
 
@@ -69,20 +69,18 @@
           $q1=$this->db->query($qs1);
 
 					if($q1->num_rows()>0){
-            foreach ($q1->result() as $res1){
-              
-							?>
+            foreach ($q1->result() as $res1){ if($res1->id==1) {continue;} ?>
 							<tr>
 							<td> <?php echo $i++;?> </td>
               <td> <?php echo $res1->username;?> </td>
               <td> <?php echo $res1->mobile;?> </td>
               <td> <?php echo $res1->email;?> </td>
               <td> <?php echo $res1->role_name;?> </td>
-							
+
 							<td> <?php echo show_date($res1->created_date);?> </td>
 							<td>
 								<?php
-                 if($res1->id==1)                   //1=Active, 0=Inactive
+                 if($res1->role_id==1)                   //1=Active, 0=Inactive
                  { echo "  <span  class='label label-default' disabled='disabled' style='cursor:disabled'>Restricted</span>"; }
 								 else if($res1->status==1)                   //1=Active, 0=Inactive
 								 { echo "  <span onclick='update_status(".$res1->id.",0)' id='span_".$res1->id."'  class='label label-success' style='cursor:pointer'>Active </span>"; }
@@ -105,7 +103,7 @@
                         </a>
                       </li>
                       <?php } ?>
-                      <?php if($CI->permissions('users_delete') && $res1->id!=1) { ?>
+                      <?php if($CI->permissions('users_delete') && $res1->role_id !=1) { ?>
                       <li>
                         <a style="cursor:pointer" title="Delete Record ?" onclick="delete_user(<?= $res1->id; ?>)">
                           <i class="fa fa-fw fa-trash text-red"></i>Delete
@@ -114,7 +112,7 @@
                       <?php } ?>
                     </ul>
                   </div>
-                
+
               </td>
 							</tr>
 							<?php
@@ -122,7 +120,7 @@
 					}
 					?>
                 </tbody>
-               
+
               </table>
             </div>
             <!-- /.box-body -->
@@ -154,7 +152,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
     //datatables
-   var table = $('#example2').DataTable({ 
+   var table = $('#example2').DataTable({
 
       /* FOR EXPORT BUTTONS START*/
   dom:'<"row margin-bottom-12"<"col-sm-12"<"pull-left"l><"pull-right"fr><"text-center margin-left-10 "B>>>tip',
@@ -173,7 +171,7 @@ $(document).ready(function() {
             { extend: 'pdf', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [0,1,2,3,4,5,6]} },
             { extend: 'print', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4,5,6]} },
             { extend: 'csv', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [0,1,2,3,4,5,6]} },
-            { extend: 'colvis', className: 'btn bg-teal color-palette btn-flat',text:'Columns' },  
+            { extend: 'colvis', className: 'btn bg-teal color-palette btn-flat',text:'Columns' },
 
             ]
         },
@@ -187,10 +185,10 @@ $(document).ready(function() {
             processing: '<div class="text-primary bg-primary" style="position: relative;z-index:100;overflow: visible;">Processing...</div>'
         },
         // Load data for the table's content from an Ajax source
-       
+
         //Set column definition initialisation properties.
         "columnDefs": [
-        { 
+        {
             "targets": [ 7 ], //first column / numbering column
             "orderable": false, //set not orderable
         },
@@ -198,13 +196,13 @@ $(document).ready(function() {
             "targets" :[0],
             "className": "text-center",
         },
-        
+
         ],
     });
     new $.fn.dataTable.FixedHeader( table );
 });
 </script>
 <script>$(".<?php echo basename(__FILE__,'.php');?>-active-li").addClass("active");</script>
-		
+
 </body>
 </html>
