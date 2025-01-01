@@ -5,7 +5,7 @@ class Sales_return_model extends CI_Model {
 
 	//Datatable start
 	var $table = 'db_salesreturn as a';
-	var $column_order = array( 'a.id','a.return_date','c.sales_code','a.return_code','a.reference_no','a.grand_total','a.payment_status','a.created_by','b.customer_name','a.paid_amount','a.return_status','a.pos'); //set column field database for datatable orderable
+	var $column_order = array( 'a.id','a.sales_id','a.return_date','c.sales_code','a.return_code','a.reference_no','a.grand_total','a.payment_status','a.created_by','b.customer_name','a.paid_amount','a.return_status','a.pos'); //set column field database for datatable orderable
 	var $column_search = array('a.id','a.return_date','c.sales_code','a.return_code','a.reference_no','a.grand_total','a.payment_status','a.created_by','b.customer_name','a.paid_amount','a.return_status','a.pos'); //set column field database for datatable searchable
 	var $order = array('a.id' => 'desc'); // default order
 
