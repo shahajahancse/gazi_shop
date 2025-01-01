@@ -63,13 +63,12 @@
                            coalesce(b.tot_discount_to_all_amt,0) as tot_discount_to_all_amt,
                            coalesce(b.round_off,0) as round_off,
                            b.payment_status,b.pos
-
                            FROM db_customers a,
                            db_sales b
                            WHERE
                            a.`id`=b.`customer_id` AND
                            b.`id`='$sales_id'
-                           ");
+    ");
 
 
     $res3=$q3->row();
@@ -202,7 +201,7 @@
             <thead class="bg-gray-active">
             <tr>
               <th style="vertical-align: middle;" rowspan="2">#</th>
-              <th style="vertical-align: middle;" rowspan="2">Product Name</th>
+              <th style="vertical-align: middle;text-align: center;" rowspan="2">Product Name</th>
               <th style="text-align: center;" colspan="2">Load</th>
               <th style="text-align: center;" colspan="2">Return</th>
               <th style="text-align: center;">Damage</th>
@@ -222,6 +221,28 @@
             </tr>
             </thead>
             <tbody>
+              <?php 
+                @$sales_id = end(explode('/', $_SERVER['REQUEST_URI']));
+                $this->db->select('db_items.item_name,db_salesitems.sales_box,db_salesitems.sales_pieces,db_salesitems.sales_qty,db_salesitems.unit_total_cost,db_salesitems.total_cost');
+                $this->db->from('db_sales');
+                $this->db->join('db_salesitems','db_salesitems.sales_id = db_sales.id');
+                $this->db->join('db_items','db_items.id = db_salesitems.item_id');
+                $this->db->where('db_sales.id', $sales_id);
+                $query = $this->db->get()->result();
+                dd($query);
+              ?>
+              <tr style="text-align: center;">
+                <td>1</td>
+                <td>Dummy Product</td>
+                <td>5</td>
+                <td>80</td>
+                <td>2</td>
+                <td>32</td>
+                <td>10</td>
+                <td>38</td>
+                <td>380</td>
+                <td>180</td>
+              </tr>
             </tbody>
           </table>
         </div>
