@@ -223,26 +223,30 @@
             <tbody>
               <?php 
                 @$sales_id = end(explode('/', $_SERVER['REQUEST_URI']));
-                $this->db->select('db_items.item_name,db_salesitems.sales_box,db_salesitems.sales_pieces,db_salesitems.sales_qty,db_salesitems.unit_total_cost,db_salesitems.total_cost');
+                $this->db->select('db_items.item_name,db_salesitems.sales_box,db_salesitems.price_per_unit,db_salesitems.sales_pieces,db_salesitems.sales_qty,db_salesitems.unit_total_cost,db_salesitems.total_cost,db_items.item_name as return_item_name,db_salesitemsreturn.return_box,db_salesitemsreturn.return_pieces,db_salesitemsreturn.return_qty,db_salesitemsreturn.damage,db_salesitemsreturn.total_cost as return_total_cost,db_salesitemsreturn.unit_total_cost as return_unit_total_cost');
                 $this->db->from('db_sales');
                 $this->db->join('db_salesitems','db_salesitems.sales_id = db_sales.id');
                 $this->db->join('db_items','db_items.id = db_salesitems.item_id');
+                $this->db->join('db_salesreturn','db_salesreturn.sales_id = db_salesitems.sales_id','left');
+                $this->db->join('db_salesitemsreturn','db_items.id = db_salesitemsreturn.item_id','left');
                 $this->db->where('db_sales.id', $sales_id);
                 $query = $this->db->get()->result();
-                dd($query);
+                // dd($query);
               ?>
+              <?php foreach($query as $row){?>
               <tr style="text-align: center;">
-                <td>1</td>
-                <td>Dummy Product</td>
-                <td>5</td>
-                <td>80</td>
-                <td>2</td>
-                <td>32</td>
-                <td>10</td>
-                <td>38</td>
-                <td>380</td>
-                <td>180</td>
+              <td><?= @$i+=1; ?></td>
+                <td><?= $row->item_name; ?></td>
+                <td><?= (isset($row->sales_box) && $row->sales_box != 0) ? $row->sales_box : ' '; ?></td>
+                <td><?= (isset($row->sales_qty) && $row->sales_qty != 0) ? $row->sales_qty : ' '; ?></td>
+                <td><?= (isset($row->return_box) && $row->return_box != 0) ? $row->return_box : ' '; ?></td>
+                <td><?= (isset($row->return_pieces) && $row->return_pieces != 0) ? $row->return_pieces : ' '; ?></td>
+                <td><?= (isset($row->damage) && $row->damage != 0) ? $row->damage : ' '; ?></td>
+                <td><?= (isset($row->return_qty) ? $row->return_qty : 0); ?></td>
+                <td><?= (isset($row->return_total_cost) ? round($row->return_total_cost,2) : 0); ?></td>
+                <td><?= (isset($row->return_unit_total_cost) && isset($row->damage) ? round($row->return_unit_total_cost*$row->damage,2) : 0); ?></td>
               </tr>
+              <?php }?>
             </tbody>
           </table>
         </div>
