@@ -186,9 +186,9 @@
         </div>
         <!-- /.col -->
         <div class="col-sm-4 invoice-col">
-          <b><?= $this->lang->line('invoice'); ?> #<?php echo  $sales_code; ?></b><br>
-          <b><?= $this->lang->line('sales_status'); ?> :<?php echo  $sales_status; ?></b><br>
-          <b><?= $this->lang->line('reference_no'); ?> :<?php echo  $reference_no; ?></b><br>
+          <b><?= $this->lang->line('invoice'); ?> : #<?php echo  $sales_code; ?></b><br>
+          <b><?= $this->lang->line('sales_status'); ?> : <?php echo  $sales_status; ?></b><br>
+          <b><?= $this->lang->line('reference_no'); ?> : <?php echo  $reference_no; ?></b><br>
         </div>
         <!-- /.col -->
       </div>
@@ -197,11 +197,11 @@
       <!-- Table row -->
       <div class="row">
         <div class="col-xs-12 table-responsive">
-                    <table class="table table-striped">
-            <thead style="border: 1px solid black;">
+          <table class="table table-striped">
+            <thead class="bg-gray-active" style="border: 1px solid black;">
             <tr>
-              <th style="border: 1px solid black;vertical-align: middle;" rowspan="2">#</th>
-              <th style="border: 1px solid black;vertical-align: middle;text-align: center;" rowspan="2">Product Name</th>
+              <th style="border: 1px solid black;vertical-align: middle;text-align: center;" rowspan="2">#</th>
+              <th style="border: 1px solid black;vertical-align: middle;text-align: left;" rowspan="2">Product Name</th>
               <th style="border: 1px solid black;text-align: center;" colspan="2">Load</th>
               <th style="border: 1px solid black;text-align: center;" colspan="2">Return</th>
               <th style="border: 1px solid black;text-align: center;">Damage</th>
@@ -236,7 +236,7 @@
               <?php foreach($query as $row){?>
               <tr style="text-align: center;">
               <td style="border: 1px solid black;"><?= @$i+=1; ?></td>
-                <td style="border: 1px solid black;"><?= $row->item_name; ?></td>
+                <td style="border: 1px solid black;text-align: left;" ><?= $row->item_name; ?></td>
                 <td style="border: 1px solid black;"><?= (isset($row->sales_box) && $row->sales_box != 0) ? $row->sales_box : ' '; ?></td>
                 <td style="border: 1px solid black;"><?= (isset($row->sales_qty) && $row->sales_qty != 0) ? $row->sales_qty : ' '; ?></td>
                 <td style="border: 1px solid black;"><?= (isset($row->return_box) && $row->return_box != 0) ? $row->return_box : ' '; ?></td>
@@ -247,35 +247,35 @@
                 <td style="border: 1px solid black;"><?= (isset($row->return_unit_total_cost) && isset($row->damage) ? round($row->return_unit_total_cost*$row->damage,2) : 0); ?></td>
               </tr>
               <?php }?>
-              <tfoot>
+              <tfoot >
                 <tr >
-                  <td colspan="2" style="text-align: center;border: 1px solid black;"><b>Total Amount</b></td>
-                  <td colspan="5" style="text-align: center;border: 1px solid black;"><b></b></td>
-                  <td colspan="1" style="text-align: center;border: 1px solid black;"><b>Total Sale</b></td>
-                  <td colspan="1" style="text-align: center;border: 1px solid black;"><b><?php echo  round($subtotal,2); ?></b></td>
-                  <td colspan="1" style="text-align: center;border: 1px solid black;"><b><?php echo  round($subtotal,2); ?></b></td>
+                  <td class="bg-gray-active" colspan="2" style="text-align: center;border: 1px solid black;"><b>Total Amount</b></td>
+                  <td class="bg-gray-active" colspan="5" style="text-align: center;border: 1px solid black;"><b></b></td>
+                  <td class="bg-gray-active" colspan="1" style="text-align: center;border: 1px solid black;"><b>Total Sale</b></td>
+                  <td class="bg-gray-active" colspan="1" style="text-align: center;border: 1px solid black;"><b><?php echo  round($subtotal,2); ?></b></td>
+                  <td class="bg-gray-active" colspan="1" style="text-align: center;border: 1px solid black;"><b>0</td>
                 </tr>
-                <tr >
+                <!-- <tr >
                   <td colspan="2" style="text-align: center;border: none; "><b></b></td>
                   <td colspan="5" style="text-align: center;border: none;"><b></b></td>
                   <td colspan="1" style="text-align: center;border: 1px solid black;"><b>Commission</b></td>
                   <td colspan="1" style="text-align: center;border: 1px solid black;"></td>
                   <td colspan="1" style="text-align: center;border: 1px solid black;"></td>
-                </tr>
+                </tr> -->
 
                 <tr >
                   <td colspan="2" style="text-align: center;border: none;"><b></b></td>
                   <td colspan="5" style="text-align: center;border: none;"><b></b></td>
-                  <td colspan="1" style="text-align: center;border: 1px solid black;"><b>Cash paid</b></td>
-                  <td colspan="1" style="text-align: center;border: 1px solid black;"></td>
-                  <td colspan="1" style="text-align: center;border: 1px solid black;"></td>
+                  <td  class="bg-gray-active" colspan="1" style="text-align: center;border: 1px solid black;"><b>Cash paid</b></td>
+                  <td  class="bg-gray-active" colspan="1" style="text-align: center;border: 1px solid black;"><b><?php echo  round($subtotal,2); ?></b></td>
+                  <td  class="bg-gray-active" colspan="1" style="text-align: center;border: 1px solid black;"><b>0</b></td>
                 </tr>
                 <tr >
                   <td colspan="2" style="text-align: center;border: 0px solid;"><b></b></td>
                   <td colspan="5" style="text-align: center;border: none;"><b></b></td>
-                  <td colspan="1" style="text-align: center;border: 1px solid black;"><b>Total Due</b></td>
-                  <td colspan="1" style="text-align: center;border: 1px solid black;"></td>
-                  <td colspan="1" style="text-align: center;border: 1px solid black;"></td>
+                  <td class="bg-gray-active" colspan="1" style="text-align: center;border: 1px solid black;"><b>Total Due</b></td>
+                  <td class="bg-gray-active" colspan="1" style="text-align: center;border: 1px solid black;"></td>
+                  <td class="bg-gray-active" colspan="1" style="text-align: center;border: 1px solid black;"></td>
                 </tr>
               </tfoot>
             </tbody>
