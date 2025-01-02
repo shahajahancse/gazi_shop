@@ -251,6 +251,7 @@ class Sales extends MY_Controller {
 		$data['page_title']=$this->lang->line('sales_invoice');
         $data=array_merge($data,array('sales_id'=>$sales_id));
         if(get_invoice_format_id()==2){
+			$this->load->view('print-sales-invoice-2',$data);
 		}
 		else{
 			$this->load->view('print-sales-invoice',$data);

@@ -198,7 +198,7 @@
       <div class="row">
         <div class="col-xs-12 table-responsive">
           <table class="table table-striped">
-            <thead class="bg-gray-active" style="border: 1px solid black;">
+            <thead style="border: 1px solid black;background-color: #b3cffc">
             <tr>
               <th style="border: 1px solid black;vertical-align: middle;text-align: center;" rowspan="2">#</th>
               <th style="border: 1px solid black;vertical-align: middle;text-align: left;" rowspan="2">Product Name</th>
@@ -223,12 +223,13 @@
             <tbody>
               <?php 
                 @$sales_id = end(explode('/', $_SERVER['REQUEST_URI']));
-                $this->db->select('db_items.item_name,db_salesitems.sales_box,db_salesitems.price_per_unit,db_salesitems.sales_pieces,db_salesitems.sales_qty,db_salesitems.unit_total_cost,db_salesitems.total_cost,db_items.item_name as return_item_name,db_salesitemsreturn.return_box,db_salesitemsreturn.return_pieces,db_salesitemsreturn.return_qty,db_salesitemsreturn.damage,db_salesitemsreturn.total_cost as return_total_cost,db_salesitemsreturn.unit_total_cost as return_unit_total_cost');
+                $this->db->select('db_items.item_name,db_salesitems.sales_box,db_salesitems.price_per_unit,db_salesitems.sales_pieces,db_salesitems.sales_qty,db_salesitems.unit_total_cost,db_salesitems.total_cost,db_items.item_name as return_item_name,db_salesitemsreturn.return_box,db_salesitemsreturn.return_pieces,db_salesitemsreturn.return_qty,db_salesitemsreturn.damage,db_salesitemsreturn.total_cost as return_total_cost,db_salesitemsreturn.unit_total_cost as return_unit_total_cost , db_salespayments.payment');
                 $this->db->from('db_sales');
                 $this->db->join('db_salesitems','db_salesitems.sales_id = db_sales.id');
                 $this->db->join('db_items','db_items.id = db_salesitems.item_id');
                 $this->db->join('db_salesreturn','db_salesreturn.sales_id = db_salesitems.sales_id','left');
                 $this->db->join('db_salesitemsreturn','db_items.id = db_salesitemsreturn.item_id','left');
+                $this->db->join('db_salespayments','db_sales.id = db_salespayments.sales_id','left');
                 $this->db->where('db_sales.id', $sales_id);
                 $query = $this->db->get()->result();
                 // dd($query);
@@ -236,24 +237,24 @@
               <?php foreach($query as $row){?>
               <tr style="text-align: center;">
               <td style="border: 1px solid black;"><?= @$i+=1; ?></td>
-                <td style="border: 1px solid black;text-align: left;" ><?= $row->item_name; ?></td>
-                <td style="border: 1px solid black;"><?= (isset($row->sales_box) && $row->sales_box != 0) ? $row->sales_box : ' '; ?></td>
-                <td style="border: 1px solid black;"><?= (isset($row->sales_qty) && $row->sales_qty != 0) ? $row->sales_qty : ' '; ?></td>
-                <td style="border: 1px solid black;"><?= (isset($row->return_box) && $row->return_box != 0) ? $row->return_box : ' '; ?></td>
-                <td style="border: 1px solid black;"><?= (isset($row->return_pieces) && $row->return_pieces != 0) ? $row->return_pieces : ' '; ?></td>
-                <td style="border: 1px solid black;"><?= (isset($row->damage) && $row->damage != 0) ? $row->damage : ' '; ?></td>
-                <td style="border: 1px solid black;"><?= (isset($row->return_qty) ? $row->return_qty : 0); ?></td>
-                <td style="border: 1px solid black;"><?= (isset($row->return_total_cost) ? round($row->return_total_cost,2) : 0); ?></td>
-                <td style="border: 1px solid black;"><?= (isset($row->return_unit_total_cost) && isset($row->damage) ? round($row->return_unit_total_cost*$row->damage,2) : 0); ?></td>
+                <td style="border: 1px solid black;text-align: left;background-color: #e9dc79;" ><?= $row->item_name; ?></td>
+                <td style="border: 1px solid black;background-color:#ace979"><?= (isset($row->sales_box) && $row->sales_box != 0) ? $row->sales_box : ' '; ?></td>
+                <td style="border: 1px solid black;background-color:#ace979"><?= (isset($row->sales_qty) && $row->sales_qty != 0) ? $row->sales_qty : ' '; ?></td>
+                <td style="border: 1px solid black;background-color:#bdf4a9"><?= (isset($row->return_box) && $row->return_box != 0) ? $row->return_box : ' '; ?></td>
+                <td style="border: 1px solid black;background-color:#bdf4a9"><?= (isset($row->return_pieces) && $row->return_pieces != 0) ? $row->return_pieces : ' '; ?></td>
+                <td style="border: 1px solid black;background-color:#aeb2b2"><?= (isset($row->damage) && $row->damage != 0) ? $row->damage : ' '; ?></td>
+                <td style="border: 1px solid black;background-color:#73e711"><?= (isset($row->return_qty) ? $row->return_qty : 0); ?></td>
+                <td style="border: 1px solid black;background-color:#bff98e"><?= (isset($row->return_total_cost) ? round($row->return_total_cost,2) : 0); ?></td>
+                <td style="border: 1px solid black;background-color:#aeb2b2"><?= (isset($row->return_unit_total_cost) && isset($row->damage) ? round($row->return_unit_total_cost*$row->damage,2) : 0); ?></td>
               </tr>
               <?php }?>
               <tfoot >
                 <tr >
-                  <td class="bg-gray-active" colspan="2" style="text-align: center;border: 1px solid black;"><b>Total Amount</b></td>
-                  <td class="bg-gray-active" colspan="5" style="text-align: center;border: 1px solid black;"><b></b></td>
-                  <td class="bg-gray-active" colspan="1" style="text-align: center;border: 1px solid black;"><b>Total Sale</b></td>
-                  <td class="bg-gray-active" colspan="1" style="text-align: center;border: 1px solid black;"><b><?php echo  round($subtotal,2); ?></b></td>
-                  <td class="bg-gray-active" colspan="1" style="text-align: center;border: 1px solid black;"><b>0</td>
+                  <td colspan="2" style="text-align: center;border: 1px solid black;background-color: #b3cffc"><b>Total Amount</b></td>
+                  <td colspan="5" style="text-align: center;border: 1px solid black;background-color: #b3cffc"><b></b></td>
+                  <td colspan="1" style="text-align: center;border: 1px solid black;background-color: #b3cffc"><b>Total Sale</b></td>
+                  <td colspan="1" style="text-align: center;border: 1px solid black;background-color: #b3cffc"><b><?php echo  round($subtotal,2); ?></b></td>
+                  <td colspan="1" style="text-align: center;border: 1px solid black;background-color: #aeb2b2"><b>0</td>
                 </tr>
                 <!-- <tr >
                   <td colspan="2" style="text-align: center;border: none; "><b></b></td>
@@ -266,16 +267,16 @@
                 <tr >
                   <td colspan="2" style="text-align: center;border: none;"><b></b></td>
                   <td colspan="5" style="text-align: center;border: none;"><b></b></td>
-                  <td  class="bg-gray-active" colspan="1" style="text-align: center;border: 1px solid black;"><b>Cash paid</b></td>
-                  <td  class="bg-gray-active" colspan="1" style="text-align: center;border: 1px solid black;"><b><?php echo  round($subtotal,2); ?></b></td>
-                  <td  class="bg-gray-active" colspan="1" style="text-align: center;border: 1px solid black;"><b>0</b></td>
+                  <td colspan="1" style="text-align: center;border: 1px solid black;background-color: #b3cffc"><b>Cash paid</b></td>
+                  <td colspan="1" style="text-align: center;border: 1px solid black;background-color: #b3cffc"><b><?php echo  round($row->payment,2); ?></b></td>
+                  <td colspan="1" style="text-align: center;border: 1px solid black;background-color: #aeb2b2"><b>0</b></td>
                 </tr>
                 <tr >
                   <td colspan="2" style="text-align: center;border: 0px solid;"><b></b></td>
                   <td colspan="5" style="text-align: center;border: none;"><b></b></td>
-                  <td class="bg-gray-active" colspan="1" style="text-align: center;border: 1px solid black;"><b>Total Due</b></td>
-                  <td class="bg-gray-active" colspan="1" style="text-align: center;border: 1px solid black;"></td>
-                  <td class="bg-gray-active" colspan="1" style="text-align: center;border: 1px solid black;"></td>
+                  <td colspan="1" style="text-align: center;border: 1px solid black;background-color: #b3cffc"><b>Total Due</b></td>
+                  <td colspan="1" style="text-align: center;border: 1px solid black;background-color: #b3cffc"><b><?php echo  round($subtotal-$row->payment,2); ?></b></td>
+                  <td colspan="1" style="text-align: center;border: 1px solid black;background-color: #aeb2b2"></td>
                 </tr>
               </tfoot>
             </tbody>
