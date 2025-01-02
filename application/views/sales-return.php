@@ -381,7 +381,8 @@
                            </div>
                            <!-- Payment section -->
                         </div>
-
+                        <!-- Item section -->
+                         
                         <!-- /.box-body -->
                         <div class="box-footer col-sm-12">
                            <center>

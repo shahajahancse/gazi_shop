@@ -132,7 +132,6 @@ class Purchase extends MY_Controller {
 												</a>
 											</li>';
 
-											if($this->permissions('purchase_add') || $this->permissions('purchase_edit'))
 											$str2.='<li>
 												<a title="Update Record ?" target="_blank" href="purchase/print_invoice/'.$purchase->id.'">
 													<i class="fa fa-fw fa-print text-blue"></i>Print
@@ -144,7 +143,7 @@ class Purchase extends MY_Controller {
 												</a>
 											</li>';
 
-											if($this->permissions('purchase_return'))
+											// if($this->permissions('purchase_return'))
 											$str2.='<li>
 												<a title="Purchase Return" href="purchase_return/add/'.$purchase->id.'">
 													<i class="fa fa-fw fa-undo text-blue"></i>Purchase Return

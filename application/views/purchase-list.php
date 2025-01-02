@@ -14,10 +14,10 @@
 <div class="wrapper">
 
   <!-- Left side column. contains the logo and sidebar -->
-  
+
   <?php include"sidebar.php"; ?>
 
-  <?php 
+  <?php
       /*Total Invoices*/
       $total_invoice=$this->db->query("SELECT COUNT(*) as total FROM db_purchase")->row()->total;
       /*Total Invoices Total*/
@@ -26,9 +26,9 @@
       $pur_return_total=$this->db->query("SELECT COALESCE(SUM(grand_total),0) AS pur_total FROM db_purchasereturn where purchase_id is not null")->row()->pur_total;
        //total purchase due
       //$purchase_due_total=$this->db->query("SELECT COALESCE(SUM(purchase_due),0) AS purchase_due FROM db_customers")->row()->purchase_due;
-      
+
       $purchase_due_total = $pur_total - $pur_return_total;
-     
+
   ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -151,9 +151,8 @@
                 </tr>
                 </thead>
                 <tbody>
-				
+
                 </tbody>
-               
               </table>
             </div>
             <!-- /.box-body -->
@@ -192,7 +191,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
     //datatables
-   var table = $('#example2').DataTable({ 
+   var table = $('#example2').DataTable({
 
       /* FOR EXPORT BUTTONS START*/
   dom:'<"row margin-bottom-12"<"col-sm-12"<"pull-left"l><"pull-right"fr><"text-center margin-left-10 "B>>>tip',
@@ -211,7 +210,7 @@ $(document).ready(function() {
             { extend: 'pdf', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4,5,6,7,8,9]} },
             { extend: 'print', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4,5,6,7,8,9]} },
             { extend: 'csv', className: 'btn bg-teal color-palette btn-flat',exportOptions: { columns: [1,2,3,4,5,6,7,8,9]} },
-            { extend: 'colvis', className: 'btn bg-teal color-palette btn-flat',text:'Columns' },  
+            { extend: 'colvis', className: 'btn bg-teal color-palette btn-flat',text:'Columns' },
 
             ]
         },
@@ -228,23 +227,22 @@ $(document).ready(function() {
         "ajax": {
             "url": "<?php echo site_url('purchase/ajax_list')?>",
             "type": "POST",
-            
+
             complete: function (data) {
-             $('.column_checkbox').iCheck({
+              $('.column_checkbox').iCheck({
                 checkboxClass: 'icheckbox_square-orange',
                 /*uncheckedClass: 'bg-white',*/
                 radioClass: 'iradio_square-orange',
                 increaseArea: '10%' // optional
               });
-             call_code();
+              call_code();
               //$(".delete_btn").hide();
-             },
-
+            },
         },
 
         //Set column definition initialisation properties.
         "columnDefs": [
-        { 
+        {
             "targets": [ 0,10 ], //first column / numbering column
             "orderable": false, //set not orderable
         },
@@ -252,7 +250,7 @@ $(document).ready(function() {
             "targets" :[0],
             "className": "text-center",
         },
-        
+
         ],
     });
     new $.fn.dataTable.FixedHeader( table );
@@ -261,6 +259,6 @@ $(document).ready(function() {
 <script src="<?php echo $theme_link; ?>js/purchase.js"></script>
 <!-- Make sidebar menu hughlighter/selector -->
 <script>$(".<?php echo basename(__FILE__,'.php');?>-active-li").addClass("active");</script>
-		
+
 </body>
 </html>
