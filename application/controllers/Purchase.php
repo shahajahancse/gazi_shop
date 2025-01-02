@@ -15,7 +15,7 @@ class Purchase extends MY_Controller {
 		$data['page_title']=$this->lang->line('purchase_list');
 		$this->load->view('purchase-list',$data);
 	}
-	
+
 	public function add()
 	{
 		$this->permission_check('purchase_add');
@@ -27,7 +27,7 @@ class Purchase extends MY_Controller {
 	public function purchase_save_and_update(){
 		$this->form_validation->set_rules('pur_date', 'Purchase Date', 'trim|required');
 		$this->form_validation->set_rules('supplier_id', 'Supplier Name', 'trim|required');
-		
+
 		if ($this->form_validation->run() == TRUE) {
 	    	$result = $this->purchase->verify_save_and_update();
 	    	echo $result;
@@ -35,7 +35,7 @@ class Purchase extends MY_Controller {
 			echo "Please Fill Compulsory(* marked) Fields.";
 		}
 	}
-	
+
 	public function update($id){
 		$this->permission_check('purchase_edit');
 		$data=$this->data;
@@ -43,12 +43,12 @@ class Purchase extends MY_Controller {
 		$data['page_title']=$this->lang->line('purchase');
 		$this->load->view('purchase', $data);
 	}
-	
+
 	//adding new item from Modal
 	public function newsupplier(){
-	
+
 		$this->form_validation->set_rules('supplier_name', 'supplier Name', 'trim|required');
-		
+
 		if ($this->form_validation->run() == TRUE) {
 			$this->load->model('suppliers_model');
 			$result=$this->suppliers_model->verify_and_save();
@@ -58,10 +58,10 @@ class Purchase extends MY_Controller {
 			$res['id']=$query->row()->id;
 			$res['supplier_name']=$query->row()->supplier_name;
 			$res['result']=$result;
-			
+
 			echo json_encode($res);
 
-		} 
+		}
 		else {
 			echo "Please Fill Compulsory(* marked) Fields.";
 		}
@@ -70,11 +70,11 @@ class Purchase extends MY_Controller {
 	public function ajax_list()
 	{
 		$list = $this->purchase->get_datatables();
-		
+
 		$data = array();
 		$no = $_POST['start'];
 		foreach ($list as $purchase) {
-			
+
 			$no++;
 			$row = array();
 			$row[] = '<input type="checkbox" name="checkbox[]" value='.$purchase->id.' class="checkbox column_checkbox" >';
@@ -110,12 +110,12 @@ class Purchase extends MY_Controller {
 												</a>
 											</li>';
 
-											if($this->permissions('purchase_edit'))
+											/* if($this->permissions('purchase_edit'))
 											$str2.='<li>
 												<a title="Update Record ?" href="purchase/update/'.$purchase->id.'">
 													<i class="fa fa-fw fa-edit text-blue"></i>Edit
 												</a>
-											</li>';
+											</li>'; */
 
 											if($this->permissions('purchase_payment_view'))
 											$str2.='
@@ -157,9 +157,9 @@ class Purchase extends MY_Controller {
 													<i class="fa fa-fw fa-trash text-red"></i>Delete
 												</a>
 											</li>
-											
+
 										</ul>
-									</div>';			
+									</div>';
 
 			$row[] = $str2;
 			$data[] = $row;
@@ -174,7 +174,7 @@ class Purchase extends MY_Controller {
 		//output to json format
 		echo json_encode($output);
 	}
-	
+
 	public function delete_purchase(){
 		$this->permission_check_with_msg('purchase_delete');
 		$id=$this->input->post('q_id');
@@ -195,7 +195,7 @@ class Purchase extends MY_Controller {
 	}
 	public function find_item_details(){
 		$id=$this->input->post('id');
-		
+
 		$result=$this->purchase->find_item_details($id);
 		echo $result;
 	}
@@ -211,8 +211,8 @@ class Purchase extends MY_Controller {
 		$data['page_title']=$this->lang->line('purchase_invoice');
 		$this->load->view('pur-invoice',$data);
 	}
-	
-	//Print Purchase invoice 
+
+	//Print Purchase invoice
 	public function print_invoice($purchase_id)
 	{
 		if(!$this->permissions('purchase_add') && !$this->permissions('purchase_edit')){
@@ -239,16 +239,16 @@ class Purchase extends MY_Controller {
         $html = $this->output->get_output();
         // Load pdf library
         $this->load->library('pdf');
-        
+
         // Load HTML content
         $this->dompdf->loadHtml($html);
-        
+
         // (Optional) Setup the paper size and orientation
         $this->dompdf->setPaper('A4', 'portrait');/*landscape or portrait*/
-        
+
         // Render the HTML as PDF
         $this->dompdf->render();
-        
+
         // Output the generated PDF (1 = download and 0 = preview)
         $this->dompdf->stream("Purchase_invoice_$purchase_id", array("Attachment"=>0));
 	}
@@ -285,12 +285,12 @@ class Purchase extends MY_Controller {
 		$this->permission_check_with_msg('purchase_add');
 		echo $this->purchase->save_payment();
 	}
-	
+
 	public function view_payments_modal(){
 		$this->permission_check_with_msg('purchase_view');
 		$purchase_id=$this->input->post('purchase_id');
 		echo $this->purchase->view_payments_modal($purchase_id);
 	}
 
-	
+
 }

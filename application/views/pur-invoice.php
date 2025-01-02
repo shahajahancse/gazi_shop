@@ -193,12 +193,12 @@
             <tr>
               <th>#</th>
               <th><?= $this->lang->line('item_name'); ?></th>
-              <th><?= $this->lang->line('purchase_price'); ?></th>
+              <th>DP. Price</th>
               <th>Box/Poly</th>
               <th>Pieces</th>
               <th>Quantity</th>
               <th><?= $this->lang->line('total_amount'); ?></th>
-              <th>Sale Price</th>
+              <th>TP. Price</th>
               <th>Profit</th>
             </tr>
             </thead>
@@ -340,12 +340,12 @@
       <div class="row no-print">
         <div class="col-xs-12">
           <?php if($CI->permissions('sales_edit')) { ?>
-          <a href="<?php echo $base_url; ?>purchase/update/<?php echo  $purchase_id ?>" class="btn btn-success">
+          <!-- <a href="<?php echo $base_url; ?>purchase/update/<?php echo  $purchase_id ?>" class="btn btn-success">
             <i class="fa  fa-edit"></i> Edit
-          </a>
+          </a> -->
           <?php } ?>
 
-          <a href='<?= base_url('items/labels/'.$purchase_id);?>' class="btn btn-info" title='Pop Up'><i class="fa fa-barcode"></i> Barcode</a>
+          <!-- <a href='<?= base_url('items/labels/'.$purchase_id);?>' class="btn btn-info" title='Pop Up'><i class="fa fa-barcode"></i> Barcode</a> -->
 
 
           <a href="<?php echo $base_url; ?>purchase/print_invoice/<?php echo  $purchase_id ?>" target="_blank" class="btn btn-warning">
