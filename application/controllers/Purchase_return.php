@@ -15,7 +15,7 @@ class Purchase_return extends MY_Controller {
 		$data['page_title']=$this->lang->line('purchase_returns_list');
 		$this->load->view('purchase-returns-list',$data);
 	}
-	
+
 	public function create(){
 		$this->permission_check('purchase_return_add');
 		$data=$this->data;
@@ -27,20 +27,19 @@ class Purchase_return extends MY_Controller {
 
 	public function add($id){
 		$this->permission_check('purchase_return_edit');
-
-		$q2=$this->db->query("select purchase_status from db_purchase where id=".$id);
-		if($q2->row()->purchase_status!='Received'){
+		/* $q2=$this->db->query("select purchase_status from db_purchase where id=".$id);
+		if($q2->row()->purchase_status != 'Received'){
 			$this->session->set_flashdata('warning','Sorry! '.$q2->row()->purchase_status.' Invoice could not be returned!');
 			redirect($_SERVER['HTTP_REFERER']);
 			exit();
-		}
+		} */
 
-		$q1=$this->db->query("select id from db_purchasereturn where purchase_id=".$id);
+		/* $q1=$this->db->query("select id from db_purchasereturn where purchase_id=".$id);
 		if($q1->num_rows()>0){
 			$this->session->set_flashdata('success','Purchase Return Invoice Already Generated!');
 			redirect(base_url('purchase_return/edit/'.$q1->row()->id),'refresh');exit();
-		}
-		
+		} */
+
 		$data=$this->data;
 		$data=array_merge($data,array('purchase_id'=>$id));
 		$data['page_title']=$this->lang->line('purchase_return');
@@ -52,7 +51,7 @@ class Purchase_return extends MY_Controller {
 	public function purchase_save_and_update(){
 		$this->form_validation->set_rules('return_date', 'Return Date', 'trim|required');
 		$this->form_validation->set_rules('supplier_id', 'Supplier Name', 'trim|required');
-		
+
 		if ($this->form_validation->run() == TRUE) {
 	    	$result = $this->purchase->verify_save_and_update();
 	    	echo $result;
@@ -60,7 +59,7 @@ class Purchase_return extends MY_Controller {
 			echo "Please Fill Compulsory(* marked) Fields.";
 		}
 	}
-	
+
 
 	public function edit($id){
 		$this->permission_check('purchase_return_edit');
@@ -71,14 +70,14 @@ class Purchase_return extends MY_Controller {
 		$data['page_title']=$this->lang->line('edit_purchase_return');
 		$this->load->view('purchase_return', $data);
 	}
-	
+
 	//adding new item from Modal
 	public function newsupplier(){
-	
+
 		$this->form_validation->set_rules('supplier_name', 'supplier Name', 'trim|required');
 		$this->form_validation->set_rules('mobile', 'Mobile', 'trim|required');
 		$this->form_validation->set_rules('state', 'State', 'trim|required');
-		
+
 		if ($this->form_validation->run() == TRUE) {
 			$this->load->model('suppliers_model');
 			$result=$this->suppliers_model->verify_and_save();
@@ -88,10 +87,10 @@ class Purchase_return extends MY_Controller {
 			$res['id']=$query->row()->id;
 			$res['supplier_name']=$query->row()->supplier_name;
 			$res['result']=$result;
-			
+
 			echo json_encode($res);
 
-		} 
+		}
 		else {
 			echo "Please Fill Compulsory(* marked) Fields.";
 		}
@@ -100,16 +99,16 @@ class Purchase_return extends MY_Controller {
 	public function ajax_list()
 	{
 		$list = $this->purchase->get_datatables();
-		
+
 		$data = array();
 		$no = $_POST['start'];
 		foreach ($list as $purchase) {
-			
+
 			$no++;
 			$row = array();
 			$row[] = '<input type="checkbox" name="checkbox[]" value='.$purchase->id.' class="checkbox column_checkbox" >';
 			$row[] = show_date($purchase->return_date);
-			
+
 			$row[] = $purchase->purchase_code;
 			$row[] = $purchase->return_code;
 			$row[] = $purchase->return_status;
@@ -173,16 +172,16 @@ class Purchase_return extends MY_Controller {
 												</a>
 											</li>';
 
-											
+
 											if($this->permissions('purchase_return_delete'))
 											$str2.='<li>
 												<a style="cursor:pointer" title="Delete Record ?" onclick="delete_return(\''.$purchase->id.'\')">
 													<i class="fa fa-fw fa-trash text-red"></i>Delete
 												</a>
 											</li>
-											
+
 										</ul>
-									</div>';			
+									</div>';
 
 			$row[] = $str2;
 			$data[] = $row;
@@ -197,7 +196,7 @@ class Purchase_return extends MY_Controller {
 		//output to json format
 		echo json_encode($output);
 	}
-	
+
 	public function delete_return(){
 		$this->permission_check_with_msg('purchase_return_delete');
 		$id=$this->input->post('q_id');
@@ -218,7 +217,7 @@ class Purchase_return extends MY_Controller {
 	}
 	public function find_item_details(){
 		$id=$this->input->post('id');
-		
+
 		$result=$this->purchase->find_item_details($id);
 		echo $result;
 	}
@@ -234,8 +233,8 @@ class Purchase_return extends MY_Controller {
 		$data['page_title']=$this->lang->line('purchase_return_invoice');
 		$this->load->view('pur-return-invoice',$data);
 	}
-	
-	//Print Purchase invoice 
+
+	//Print Purchase invoice
 	public function print_invoice($return_id)
 	{
 		if(!$this->permissions('purchase_return_add') && !$this->permissions('purchase_return_edit')){
@@ -262,16 +261,16 @@ class Purchase_return extends MY_Controller {
         $html = $this->output->get_output();
         // Load pdf library
         $this->load->library('pdf');
-        
+
         // Load HTML content
         $this->dompdf->loadHtml($html);
-        
+
         // (Optional) Setup the paper size and orientation
         $this->dompdf->setPaper('A4', 'portrait');/*landscape or portrait*/
-        
+
         // Render the HTML as PDF
         $this->dompdf->render();
-        
+
         // Output the generated PDF (1 = download and 0 = preview)
         $this->dompdf->stream("Purchase_return_invoice_$return_id", array("Attachment"=>0));
 	}
@@ -298,7 +297,7 @@ class Purchase_return extends MY_Controller {
 	public function purchase_list($purchase_id){
 		echo $this->purchase->purchase_list($purchase_id);
 	}
-	
+
 	public function delete_payment(){
 		$this->permission_check_with_msg('purchase_return_payment_delete');
 		$payment_id = $this->input->post('payment_id');
@@ -315,7 +314,7 @@ class Purchase_return extends MY_Controller {
 		$this->permission_check_with_msg('purchase_return_add');
 		echo $this->purchase->save_payment();
 	}
-	
+
 	public function view_payments_modal(){
 		$this->permission_check_with_msg('purchase_return_view');
 		$purchase_id=$this->input->post('purchase_id');
