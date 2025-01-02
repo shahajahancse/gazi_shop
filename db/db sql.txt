@@ -1,20 +1,7 @@
-ALTER TABLE `db_items` ADD `box_qty` INT NOT NULL DEFAULT '1' AFTER `unit_id`;
-ALTER TABLE `db_purchaseitems` ADD `box_qty` DECIMAL(12,2) NOT NULL DEFAULT '0' AFTER `item_id`, ADD `box_per_qty` DECIMAL(12,2) NOT NULL DEFAULT '0' AFTER `box_qty`, ADD `pieces` DECIMAL(12,2) NOT NULL DEFAULT '0' AFTER `box_per_qty`;
-ALTER TABLE `db_purchaseitems` ADD `profit_total` DECIMAL(12,2) NOT NULL DEFAULT '0' AFTER `profit_margin_per`;
-ALTER TABLE `db_sales` ADD `profit_total` DECIMAL(12,2) NOT NULL DEFAULT '0' AFTER `grand_total`;
-ALTER TABLE `db_salesitems` ADD `sales_box` INT NOT NULL DEFAULT '0' AFTER `item_id`, ADD `sales_pieces` INT NOT NULL DEFAULT '0' AFTER `sales_box`;
-ALTER TABLE `db_salesitems` ADD `purchase_price` DECIMAL(12,2) NOT NULL DEFAULT '0' AFTER `total_cost`, ADD `profit_per` DECIMAL(12,2) NOT NULL DEFAULT '0' AFTER `purchase_price`, ADD `tot_profit` DECIMAL(12,2) NOT NULL DEFAULT '0' AFTER `profit_per`;
-ALTER TABLE `db_sales` ADD `dsr_name` VARCHAR(128) NULL DEFAULT NULL AFTER `customer_id`;
-ALTER TABLE `db_salesitemsreturn` ADD `return_box` INT NULL DEFAULT '0' AFTER `item_id`, ADD `return_pieces` INT NULL DEFAULT '0' AFTER `return_box`;
-ALTER TABLE `db_salesitemsreturn` ADD `damage` INT NOT NULL DEFAULT '0' AFTER `return_qty`;
-ALTER TABLE `db_salesitemsreturn` ADD `box_qty` INT NOT NULL DEFAULT '0' AFTER `item_id`;
-ALTER TABLE `db_salesitemsreturn` ADD `sal_details_id` INT NULL DEFAULT NULL AFTER `sales_id`;
-ALTER TABLE `db_salesitemsreturn` ADD INDEX(`sales_id`);
-ALTER TABLE `db_salesitemsreturn` ADD INDEX(`return_id`);
-ALTER TABLE `db_salesitemsreturn` ADD INDEX(`item_id`);
-
-
-
+ALTER TABLE `db_purchaseitemsreturn` ADD `pur_details_id` INT NOT NULL AFTER `return_id`, ADD INDEX (`pur_details_id`);
+ALTER TABLE `db_purchaseitemsreturn` ADD INDEX(`return_id`);
+ALTER TABLE `db_purchaseitemsreturn` ADD INDEX(`item_id`);
+ALTER TABLE `db_purchaseitemsreturn` ADD `return_box` INT NOT NULL DEFAULT '0' AFTER `item_id`, ADD `box_qty` INT NOT NULL DEFAULT '0' AFTER `return_box`, ADD `return_pieces` INT NOT NULL DEFAULT '0' AFTER `box_qty`;
 
 
 

@@ -196,33 +196,29 @@ class Sales_return_model extends CI_Model {
 				$return_amt			=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_13']));
 
 				$salesitems_entry = array(
-							'sales_id' 			=> $sales_id,
-							'sal_details_id' 	=> $sal_details_id,
-		    				'return_id' 		=> $return_id,
-		    				'return_status'		=> $return_status,
-		    				'item_id' 			=> $item_id,
-		    				'box_qty' 			=> $box_qty,
+					'sales_id' 			=> $sales_id,
+					'sal_details_id' 	=> $sal_details_id,
+					'return_id' 		=> $return_id,
+					'return_status'		=> $return_status,
+					'item_id' 			=> $item_id,
+					'box_qty' 			=> $box_qty,
 
-		    				'return_box' 		=> $return_box,
-		    				'return_pieces' 	=> $return_pieces,
-		    				'damage' 			=> $damage,
-		    				'return_qty' 		=> $return_qty,
+					'return_box' 		=> $return_box,
+					'return_pieces' 	=> $return_pieces,
+					'damage' 			=> $damage,
+					'return_qty' 		=> $return_qty,
 
-		    				'price_per_unit' 	=> $return_price,
-		    				'tax_id' 			=> 0,
-		    				'tax_amt' 			=> 0,
-		    				'unit_discount_per' => 0,
-		    				'discount_amt' 		=> 0,
-		    				'unit_total_cost' 	=> $return_price,
-		    				'total_cost' 		=> $return_amt,
-		    				'status'	 		=> 1,
-
-		    			);
+					'price_per_unit' 	=> $return_price,
+					'tax_id' 			=> 0,
+					'tax_amt' 			=> 0,
+					'unit_discount_per' => 0,
+					'discount_amt' 		=> 0,
+					'unit_total_cost' 	=> $return_price,
+					'total_cost' 		=> $return_amt,
+					'status'	 		=> 1,
+				);
 
 				$q2 = $this->db->insert('db_salesitemsreturn', $salesitems_entry);
-
-				/*Find the Item Exist in sales entry or not*/
-				//$this->adjust_sales_item($sales_id,$item_id,$return_qty,$command);
 
 				//UPDATE itemS QUANTITY IN itemS TABLE
 				$this->load->model('pos_model');
@@ -230,29 +226,26 @@ class Sales_return_model extends CI_Model {
 				if(!$q6){
 					return "failed";
 				}
-
 			}
-
 		}//for end
 
 		if($amount>0 && !empty($payment_type)){
 			$salespayments_entry = array(
-					'sales_id' 			=> $sales_id,
-					'return_id' 		=> $return_id,
-					'payment_date'		=> $return_date,//Current Payment with sales entry
-					'payment_type' 		=> $payment_type,
-					'payment' 			=> $amount,
-					'payment_note' 		=> $payment_note,
-					'created_date' 		=> $CUR_DATE,
-    				'created_time' 		=> $CUR_TIME,
-    				'created_by' 		=> $CUR_USERNAME,
-    				'system_ip' 		=> $SYSTEM_IP,
-    				'system_name' 		=> $SYSTEM_NAME,
-    				'status' 			=> 1,
-				);
+				'sales_id' 			=> $sales_id,
+				'return_id' 		=> $return_id,
+				'payment_date'		=> $return_date,//Current Payment with sales entry
+				'payment_type' 		=> $payment_type,
+				'payment' 			=> $amount,
+				'payment_note' 		=> $payment_note,
+				'created_date' 		=> $CUR_DATE,
+				'created_time' 		=> $CUR_TIME,
+				'created_by' 		=> $CUR_USERNAME,
+				'system_ip' 		=> $SYSTEM_IP,
+				'system_name' 		=> $SYSTEM_NAME,
+				'status' 			=> 1,
+			);
 
 			$q3 = $this->db->insert('db_salespaymentsreturn', $salespayments_entry);
-
 		}
 
 
@@ -394,8 +387,7 @@ class Sales_return_model extends CI_Model {
 		$query=$this->db->query("select * from db_sales where upper(id)=upper('$id')");
 		if($query->num_rows()==0){
 			show_404();exit;
-		}
-		else{
+		} else{
 			$query=$query->row();
 			$data['q_id']=$query->id;
 			$data['item_code']=$query->item_code;

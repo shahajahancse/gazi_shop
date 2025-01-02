@@ -93,68 +93,52 @@ class Purchase_returns_model extends CI_Model {
 	public function verify_save_and_update(){
 		//Filtering XSS and html escape from user inputs
 		extract($this->xss_html_filter(array_merge($this->data,$_POST,$_GET)));
-		//echo "<pre>";print_r($this->xss_html_filter(array_merge($this->data,$_POST,$_GET)));exit();
-
+		if (empty($purchase_id)) {
+			return;
+		}
 		$this->db->trans_begin();
 		$return_date=date('Y-m-d',strtotime($return_date));
-
-		if($other_charges_input=='' || $other_charges_input==0){$other_charges_input=null;}
-	    if($other_charges_tax_id=='' || $other_charges_tax_id==0){$other_charges_tax_id=null;}
-	    if($other_charges_amt=='' || $other_charges_amt==0){$other_charges_amt=null;}
-	    if($discount_to_all_input=='' || $discount_to_all_input==0){$discount_to_all_input=null;}
-	    if($tot_discount_to_all_amt=='' || $tot_discount_to_all_amt==0){$tot_discount_to_all_amt=null;}
-	    if($tot_round_off_amt=='' || $tot_round_off_amt==0){$tot_round_off_amt=null;}
-	    $purchase_id = (isset($purchase_id)&&!empty($purchase_id)) ? $purchase_id : null;
-	    //If you are editing the return products.
-	    if(isset($return_id) && !empty($return_id)){
-			$previous_return=$this->db->query("select item_id,return_qty from db_purchaseitemsreturn where return_id=".$return_id);
-		}
-
 
 	    if($command=='save' || $command=='create'){//Create purchase code unique if first time entry
 		    $qs5="select purchase_return_init from db_company";
 			$q5=$this->db->query($qs5);
 			$purchase_return_init=$q5->row()->purchase_return_init;
-
 			$this->db->query("ALTER TABLE db_purchasereturn AUTO_INCREMENT = 1");
 			$q4=$this->db->query("select coalesce(max(id),0)+1 as maxid from db_purchasereturn");
 			$maxid=$q4->row()->maxid;
 			$return_code=$purchase_return_init.str_pad($maxid, 4, '0', STR_PAD_LEFT);
 
 		    $purchase_entry = array(
-		    				'purchase_id' 		=> $purchase_id,
-		    				'return_code' 			=> $return_code,
-		    				'reference_no' 				=> $reference_no,
-		    				'return_date' 			=> $return_date,
-		    				'return_status' 			=> $return_status,
-		    				'supplier_id' 				=> $supplier_id,
-		    				/*'warehouse_id' 				=> $warehouse_id,*/
-		    				/*Other Charges*/
-		    				'other_charges_input' 		=> $other_charges_input,
-		    				'other_charges_tax_id' 		=> $other_charges_tax_id,
-		    				'other_charges_amt' 		=> $other_charges_amt,
-		    				/*Discount*/
-		    				'discount_to_all_input' 	=> $discount_to_all_input,
-		    				'discount_to_all_type' 		=> $discount_to_all_type,
-		    				'tot_discount_to_all_amt' 	=> $tot_discount_to_all_amt,
-		    				/*Subtotal & Total */
-		    				'subtotal' 					=> $tot_subtotal_amt,
-		    				'round_off' 				=> $tot_round_off_amt,
-		    				'grand_total' 				=> $tot_total_amt,
-		    				'return_note' 			=> $return_note,
-		    				/*System Info*/
-		    				'created_date' 				=> $CUR_DATE,
-		    				'created_time' 				=> $CUR_TIME,
-		    				'created_by' 				=> $CUR_USERNAME,
-		    				'system_ip' 				=> $SYSTEM_IP,
-		    				'system_name' 				=> $SYSTEM_NAME,
-		    				'status' 					=> 1,
-		    			);
+				'purchase_id' 				=> $purchase_id,
+				'return_code' 				=> $return_code,
+				'reference_no' 				=> $reference_no,
+				'return_date' 				=> $return_date,
+				'return_status' 			=> $return_status,
+				'supplier_id' 				=> $supplier_id,
+				'other_charges_input' 		=> $other_charges_input,
+				'other_charges_tax_id' 		=> 0,
+				'other_charges_amt' 		=> $other_charges_amt,
+				'discount_to_all_input' 	=> $discount_to_all_input,
+				'discount_to_all_type' 		=> $discount_to_all_type,
+				'tot_discount_to_all_amt' 	=> 0,
+
+				'subtotal' 					=> $tot_subtotal_amt,
+				'round_off' 				=> 0,
+				'grand_total' 				=> $tot_total_amt,
+				'return_note' 				=> $return_note,
+
+				'created_date' 				=> $CUR_DATE,
+				'created_time' 				=> $CUR_TIME,
+				'created_by' 				=> $CUR_USERNAME,
+				'system_ip' 				=> $SYSTEM_IP,
+				'system_name' 				=> $SYSTEM_NAME,
+				'status' 					=> 1,
+			);
 
 			$q1 = $this->db->insert('db_purchasereturn', $purchase_entry);
 			$return_id = $this->db->insert_id();
-		}
-		else if($command=='update'){
+		}else if($command=='update'){
+			redirect('purchase_return','refresh');
 			$purchase_entry = array(
 							'purchase_id' 		=> $purchase_id,
 		    				'reference_no' 				=> $reference_no,
@@ -186,97 +170,63 @@ class Purchase_returns_model extends CI_Model {
 		}
 		//end
 
-		/*if(isset($return_id) && isset($previous_return)){
-			foreach ($previous_return->result() as $row){
-					if(!empty($purchase_id)){
-			         $this->adjust_purchase_item($purchase_id,$row->item_id,$row->return_qty,'add_qty_in_update_mode');
-					}
-			}
-		}*/
-
 		//Import post data from form
 		for($i=1;$i<=$rowcount;$i++){
-
-			if(isset($_REQUEST['tr_item_id_'.$i]) && !empty($_REQUEST['tr_item_id_'.$i])){
-
-				$item_id 			=$this->xss_html_filter(trim($_REQUEST['tr_item_id_'.$i]));
-				$return_qty		    =$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_3']));
-				$price_per_unit 	=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_4']));
-				$tax_id 			=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_15']));
-				$tax_amt 			=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_5']));
-				$unit_discount_per	=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_8']));
-				$unit_total_cost	=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_10']));
-				$total_cost			=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_9']));
-				//$profit_margin_per	=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_12']));
-				//$unit_sales_price	=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_13']));
-                $unit_discount_per  =(empty($unit_discount_per)) ? 0 : $unit_discount_per;
-
-				$discount_amt 		=(($return_qty * ($price_per_unit+$tax_amt))*$unit_discount_per)/100;
-
-				if($tax_id=='' || $tax_id==0){$tax_id=null;}
-				if($tax_amt=='' || $tax_amt==0){$tax_amt=null;}
-				if($unit_discount_per=='' || $unit_discount_per==0){$unit_discount_per=null;}
-				if($unit_total_cost=='' || $unit_total_cost==0){$unit_total_cost=null;}
-				if($total_cost=='' || $total_cost==0){$total_cost=null;}
-				//if($profit_margin_per=='' || $profit_margin_per==0){$profit_margin_per=null;}
-				//if($unit_sales_price=='' || $unit_sales_price==0){$unit_sales_price=null;}
-
-				if(!empty($discount_to_all_input) && $discount_to_all_input!=0){
-					$unit_discount_per =null;
-					$discount_amt =null;
-				}
-
+			if(isset($_REQUEST['item_id_'.$i]) && !empty($_REQUEST['item_id_'.$i])){
+				$item_id 			=$this->xss_html_filter(trim($_REQUEST['item_id_'.$i]));
+				$pur_details_id 	=$this->xss_html_filter(trim($_REQUEST['sal_details_id_'.$i]));
+				$price_per_unit		=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_2']));
+				$return_box			=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_7']));
+				$return_pieces		=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_8']));
+				$box_qty			=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_10']));
+				$return_qty			=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_12']));
+				$total_cost			=$this->xss_html_filter(trim($_REQUEST['td_data_'.$i.'_13']));
 
 				$purchaseitems_entry = array(
-		    				'purchase_id' 		=> $purchase_id,
-		    				'return_id' 		=> $return_id,
-		    				'return_status'	=> $return_status,
-		    				'item_id' 			=> $item_id,
-		    				'return_qty' 		=> $return_qty,
-		    				'price_per_unit' 	=> $price_per_unit,
-		    				'tax_id' 			=> $tax_id,
-		    				'tax_amt' 			=> $tax_amt,
-		    				'unit_discount_per' => $unit_discount_per,
-		    				'discount_amt' 		=> $discount_amt,
-		    				'unit_total_cost' 	=> $unit_total_cost,
-		    				'total_cost' 		=> $total_cost,
-		    				'status'			=> 1,
-		    			);
+					'purchase_id' 		=> $purchase_id,
+					'return_id' 		=> $return_id,
+					'pur_details_id' 	=> $pur_details_id,
+					'item_id' 			=> $item_id,
+					'return_status'		=> $return_status,
+					'return_box' 		=> $return_box,
+					'box_qty' 			=> $box_qty,
+					'return_pieces' 	=> $return_pieces,
+					'return_qty' 		=> $return_qty,
+					'price_per_unit' 	=> $price_per_unit,
+					'tax_id' 			=> 0,
+					'tax_amt' 			=> 0,
+					'unit_discount_per' => 0,
+					'discount_amt' 		=> 0,
+					'unit_total_cost' 	=> $price_per_unit,
+					'total_cost' 		=> $total_cost,
+					'status'			=> 1,
+				);
 				$q2 = $this->db->insert('db_purchaseitemsreturn', $purchaseitems_entry);
 
-				/*Find the Item Exist in Purchase entry or not*/
-				//$this->adjust_purchase_item($purchase_id,$item_id,$return_qty,$command);
-
-				//UPDATE itemS QUANTITY IN itemS TABLE
 				$this->load->model('pos_model');
 				$q6=$this->pos_model->update_items_quantity($item_id);
 				if(!$q6){
 					return "failed";
 				}
-
 			}
-
 		}//for end
 
-		if($amount=='' || $amount==0){$amount=null;}
 		if($amount>0 && !empty($payment_type)){
 			$purchasepayments_entry = array(
-					'purchase_id' 		=> $purchase_id,
-					'return_id' 		=> $return_id,
-					'payment_date'		=> $return_date,//Current Payment with Purchase entry
-					'payment_type' 		=> $payment_type,
-					'payment' 			=> $amount,
-					'payment_note' 		=> $payment_note,
-					'created_date' 		=> $CUR_DATE,
-    				'created_time' 		=> $CUR_TIME,
-    				'created_by' 		=> $CUR_USERNAME,
-    				'system_ip' 		=> $SYSTEM_IP,
-    				'system_name' 		=> $SYSTEM_NAME,
-    				'status' 			=> 1,
-				);
-
+				'purchase_id' 		=> $purchase_id,
+				'return_id' 		=> $return_id,
+				'payment_date'		=> $return_date,//Current Payment with Purchase entry
+				'payment_type' 		=> $payment_type,
+				'payment' 			=> $amount,
+				'payment_note' 		=> $payment_note,
+				'created_date' 		=> $CUR_DATE,
+				'created_time' 		=> $CUR_TIME,
+				'created_by' 		=> $CUR_USERNAME,
+				'system_ip' 		=> $SYSTEM_IP,
+				'system_name' 		=> $SYSTEM_NAME,
+				'status' 			=> 1,
+			);
 			$q3 = $this->db->insert('db_purchasepaymentsreturn', $purchasepayments_entry);
-
 		}
 
 		if(isset($purchase_id) && !empty($purchase_id)){
@@ -292,35 +242,7 @@ class Purchase_returns_model extends CI_Model {
 		$this->session->set_flashdata('success', 'Success!! Record Saved Successfully!');
 		return "success<<<###>>>$return_id";
 
-	}//verify_save_and_update() function end
-
-	/*public function adjust_purchase_item($purchase_id,$item_id,$return_qty,$command=null){
-		//Find the Item Exist in Purchase entry or not
-		//echo "adjust_purchase_item()";exit();
-				if(!empty($purchase_id)){
-					$q13=$this->db->query('select coalesce(sum(purchase_qty),0) as purchase_qty from db_purchaseitems where purchase_id='.$purchase_id.' and item_id='.$item_id);
-					if($q13->num_rows()>0){
-
-						$q15=$this->db->query('select coalesce(sum(return_qty),0) as return_qty from db_purchaseitemsreturn where purchase_id='.$purchase_id.' and item_id='.$item_id);
-						if($command=='save'){
-							$remaining_qty=($q13->row()->purchase_qty)-$return_qty;
-						}
-						else if($command=='add_qty_in_update_mode'){
-							$remaining_qty=($q13->row()->purchase_qty+$return_qty);
-						}
-						else{
-							$remaining_qty=($q13->row()->purchase_qty)-$return_qty;
-						}
-
-						//echo "\n(".$q13->row()->purchase_qty."+".$q15->row()->return_qty.")-".$return_qty;
-						//echo "\nremaining_qty=".$remaining_qty;
-						$q14=$this->db->query('update db_purchaseitems set purchase_qty='.$remaining_qty.' where purchase_id='.$purchase_id.' and item_id='.$item_id);
-
-
-
-					}
-				}
-	}*/
+	}
 
 	public function delete_payment($payment_id){
         $this->db->trans_begin();

@@ -27,19 +27,6 @@ class Purchase_return extends MY_Controller {
 
 	public function add($id){
 		$this->permission_check('purchase_return_edit');
-		/* $q2=$this->db->query("select purchase_status from db_purchase where id=".$id);
-		if($q2->row()->purchase_status != 'Received'){
-			$this->session->set_flashdata('warning','Sorry! '.$q2->row()->purchase_status.' Invoice could not be returned!');
-			redirect($_SERVER['HTTP_REFERER']);
-			exit();
-		} */
-
-		/* $q1=$this->db->query("select id from db_purchasereturn where purchase_id=".$id);
-		if($q1->num_rows()>0){
-			$this->session->set_flashdata('success','Purchase Return Invoice Already Generated!');
-			redirect(base_url('purchase_return/edit/'.$q1->row()->id),'refresh');exit();
-		} */
-
 		$data=$this->data;
 		$data=array_merge($data,array('purchase_id'=>$id));
 		$data['page_title']=$this->lang->line('purchase_return');
