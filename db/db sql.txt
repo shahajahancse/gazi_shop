@@ -1,9 +1,4 @@
-ALTER TABLE `db_purchaseitemsreturn` ADD `pur_details_id` INT NOT NULL AFTER `return_id`, ADD INDEX (`pur_details_id`);
-ALTER TABLE `db_purchaseitemsreturn` ADD INDEX(`return_id`);
-ALTER TABLE `db_purchaseitemsreturn` ADD INDEX(`item_id`);
-ALTER TABLE `db_purchaseitemsreturn` ADD `return_box` INT NOT NULL DEFAULT '0' AFTER `item_id`, ADD `box_qty` INT NOT NULL DEFAULT '0' AFTER `return_box`, ADD `return_pieces` INT NOT NULL DEFAULT '0' AFTER `box_qty`;
-
-
+INSERT INTO `db_permissions` (`id`, `role_id`, `permissions`) VALUES (NULL, '1', 'sales_due_report'), (NULL, '2', 'sales_due_report');
 
 
 

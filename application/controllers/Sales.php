@@ -221,12 +221,11 @@ class Sales extends MY_Controller {
 			$this->show_access_denied_page();
 		}
 		$data=$this->data;
-		$data=array_merge($data,array('sales_id'=>$sales_id));
+		$data=array_merge($data, array('sales_id' => $sales_id));
 		$data['page_title']=$this->lang->line('sales_invoice');
 		if(get_invoice_format_id()==2){
 			$this->load->view('print-sales-invoice-2',$data);
-		}
-		else{
+		}else{
 			$this->load->view('print-sales-invoice',$data);
 		}
 	}

@@ -7,9 +7,9 @@ class Reports extends MY_Controller {
 		$this->load_global();
 		$this->load->model('reports_model','reports');
 	}
-	
-		
-	//Sales Report 
+
+
+	//Sales Report
 	public function sales(){
 		$this->permission_check('sales_report');
 		$data=$this->data;
@@ -20,7 +20,7 @@ class Reports extends MY_Controller {
 		echo $this->reports->show_sales_report();
 	}
 
-	//Sales Return Report 
+	//Sales Return Report
 	public function sales_return(){
 		$this->permission_check('sales_return_report');
 		$data=$this->data;
@@ -30,6 +30,18 @@ class Reports extends MY_Controller {
 	public function show_sales_return_report(){
 		echo $this->reports->show_sales_return_report();
 	}
+
+	// sales due reports
+	public function sales_due(){
+		$this->permission_check('sales_report');
+		$data=$this->data;
+		$data['page_title'] = 'Sales Due Report';
+		$this->load->view('sales_due', $data);
+	}
+	public function show_sales_due(){
+		echo $this->reports->show_sales_due();
+	}
+	// sales due reports
 
 	//Purchase report
 	public function purchase(){
@@ -91,7 +103,7 @@ class Reports extends MY_Controller {
 	public function brand_wise_stock(){
 		echo $this->reports->brand_wise_stock();
 	}
-	//Item Sales Report 
+	//Item Sales Report
 	public function item_sales(){
 		$this->permission_check('item_sales_report');
 		$data=$this->data;
@@ -101,7 +113,7 @@ class Reports extends MY_Controller {
 	public function show_item_sales_report(){
 		echo $this->reports->show_item_sales_report();
 	}
-	
+
 	//Purchase Payments report
 	public function purchase_payments(){
 		$this->permission_check('purchase_payments_report');
@@ -123,7 +135,7 @@ class Reports extends MY_Controller {
 	public function show_sales_payments_report(){
 		echo $this->reports->show_sales_payments_report();
 	}
-	//Expired Items Report 
+	//Expired Items Report
 	public function expired_items(){
 		$this->permission_check('expired_items_report');
 		$data=$this->data;
@@ -134,6 +146,6 @@ class Reports extends MY_Controller {
 		echo $this->reports->show_expired_items_report();
 	}
 
-	
+
 }
 

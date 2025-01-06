@@ -358,7 +358,10 @@
             </a>
             <ul class="treeview-menu">
               <?php if($CI->permissions('sales_report')) { ?>
-              <li class="report-sales-active-li"><a href="<?php echo $base_url; ?>reports/sales" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('sales_report'); ?></span></a></li>
+                <li class="report-sales-active-li"><a href="<?php echo $base_url; ?>reports/sales" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('sales_report'); ?></span></a></li>
+              <?php } ?>
+              <?php if($CI->permissions('item_sales_report')) { ?>
+                <li class="report-sales-item-active-li"><a href="<?php echo $base_url; ?>reports/item_sales" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('item_sales_report'); ?></span></a></li>
               <?php } ?>
               <?php if($CI->permissions('sales_return_report')) { ?>
                 <li class="report-sales-return-active-li"><a href="<?php echo $base_url; ?>reports/sales_return" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('sales_return_report'); ?></span>
@@ -367,44 +370,35 @@
                   </span>
                 </a></li>
               <?php } ?>
-              <?php if($CI->permissions('purchase_report')) { ?>
-              <li class="report-purchase-active-li"><a href="<?php echo $base_url; ?>reports/purchase" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('purchase_report'); ?></span></a></li>
+              <?php if($CI->permissions('sales_payments_report')) { ?>
+                <li class="report-sales-payments-active-li"><a href="<?php echo $base_url; ?>reports/sales_payments" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('sales_payments_report'); ?></span></a></li>
               <?php } ?>
-              <?php if($CI->permissions('purchase_return_report')) { ?>
-              <li class="report-purchase-return-active-li"><a href="<?php echo $base_url; ?>reports/purchase_return" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('purchase_return_report'); ?></span>
-              <span class="pull-right-container" title="New">
-                    <small class="label pull-right bg-green"><i class="fa fa-fw fa-star-o"></i></small>
-                  </span>
-                </a></li>
+              <?php if($CI->permissions('sales_due_report')) { ?>
+                <li class="report-sales-payments-active-li"><a href="<?php echo $base_url; ?>reports/sales_due" ><i class="fa fa-files-o "></i> Sales Due</a></li>
               <?php } ?>
-              <?php if($CI->permissions('expense_report')) { ?>
-              <li class="report-expense-active-li"><a href="<?php echo $base_url; ?>reports/expense" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('expense_report'); ?></span></a></li>
-              <?php } ?>
+
               <?php if($CI->permissions('profit_report')) { ?>
-              <li class="report-profit-loss-active-li"><a href="<?php echo $base_url; ?>reports/profit_loss" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('profit_and_loss_report'); ?></span>
-              <span class="pull-right-container" title="New">
-                    <small class="label pull-right bg-green"><i class="fa fa-fw fa-star-o"></i></small>
-                  </span>
-                </a></li>
+                <li class="report-profit-loss-active-li"><a href="<?php echo $base_url; ?>reports/profit_loss" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('profit_and_loss_report'); ?></span> <span class="pull-right-container" title="New"> <small class="label pull-right bg-green"><i class="fa fa-fw fa-star-o"></i></small> </span> </a></li>
               <?php } ?>
               <?php if($CI->permissions('stock_report')) { ?>
-              <li class="report-stock-active-li"><a href="<?php echo $base_url; ?>reports/stock" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('stock_report'); ?></span>
-              <span class="pull-right-container" title="New">
-                    <small class="label pull-right bg-green"><i class="fa fa-fw fa-star-o"></i></small>
-                  </span>
+                <li class="report-stock-active-li"><a href="<?php echo $base_url; ?>reports/stock" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('stock_report'); ?></span> <span class="pull-right-container" title="New"> <small class="label pull-right bg-green"><i class="fa fa-fw fa-star-o"></i></small> </span> </a></li>
+              <?php } ?>
+
+              <?php if($CI->permissions('purchase_report')) { ?>
+                <li class="report-purchase-active-li"><a href="<?php echo $base_url; ?>reports/purchase" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('purchase_report'); ?></span></a></li>
+              <?php } ?>
+              <?php if($CI->permissions('purchase_return_report')) { ?>
+                <li class="report-purchase-return-active-li"><a href="<?php echo $base_url; ?>reports/purchase_return" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('purchase_return_report'); ?></span> <span class="pull-right-container" title="New"><small class="label pull-right bg-green"><i class="fa fa-fw fa-star-o"></i></small></span>
                 </a></li>
               <?php } ?>
-              <?php if($CI->permissions('item_sales_report')) { ?>
-              <li class="report-sales-item-active-li"><a href="<?php echo $base_url; ?>reports/item_sales" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('item_sales_report'); ?></span></a></li>
-              <?php } ?>
               <?php if($CI->permissions('purchase_payments_report')) { ?>
-              <li class="report-purchase-payments-active-li"><a href="<?php echo $base_url; ?>reports/purchase_payments" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('purchase_payments_report'); ?></span></a></li>
+                <li class="report-purchase-payments-active-li"><a href="<?php echo $base_url; ?>reports/purchase_payments" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('purchase_payments_report'); ?></span></a></li>
               <?php } ?>
-              <?php if($CI->permissions('sales_payments_report')) { ?>
-              <li class="report-sales-payments-active-li"><a href="<?php echo $base_url; ?>reports/sales_payments" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('sales_payments_report'); ?></span></a></li>
+              <?php if($CI->permissions('expense_report')) { ?>
+                <li class="report-expense-active-li"><a href="<?php echo $base_url; ?>reports/expense" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('expense_report'); ?></span></a></li>
               <?php } ?>
               <?php if($CI->permissions('expired_items_report')) { ?>
-              <li class="report-expired-items-active-li"><a href="<?php echo $base_url; ?>reports/expired_items" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('expired_items_report'); ?></span></a></li>
+                <li class="report-expired-items-active-li"><a href="<?php echo $base_url; ?>reports/expired_items" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('expired_items_report'); ?></span></a></li>
               <?php } ?>
             </ul>
           </li>
