@@ -88,7 +88,7 @@
               <div class="box-footer">
                 <div class="col-sm-8 col-sm-offset-2 text-center">
                   <div class="col-md-3 col-md-offset-3">
-                      <button type="button" onclick="sales_due()" class=" btn btn-block btn-success">Show</button>
+                      <button type="button" onclick="sales_due()" class="btn btn-block btn-success">Show</button>
                   </div>
                   <div class="col-sm-3">
                     <a href="<?=base_url('dashboard');?>">
@@ -124,14 +124,12 @@
                 <thead>
                 <tr>
                   <th style="">#</th>
-                  <th style=""><?= $this->lang->line('invoice_no'); ?></th>
-                  <th style=""><?= $this->lang->line('sales_date'); ?></th>
-                  <th style=""><?= $this->lang->line('customer_id'); ?></th>
-                  <th style=""><?= $this->lang->line('customer_name'); ?></th>
-                  <th style=""><?= "Vat(%)" ?></th>
-                  <th style="text-align:right"><?= $this->lang->line('invoice_total'); ?>(<?= $CI->currency(); ?>)</th>
-                  <th style="text-align:right"><?= $this->lang->line('paid_amount'); ?>(<?= $CI->currency(); ?>)</th>
-                  <!-- <th style="text-align:right"><?= $this->lang->line('due_amount'); ?>(<?= $CI->currency(); ?>)</th> -->
+                  <th style="">Customer Name</th>
+                  <th style="">Total Sale</th>
+                  <th style="">Sale Return</th>
+                  <th style="">Total Paid</th>
+                  <th style="">Total Due</th>
+                  <th style="">Action</th>
                 </tr>
                 </thead>
                 <tbody id="tbodyid">

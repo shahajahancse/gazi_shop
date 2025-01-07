@@ -3,6 +3,79 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Reports_model extends CI_Model {
 
+	public function show_sales_due(){
+		extract($_POST);
+
+		$from_date = date("Y-m-d",strtotime($from_date));
+		$to_date = date("Y-m-d",strtotime($to_date));
+
+		$this->db->select("
+				s.customer_id, c.customer_name,c.mobile,c.phone,c.email,
+				COALESCE(SUM(s.subtotal),0) as subtotal,
+				COALESCE(SUM(s.grand_total),0) as grand_total,
+				COALESCE(SUM(sr.grand_total),0) as return_amt,
+				COALESCE((SELECT SUM(sp.payment) FROM db_salespayments as sp WHERE s.id = sp.sales_id),0) as paid_amount,
+		");
+		$this->db->from('db_sales s');
+		$this->db->join('db_customers c', 's.customer_id = c.id','left');
+		$this->db->join('db_salesreturn sr', 's.customer_id = sr.customer_id AND s.id = sr.sales_id','left');
+		if (!empty($customer_id)) {
+		  $this->db->where('s.customer_id', $customer_id);
+	  	}
+		if (!empty($from_date) && !empty($to_date)) {
+			$this->db->where('s.sales_date >=', $from_date);
+			$this->db->where('s.sales_date <=', $to_date);
+		}
+		$this->db->group_by('s.customer_id');
+		$q1 = $this->db->get()->result();
+		$gtotal = 0;
+		$greturn = 0;
+		$gpaid = 0;
+		if(!empty($q1)){
+			foreach ($q1 as $k => $r) {
+				$tt = $r->grand_total - ($r->return_amt  + $r->paid_amount);
+				$gtotal = $r->grand_total + $gtotal;
+				$greturn = $r->return_amt + $greturn;
+				$gpaid = $r->paid_amount + $gpaid;
+				echo "<tr>";
+					echo "<td>".($k + 1)."</td>";
+					echo "<td>".$r->customer_name."</td>";
+					echo "<td>".number_format($r->grand_total,2,'.','')."</td>";
+					echo "<td>".number_format($r->return_amt,2,'.','')."</td>";
+					echo "<td>".number_format($r->paid_amount,2,'.','')."</td>";
+					echo "<td>".number_format($tt,2,'.','')."</td>"; ?>
+					<td>
+						<div class='btn-group'>
+							<a class='btn btn-primary btn-o dropdown-toggle' data-toggle='dropdown'> Action <span class='caret'></span> </a>
+							<ul role='menu' class='dropdown-menu dropdown-light pull-right'>
+								<li><a style="cursor: pointer" onclick="print_due(<?= $r->customer_id ?>)"> View Print</a></li>
+							</ul>
+						</div>
+					</td>
+				</tr>
+			<?php }
+
+			echo "<tr>
+				<td class='text-center text-bold' colspan='2'><b>Total :</b></td>
+				<td class='text-bold'>".number_format($gtotal,2,'.','')."</td>
+				<td class='text-bold'>".number_format($greturn,2,'.','')."</td>
+				<td class='text-bold'>".number_format($gpaid,2,'.','')."</td>
+				<td class='text-bold'>".number_format($gtotal - ($greturn + $gpaid), 2,'.','')."</td>
+				<td><a class='btn btn-success' onclick='print_all_due' >Print All</a></td>
+			</tr>";
+		}else{
+			echo "<tr>";
+			echo "<td class='text-center text-danger' colspan=13>No Records Found</td>";
+			echo "</tr>";
+		}
+	    exit;
+	}
+
+
+
+
+
+	// old code
 	public function show_sales_report(){
 		extract($_POST);
 
@@ -65,73 +138,6 @@ class Reports_model extends CI_Model {
 			echo "<td class='text-center text-danger' colspan=13>No Records Found</td>";
 			echo "</tr>";
 		}
-	    exit;
-	}
-
-	public function show_sales_due(){
-		extract($_POST);
-		dd($_POST);
-
-		$from_date=date("Y-m-d",strtotime($from_date));
-		$to_date=date("Y-m-d",strtotime($to_date));
-
-		$this->db->select("a.id,a.sales_code,a.sales_date,b.customer_name,b.customer_code,a.grand_total,a.paid_amount, a.other_charges_tax_id as vat_id");
-
-		if($customer_id!=''){
-
-			$this->db->where("a.customer_id=$customer_id");
-		}
-		if($view_all=="no"){
-			$this->db->where("(a.sales_date>='$from_date' and a.sales_date<='$to_date')");
-		}
-		$this->db->where("b.`id`= a.`customer_id`");
-		$this->db->from("db_sales as a");
-		$this->db->where("a.`sales_status`= 'Final'");
-		$this->db->from("db_customers as b");
-
-
-
-		//echo $this->db->get_compiled_select();exit();
-
-		$q1=$this->db->get();
-		// echo "<pre>";print_r($q1->result());exit;
-		if($q1->num_rows()>0){
-			$i=0;
-			$tot_grand_total=0;
-			$tot_paid_amount=0;
-			$tot_due_amount=0;
-			foreach ($q1->result() as $res1) {
-				echo "<tr>";
-				echo "<td>".++$i."</td>";
-				echo "<td><a title='View Invoice' href='".base_url("sales/invoice/$res1->id")."'>".$res1->sales_code."</a></td>";
-				echo "<td>".show_date($res1->sales_date)."</td>";
-				echo "<td>".$res1->customer_code."</td>";
-				echo "<td>".$res1->customer_name."</td>";
-				$vat = $this->db->where("id",$res1->vat_id)->get('db_tax')->row();
-				echo "<td>". ceil($vat->tax)."% </td>";
-				echo "<td class='text-right'>".number_format($res1->grand_total,2,'.','')."</td>";
-				echo "<td class='text-right'>".number_format($res1->paid_amount,2,'.','')."</td>";
-				// echo "<td class='text-right'>".number_format(($res1->grand_total-$res1->paid_amount),2,'.','')."</td>";
-				echo "</tr>";
-				$tot_grand_total+=$res1->grand_total;
-				$tot_paid_amount+=$res1->paid_amount;
-				// $tot_due_amount+=($res1->grand_total-$res1->paid_amount);
-
-			}
-
-			echo "<tr>
-					  <td class='text-right text-bold' colspan='6'><b>Total :</b></td>
-					  <td class='text-right text-bold'>".number_format($tot_grand_total,2,'.','')."</td>
-					  <td class='text-right text-bold'>".number_format($tot_paid_amount,2,'.','')."</td>
-					  </tr>";
-					}
-					//   <td class='text-right text-bold'>".number_format($tot_due_amount,2,'.','')."</td>
-		else{
-			echo "<tr>";
-			echo "<td class='text-center text-danger' colspan=13>No Records Found</td>";
-			echo "</tr>";
-		}
-
 	    exit;
 	}
 

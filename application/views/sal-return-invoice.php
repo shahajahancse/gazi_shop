@@ -273,11 +273,11 @@
             <tfoot class="text-right text-bold bg-gray">
               <tr>
                 <td colspan="2" class="">Total</td>
-                <td><?=$tot_qty;?></td>
                 <td>-</td>
-                <td><?= $CI->currency(number_format($unit_cost,2,'.','')) ;?></td>
-                <td><?= $CI->currency(number_format($tax_amt,2,'.','')) ;?></td>
-                <td><?= $CI->currency(number_format($dis_amt,2,'.','')) ;?></td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
                 <td><?= $CI->currency(number_format($total_cost,2,'.','')) ;?></td>
               </tr>
             </tfoot>

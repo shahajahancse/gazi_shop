@@ -8,7 +8,60 @@ class Reports extends MY_Controller {
 		$this->load->model('reports_model','reports');
 	}
 
+	// sales due reports
+	public function sales_due(){
+		$this->permission_check('sales_report');
+		$data=$this->data;
+		$data['page_title'] = 'Sales Due Report';
+		$this->load->view('sales_due', $data);
+	}
+	public function show_sales_due(){
+		echo $this->reports->show_sales_due();
+	}
+	public function single_customer_due(){
+		$from_date = date("Y-m-d",strtotime($_POST['from_date']));
+		$to_date = date("Y-m-d",strtotime($_POST['to_date']));
+		$customer_id = $this->input->post('customer_id');
+		$excel = $this->input->post('excel');
 
+		$this->db->select("
+			s.sales_code, s.customer_id, c.customer_name, c.mobile,c.phone,c.email,
+			COALESCE(SUM(s.subtotal),0) as subtotal,
+			COALESCE(SUM(s.grand_total),0) as grand_total,
+			COALESCE(SUM(sr.grand_total),0) as return_amt,
+			COALESCE(SUM(sp.payment)) as paid_amount,
+			s.created_date,
+		");
+		$this->db->from('db_sales s');
+		$this->db->join('db_customers c', 's.customer_id = c.id','left');
+		$this->db->join('db_salesreturn sr', 's.customer_id = sr.customer_id AND s.id = sr.sales_id','left');
+		$this->db->join('db_salespayments sp', 's.id = sp.sales_id','left');
+
+		if (!empty($customer_id)) {
+		  $this->db->where('s.customer_id', $customer_id);
+	  	}
+		if (!empty($from_date) && !empty($to_date)) {
+			$this->db->where('s.sales_date >=', $from_date);
+			$this->db->where('s.sales_date <=', $to_date);
+		}
+		$this->db->group_by('s.id');
+		$sql = $this->db->get()->result();
+		$data['results'] = $sql;
+		$data['from_date'] = $from_date;
+		$data['to_date'] = $to_date;
+		if ($excel == 1) {
+			// dd($data['results']);
+			$this->load->view('single_customer_due_excel', $data);
+		} else {
+			$this->load->view('single_customer_due', $data);
+		}
+		exit;
+	}
+	// sales due reports
+
+
+
+	// old code
 	//Sales Report
 	public function sales(){
 		$this->permission_check('sales_report');
@@ -30,18 +83,6 @@ class Reports extends MY_Controller {
 	public function show_sales_return_report(){
 		echo $this->reports->show_sales_return_report();
 	}
-
-	// sales due reports
-	public function sales_due(){
-		$this->permission_check('sales_report');
-		$data=$this->data;
-		$data['page_title'] = 'Sales Due Report';
-		$this->load->view('sales_due', $data);
-	}
-	public function show_sales_due(){
-		echo $this->reports->show_sales_due();
-	}
-	// sales due reports
 
 	//Purchase report
 	public function purchase(){
