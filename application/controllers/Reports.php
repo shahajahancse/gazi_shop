@@ -59,6 +59,16 @@ class Reports extends MY_Controller {
 	}
 	// sales due reports
 
+	// sales damage report
+	function damage_report() {
+		$this->permission_check('sales_report');
+		$data=$this->data;
+		$data['page_title'] = 'Sales Damage Report';
+		$this->load->view('damage_report', $data);
+	}
+	public function damage_ajax_list(){
+		echo $this->reports->damage_ajax_list();
+	}
 
 
 	// old code

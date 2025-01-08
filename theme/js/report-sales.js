@@ -51,6 +51,32 @@ function sales_due() {
   $.post("show_sales_due",{customer_id:customer_id,view_all:view_all,from_date:from_date,to_date:to_date},function(result){
     $("#tbodyid").empty().append(result);
     $(".overlay").remove();
+    window.document.close();
+  });
+}
+
+// due search list
+function damage_ajax_list() {
+  var from_date = document.getElementById("from_date").value.trim();
+  var to_date=document.getElementById("to_date").value.trim();
+  if(from_date == "")
+  {
+    toastr["warning"]("Select From Date!");
+    document.getElementById("from_date").focus();
+    return;
+  }
+
+  if(to_date == "")
+  {
+    toastr["warning"]("Select To Date!");
+    document.getElementById("to_date").focus();
+    return;
+  }
+
+  $.post("damage_ajax_list",{from_date:from_date,to_date:to_date},function(result){
+    $("#tbodyid").empty().append(result);
+    $(".overlay").remove();
+    window.document.close();
   });
 }
 

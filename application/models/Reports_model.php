@@ -3,6 +3,51 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Reports_model extends CI_Model {
 
+	public function damage_ajax_list(){
+		extract($_POST);
+		$from_date = date("Y-m-d",strtotime($from_date));
+		$to_date = date("Y-m-d",strtotime($to_date));
+
+		$this->db->select("
+			srd.item_id, sr.created_date, srd.box_qty, srd.price_per_unit, item.item_name,
+			COALESCE(SUM(srd.damage),0) as damage,
+			COALESCE(SUM(srd.damage * srd.price_per_unit),0) as damage_amt
+		");
+		$this->db->from('db_salesreturn as sr');
+		$this->db->join('db_salesitemsreturn as srd', 'sr.sales_id = srd.sales_id','left');
+		$this->db->join('db_items as item', 'srd.item_id = item.id','left');
+		$this->db->where('srd.damage !=', 0);
+
+		if (!empty($from_date) && !empty($to_date)) {
+			$this->db->where('sr.created_date >=', $from_date);
+			$this->db->where('sr.created_date <=', $to_date);
+		}
+		$this->db->group_by('item.id');
+		$q1 = $this->db->get()->result();
+		$gpaid = 0;
+		if(!empty($q1)){
+			foreach ($q1 as $k => $r) {
+				$gpaid = $r->damage_amt + $gpaid;
+				echo "<tr>";
+					echo "<td>".($k + 1)."</td>";
+					echo "<td>".$r->item_name."</td>";
+					echo "<td>".number_format($r->price_per_unit,2,'.','')."</td>";
+					echo "<td>".number_format($r->damage,2,'.','')."</td>";
+					echo "<td>".number_format($r->damage_amt,2,'.','')."</td>"; ?>
+				</tr>
+			<?php }
+			echo "<tr>
+				<td class='text-center text-bold' colspan='4'><b>Total :</b></td>
+				<td class='text-bold'>".number_format($gpaid, 2,'.','')."</td>
+			</tr>";
+		}else{
+			echo "<tr>";
+			echo "<td class='text-center text-danger' colspan=13>No Records Found</td>";
+			echo "</tr>";
+		}
+	    exit;
+	}
+
 	public function show_sales_due(){
 		extract($_POST);
 
@@ -44,7 +89,7 @@ class Reports_model extends CI_Model {
 					echo "<td>".number_format($r->return_amt,2,'.','')."</td>";
 					echo "<td>".number_format($r->paid_amount,2,'.','')."</td>";
 					echo "<td>".number_format($tt,2,'.','')."</td>"; ?>
-					<td>
+					<td class="hide_print">
 						<div class='btn-group'>
 							<a class='btn btn-primary btn-o dropdown-toggle' data-toggle='dropdown'> Action <span class='caret'></span> </a>
 							<ul role='menu' class='dropdown-menu dropdown-light pull-right'>
@@ -61,7 +106,7 @@ class Reports_model extends CI_Model {
 				<td class='text-bold'>".number_format($greturn,2,'.','')."</td>
 				<td class='text-bold'>".number_format($gpaid,2,'.','')."</td>
 				<td class='text-bold'>".number_format($gtotal - ($greturn + $gpaid), 2,'.','')."</td>
-				<td><a class='btn btn-success' onclick='print_all_due' >Print All</a></td>
+				<td class='hide_print'></td>
 			</tr>";
 		}else{
 			echo "<tr>";

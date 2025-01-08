@@ -6,9 +6,9 @@
   <?php include"comman/code_css_form.php"; ?>
   <!-- </copy> -->
   <style>
-      .show_print {
-        display: none;
-      }
+    .show_print {
+      display: none;
+    }
     @media print {
       .hide_print {
         display: none;
@@ -27,7 +27,7 @@
 
 <div class="wrapper">
 
- <?php include"sidebar.php"; ?>
+  <?php include"sidebar.php"; ?>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -55,7 +55,7 @@
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form class="form-horizontal" id="due-report" onkeypress="return event.keyCode != 13;">
+            <form class="form-horizontal" id="damage-report" onkeypress="return event.keyCode != 13;">
               <input type="hidden" name="<?php echo $this->security->get_csrf_token_name();?>" value="<?php echo $this->security->get_csrf_hash();?>">
               <div class="box-body">
                 <div class="form-group">
@@ -77,34 +77,13 @@
                     <span id="Sales_date_msg" style="display:none" class="text-danger"></span>
                   </div>
                 </div>
-
-                <div class="form-group">
-                  <label for="customer_id" class="col-sm-2 control-label"><?= $this->lang->line('customer_name'); ?></label>
-                  <div class="col-sm-3">
-                    <select class="form-control select2 " id="customer_id" name="customer_id" ">
-                      <option value="">-All-</option>
-                      <?php
-                        $q1=$this->db->query("select * from db_customers where status=1");
-                        if($q1->num_rows()>0)
-                        {
-                          foreach($q1->result() as $res1)
-                          {
-                            echo "<option value='".$res1->id."'>".$res1->customer_name."</option>";
-                          }
-                        } else { ?>
-                            <option value="">No Records Found</option>
-                      <?php } ?>
-                    </select>
-                    <span id="customer_id_msg" style="display:none" class="text-danger"></span>
-                  </div>
-                </div>
               </div>
               <!-- /.box-body -->
 
               <div class="box-footer">
                 <div class="col-sm-8 col-sm-offset-2 text-center">
                   <div class="col-md-3 col-md-offset-3">
-                    <button type="button" onclick="sales_due()" class="btn btn-block btn-success">Show</button>
+                    <button type="button" onclick="damage_ajax_list()" class="btn btn-block btn-success">Show</button>
                   </div>
                   <div class="col-sm-3">
                     <a href="<?=base_url('dashboard');?>">
@@ -130,7 +109,7 @@
 
           <div class="box">
             <div class="show_print text-center">
-              <h4>Customer Due Report</h4>
+              <h4>Item Damage Report</h4>
               <span class="change_date">Report : <?= date('d-m-Y') ?> To <?= date('d-m-Y') ?></span>
             </div>
             <div class="box-header hide_print">
@@ -139,17 +118,21 @@
               <button type="button" class="btn btn-primary pull-right" onclick="print_all_due()" style="margin-right: 10px;">Print</button>
             </div>
             <!-- /.box-header -->
+             <style>
+              .tt {
+                background: #ef073d;
+                border-radius: 50% !important;
+              }
+             </style>
             <div class="box-body table-responsive no-padding">
               <table class="table table-bordered table-hover " id="report-data" >
                 <thead>
                 <tr>
                   <th style="">#</th>
-                  <th style="">Customer Name</th>
-                  <th style="">Total Sale</th>
-                  <th style="">Sale Return</th>
-                  <th style="">Total Paid</th>
-                  <th style="">Total Due</th>
-                  <th class="hide_print">Action</th>
+                  <th style="">Item Name</th>
+                  <th title="Item Price variable">Item Price <span class="tt">*</span></th>
+                  <th style="">Damage Quantity</th>
+                  <th style="">Total</th>
                 </tr>
                 </thead>
                 <tbody id="tbodyid">
@@ -212,7 +195,5 @@
       $('.change_date').text('Report : ' + from_date + ' To ' + to_date);
     }
   </script>
-
-
 </body>
 </html>

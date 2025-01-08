@@ -377,6 +377,8 @@
                 <li class="report-sales-payments-active-li"><a href="<?php echo $base_url; ?>reports/sales_due" ><i class="fa fa-files-o "></i> Sales Due</a></li>
               <?php } ?>
 
+              <li class="report-sales-payments-active-li"><a href="<?php echo $base_url; ?>reports/damage_report" ><i class="fa fa-files-o "></i> Damage Report</a></li>
+
               <?php if($CI->permissions('profit_report')) { ?>
                 <li class="report-profit-loss-active-li"><a href="<?php echo $base_url; ?>reports/profit_loss" ><i class="fa fa-files-o "></i> <span><?= $this->lang->line('profit_and_loss_report'); ?></span> <span class="pull-right-container" title="New"> <small class="label pull-right bg-green"><i class="fa fa-fw fa-star-o"></i></small> </span> </a></li>
               <?php } ?>
